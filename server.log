@@ -1,0 +1,36 @@
+✅ Loaded 849 contaminants from /Users/rubengarciarojo/.gemini/antigravity/workspaces/Gestion-Laboratorio-Higiene/data/contaminantes.json
+🔬 Gestión Laboratorio — Higiene Industrial API
+   Contaminantes: 849
+   F01655: ✅
+   F00662: ✅
+
+ * Serving Flask app 'server'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5003
+ * Running on http://192.168.0.47:5003
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 113-554-098
+127.0.0.1 - - [20/Feb/2026 14:48:15] "POST /api/generate-ficha HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 14:48:48] "OPTIONS /api/generate-ficha HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 14:48:48] "POST /api/generate-ficha HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 14:49:14] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [20/Feb/2026 14:49:25] "OPTIONS /api/generate-ficha HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 14:49:25] "POST /api/generate-ficha HT * Detected ch * Detected change in '/Users/rubengarciarojo/.gemini/antigravity/workspaces/Gestion-Laboratorio-Higiene/scripts/update_knowledge_base.p✅ Loaded 849✅ Loaded 849 contaminants from /Users/rubengarciarojo/.gemini/antigravity/workspaces/Gestion-Laboratorio-Higiene/data/contaminantes.json
+🔬 Gestión Laboratorio — Higiene Industrial API
+   Contaminantes: 849
+   F01655: ✅
+   * Restarting  * Restart * Debugger is active!
+ * Debugger PIN: 113-554-098
+✅ Loaded 849 contaminants from /Users/rubengarciarojo/.gemini/antigravity/workspaces/Gestion-Laboratorio-Higiene/data/contaminantes.json
+🔬 Gestión Laboratorio — Higiene Industrial API
+   Contaminantes: 849
+   F01655: ✅
+   F00662: ✅
+
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/resource_tracker.py:216: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+ar to be %d '
