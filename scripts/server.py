@@ -660,6 +660,32 @@ def admin_create_product():
     return jsonify({"ok": True, "product": new_product}), 201
 
 
+@app.route("/api/admin/deploy", methods=["POST"])
+def admin_deploy_to_vercel():
+    """Commit local JSON changes to GitHub to trigger Vercel deploy."""
+    if not check_admin_password():
+        return jsonify({"error": "No autorizado"}), 401
+    
+    try:
+        # Save any in-memory state explicitly
+        save_contaminants()
+        
+        # Git commands
+        subprocess.run(["git", "add", "data/contaminantes.json", "public/contaminantes.json", "data/log_actividad.txt"], cwd=PROJECT_DIR, check=True)
+        # Commit might fail if no changes, we ignore error
+        subprocess.run(["git", "commit", "-m", "Panel Admin: Publicar cambios de visibilidad en Vercel"], cwd=PROJECT_DIR)
+        
+        # Push to trigger deploy
+        result = subprocess.run(["git", "push", "origin", "main"], cwd=PROJECT_DIR, capture_output=True, text=True)
+        if result.returncode != 0:
+            return jsonify({"error": "Error al hacer push a GitHub", "details": result.stderr}), 500
+        
+        log_activity("Despliegue WEB", "Actualización forzada a Vercel")
+        return jsonify({"ok": True, "message": "Cambios enviados a Vercel con éxito. Estarán visibles en ~1 minuto."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/api/admin/log", methods=["GET"])
 def admin_get_log():
     """Return the last 100 lines of the activity log."""

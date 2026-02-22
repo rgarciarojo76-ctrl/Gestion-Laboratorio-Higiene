@@ -154,6 +154,28 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
     setSaving(false);
   };
 
+  const publishToWeb = async () => {
+    if (!window.confirm("¿Estás seguro de que quieres publicar los cambios actuales en la versión web (Vercel)? Esto tardará ~1 minuto.")) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/deploy`, {
+        method: "POST",
+        headers: { "X-Admin-Password": password },
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message || "Cambios enviados a Vercel con éxito.");
+        fetchLog();
+      } else {
+        alert("Error al publicar: " + (data.error || "Desconocido"));
+      }
+    } catch (e) {
+      console.error("Deploy error:", e);
+      alert("Error de conexión al intentar publicar.");
+    }
+    setSaving(false);
+  };
+
   // ─── Login Screen ─────────────────────────────────────────────────
   if (!authenticated) {
     return (
@@ -248,12 +270,22 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <button
-              className="admin-btn-primary"
-              onClick={() => setShowNewModal(true)}
-            >
-              ➕ Nuevo Producto
-            </button>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button
+                className="admin-btn-secondary"
+                onClick={publishToWeb}
+                disabled={saving}
+                title="Sube los cambios locales a GitHub y actualiza la web de Vercel"
+              >
+                {saving ? "⏳ Procesando..." : "🌐 Publicar en Vercel"}
+              </button>
+              <button
+                className="admin-btn-primary"
+                onClick={() => setShowNewModal(true)}
+              >
+                ➕ Nuevo Producto
+              </button>
+            </div>
           </div>
 
           <div className="admin-table-wrapper">

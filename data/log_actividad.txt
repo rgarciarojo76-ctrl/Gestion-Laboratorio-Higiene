@@ -5,3 +5,4 @@
 [2026-02-22 20:48:39] - USUARIO: Admin - ACCIÓN: Visibilidad: Desactivado - PRODUCTO: Formaldehído - aire (CAS: 50-00-0)
 [2026-02-22 21:02:16] - USUARIO: Admin - ACCIÓN: Visibilidad: Activado - PRODUCTO: Formaldehído - aire (CAS: 50-00-0)
 [2026-02-22 21:05:05] - USUARIO: Admin - ACCIÓN: Visibilidad: Desactivado - PRODUCTO: Formaldehído - aire (CAS: 50-00-0)
+[2026-02-22 21:47:41] - USUARIO: Admin - ACCIÓN: Visibilidad: Activado - PRODUCTO: Formaldehído - aire (CAS: 50-00-0)

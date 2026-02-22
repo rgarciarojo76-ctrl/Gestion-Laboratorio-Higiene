@@ -503,6 +503,118 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             </div>
           )}
 
+          {/* 2x2 Info Cards Grid */}
+          <div className="info-cards-grid">
+            {/* Card 1: Soporte */}
+            <div className="info-card">
+              <div className="info-card-icon icon-green">🧪</div>
+              <div className="info-card-content">
+                <span className="info-card-label">Soporte de Muestreo</span>
+                <span
+                  className="info-card-value"
+                  title={
+                    selected.soporte_captacion_display ||
+                    selected.soporte_captacion
+                  }
+                >
+                  {renderWithAnexoLink(
+                    selected.soporte_captacion_display ||
+                      selected.soporte_captacion ||
+                      "—",
+                  )}
+                </span>
+                {selected.ref_soporte && (
+                  <span
+                    style={{
+                      fontSize: "11px",
+                      color: "#64748b",
+                      fontFamily: "monospace",
+                    }}
+                  >
+                    Ref: {selected.ref_soporte}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Card 2: Descripción Técnica */}
+            <div className="info-card">
+              <div className="info-card-icon icon-blue">🔬</div>
+              <div className="info-card-content">
+                <span className="info-card-label">Descripción Técnica</span>
+                <span
+                  className="info-card-value"
+                  title={selected.descripcion_tecnica}
+                >
+                  {selected.descripcion_tecnica || "—"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* 4-column Grid for Params */}
+          <div className="info-cards-grid-4">
+            {/* Caudal */}
+            <div className="info-card">
+              <div className="info-card-icon icon-teal">💨</div>
+              <div className="info-card-content">
+                <span className="info-card-label">Caudal</span>
+                <span className="info-card-value">
+                  {selected.caudal
+                    ? `${selected.caudal} L/min`
+                    : selected.caudal_l_min
+                      ? `${selected.caudal_l_min} L/min`
+                      : "—"}
+                </span>
+              </div>
+            </div>
+
+            {/* Volumen Mín. */}
+            <div className="info-card">
+              <div className="info-card-icon icon-teal">📦</div>
+              <div className="info-card-content">
+                <span className="info-card-label">Volumen Método</span>
+                <span className="info-card-value">
+                  {selected.volumen_minimo
+                    ? `${selected.volumen_minimo} L`
+                    : selected.volumen_recomendado_l
+                      ? `${selected.volumen_recomendado_l} L`
+                      : "—"}
+                </span>
+              </div>
+            </div>
+
+            {/* LOQ */}
+            <div className="info-card">
+              <div className="info-card-icon icon-yellow">🎯</div>
+              <div className="info-card-content">
+                <span className="info-card-label">LOQ</span>
+                <span className="info-card-value">
+                  {selected.lq
+                    ? `${selected.lq} µg`
+                    : selected.loq
+                      ? `${selected.loq} µg`
+                      : "—"}
+                </span>
+              </div>
+            </div>
+
+            {/* LOD */}
+            <div className="info-card">
+              <div className="info-card-icon icon-yellow">🔍</div>
+              <div className="info-card-content">
+                <span className="info-card-label">LOD</span>
+                <span className="info-card-value">
+                  {selected.ld
+                    ? `${selected.ld} µg`
+                    : selected.lod
+                      ? `${selected.lod} µg`
+                      : "—"}
+                </span>
+              </div>
+            </div>
+          </div>
+
           {/* --- CAPA 1: Cálculos UNE-EN 482 --- */}
           {(() => {
             const volMinED_UNE = calcVolMinUNE482(
@@ -620,119 +732,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             className="expanded-info-section"
             style={{ display: "none" }}
           >
-            {/* 2x2 Info Cards Grid (Moved to Capa 2) */}
-            <div className="info-cards-grid" style={{ padding: "24px 28px 0" }}>
-              {/* Card 1: Soporte */}
-              <div className="info-card">
-                <div className="info-card-icon icon-green">🧪</div>
-                <div className="info-card-content">
-                  <span className="info-card-label">Soporte de Muestreo</span>
-                  <span
-                    className="info-card-value"
-                    title={
-                      selected.soporte_captacion_display ||
-                      selected.soporte_captacion
-                    }
-                  >
-                    {renderWithAnexoLink(
-                      selected.soporte_captacion_display ||
-                        selected.soporte_captacion ||
-                        "—"
-                    )}
-                  </span>
-                  {selected.ref_soporte && (
-                    <span
-                      style={{
-                        fontSize: "11px",
-                        color: "#64748b",
-                        fontFamily: "monospace",
-                      }}
-                    >
-                      Ref: {selected.ref_soporte}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Card 2: Descripción Técnica */}
-              <div className="info-card">
-                <div className="info-card-icon icon-blue">🔬</div>
-                <div className="info-card-content">
-                  <span className="info-card-label">Descripción Técnica</span>
-                  <span
-                    className="info-card-value"
-                    title={selected.descripcion_tecnica}
-                  >
-                    {selected.descripcion_tecnica || "—"}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* 4-column Grid for Params (Moved to Capa 2) */}
-            <div className="info-cards-grid-4" style={{ padding: "0 28px", marginTop: 16 }}>
-              {/* Caudal */}
-              <div className="info-card">
-                <div className="info-card-icon icon-teal">💨</div>
-                <div className="info-card-content">
-                  <span className="info-card-label">Caudal</span>
-                  <span className="info-card-value">
-                    {selected.caudal
-                      ? `${selected.caudal} L/min`
-                      : selected.caudal_l_min
-                        ? `${selected.caudal_l_min} L/min`
-                        : "—"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Volumen Mín. */}
-              <div className="info-card">
-                <div className="info-card-icon icon-teal">📦</div>
-                <div className="info-card-content">
-                  <span className="info-card-label">Volumen Método</span>
-                  <span className="info-card-value">
-                    {selected.volumen_minimo
-                      ? `${selected.volumen_minimo} L`
-                      : selected.volumen_recomendado_l
-                        ? `${selected.volumen_recomendado_l} L`
-                        : "—"}
-                  </span>
-                </div>
-              </div>
-
-              {/* LOQ */}
-              <div className="info-card">
-                <div className="info-card-icon icon-yellow">🎯</div>
-                <div className="info-card-content">
-                  <span className="info-card-label">LOQ</span>
-                  <span className="info-card-value">
-                    {selected.lq
-                      ? `${selected.lq} µg`
-                      : selected.loq
-                        ? `${selected.loq} µg`
-                        : "—"}
-                  </span>
-                </div>
-              </div>
-
-              {/* LOD */}
-              <div className="info-card">
-                <div className="info-card-icon icon-yellow">🔍</div>
-                <div className="info-card-content">
-                  <span className="info-card-label">LOD</span>
-                  <span className="info-card-value">
-                    {selected.ld
-                      ? `${selected.ld} µg`
-                      : selected.lod
-                        ? `${selected.lod} µg`
-                        : "—"}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="detail-grid" style={{ borderTop: "1px solid #e2e8f0", paddingTop: 24, marginTop: 24 }}>
+            <div className="detail-grid" style={{ borderTop: "none", paddingTop: 8, marginTop: 8 }}>
               {/* === SCREENING / PERFIL ANALÍTICO === */}
               {selected.screening_perfil && (
                 <div
