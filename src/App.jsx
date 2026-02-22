@@ -58,7 +58,7 @@ function App() {
 
   // Filtered contaminants for technician modules (only visible ones)
   const visibleContaminants = useMemo(() => {
-    return contaminants.filter(c => c.visible_en_app === true)
+    return contaminants.filter(c => c.visible_en_app !== false)
   }, [contaminants])
 
   return (

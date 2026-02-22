@@ -92,15 +92,17 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
   const toggleVisibility = async (id) => {
     setSaving(true);
     try {
-      await fetch(`${API_BASE}/api/admin/products/${id}/visibility`, {
+      const res = await fetch(`${API_BASE}/api/admin/products/${id}/visibility`, {
         method: "PUT",
         headers: { "X-Admin-Password": password },
       });
+      if (!res.ok) throw new Error("Fallo al contactar con el backend.");
       await fetchProducts(searchQuery);
       fetchLog();
       if (onDataChanged) onDataChanged();
     } catch (e) {
       console.error("Toggle error:", e);
+      alert("Error: No se pudo conectar con el servidor backend (python3 scripts/server.py). Los cambios no se guardarán.");
     }
     setSaving(false);
   };
@@ -109,7 +111,7 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
     setSaving(true);
     try {
       const { id, ...fields } = product;
-      await fetch(`${API_BASE}/api/admin/products/${id}`, {
+      const res = await fetch(`${API_BASE}/api/admin/products/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -117,12 +119,14 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
         },
         body: JSON.stringify(fields),
       });
+      if (!res.ok) throw new Error("Fallo al contactar con el backend.");
       await fetchProducts(searchQuery);
       fetchLog();
       setEditProduct(null);
       if (onDataChanged) onDataChanged();
     } catch (e) {
       console.error("Save error:", e);
+      alert("Error: No se pudo conectar con el servidor backend. Asegúrate de ejecutar (python3 scripts/server.py).");
     }
     setSaving(false);
   };
@@ -130,7 +134,7 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
   const createProduct = async (product) => {
     setSaving(true);
     try {
-      await fetch(`${API_BASE}/api/admin/products`, {
+      const res = await fetch(`${API_BASE}/api/admin/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -138,12 +142,14 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
         },
         body: JSON.stringify(product),
       });
+      if (!res.ok) throw new Error("Fallo al contactar con el backend.");
       await fetchProducts(searchQuery);
       fetchLog();
       setShowNewModal(false);
       if (onDataChanged) onDataChanged();
     } catch (e) {
       console.error("Create error:", e);
+      alert("Error: No se pudo conectar con el servidor backend. Asegúrate de ejecutar (python3 scripts/server.py).");
     }
     setSaving(false);
   };
