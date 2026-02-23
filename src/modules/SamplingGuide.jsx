@@ -282,7 +282,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
       {selected && (
         <div className="detail-panel">
           <div className="detail-header-top">
-            <div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               <h3 className="detail-title">
                 {renderWithAnexoLink(
                   selected.contaminante_display || selected.contaminante,
@@ -296,11 +296,10 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               {selected.sinonimo && (
                 <div style={{
                   fontSize: "13px",
-                  color: "#94a3b8",
+                  color: "#64748b",
                   fontWeight: 400,
                   lineHeight: 1.4,
-                  marginTop: 4,
-                  maxWidth: 650,
+                  maxWidth: 700,
                 }}>
                   {selected.sinonimo}
                 </div>
@@ -312,7 +311,6 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   display: "flex",
                   gap: 8,
                   flexWrap: "wrap",
-                  marginBottom: 12,
                 }}
               >
                 {selected.sin_metodo_disponible && (
