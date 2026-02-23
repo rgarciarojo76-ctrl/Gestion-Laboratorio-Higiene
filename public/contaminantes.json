@@ -72,7 +72,8 @@
     "screening_condiciones_ed": "Las condiciones de muestreo asociadas al agente más limitante que conforma el screening 0205 están vinculadas a acroleína (N0010), en la presente entrada se consideran las asociadas al formaldehído (N0015) por ser el agente de valoración más habitual.\nCondiciones por defecto (0,2L/min y 120min, suponen 20L) se encuentran dentro de rango de método interno basado en NIOSH 2016 y 2532 (1-30L). De manera general, podrían considerarse adecuadas.",
     "screening_condiciones_ec": "Las condiciones de muestreo asociadas al agente más limitante que conforma el screening 0205 están vinculadas a acroleína (N0010), pero en la presente entrada se consideran las asociadas al formaldehído (N0015) por ser el agente de valoración más habitual.\nCondiciones por defecto (0,2L/min y 15min, suponen 3L) se encuentran dentro de rango de método interno basado en NIOSH 2016 y 2532 (1-30L). De manera general, podrían considerarse adecuadas.",
     "screening_comentarios": "Las condiciones de muestreo asociadas al agente más limitante que conforma el screening 0205 están vinculadas a acroleína (N0010), en la presente entrada se consideran las asociadas al formaldehído (N0015) por ser el agente de valoración más habitual.\nCondiciones por defecto (0,2L/min y 120min, suponen 20L) se encuentran dentro de rango de método interno basado en NIOSH 2016 y 2532 (1-30L). De manera general, podrían considerarse adecuadas.",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "visible_en_app": true
   },
   {
     "contaminante": "1 aldehído (rutina)",
