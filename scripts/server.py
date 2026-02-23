@@ -608,7 +608,7 @@ def admin_toggle_visibility(product_id):
 
     for c in contaminants:
         if str(c.get("id")) == str(product_id):
-            new_val = not c.get("visible_en_app", True)
+            new_val = not c.get("visible_en_app", False)
             c["visible_en_app"] = new_val
             save_contaminants()
             action = "Visibilidad: Activado" if new_val else "Visibilidad: Desactivado"
