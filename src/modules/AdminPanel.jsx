@@ -15,6 +15,7 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
   // Admin data
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [visibilityFilter, setVisibilityFilter] = useState("all");
   const [logEntries, setLogEntries] = useState([]);
   const [activeTab, setActiveTab] = useState("products"); // products | log
 
@@ -269,7 +270,17 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div style={{ display: "flex", gap: "10px" }}>
+            <select
+              className="admin-filter-select"
+              value={visibilityFilter}
+              onChange={(e) => setVisibilityFilter(e.target.value)}
+              style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--border-color)", fontSize: "14px", background: "white", color: "var(--text-primary)" }}
+            >
+              <option value="all">👁️ Todos los estados</option>
+              <option value="visible">✅ Solo Visibles</option>
+              <option value="hidden">❌ Solo Ocultos</option>
+            </select>
+            <div style={{ display: "flex", gap: "10px", marginLeft: "auto" }}>
               <button
                 className="admin-btn-secondary"
                 onClick={publishToWeb}
@@ -299,7 +310,14 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
                 </tr>
               </thead>
               <tbody>
-                {products.slice(0, 100).map((p) => (
+                {products
+                  .filter((p) => {
+                    if (visibilityFilter === "all") return true;
+                    if (visibilityFilter === "visible") return p.visible_en_app;
+                    return !p.visible_en_app;
+                  })
+                  .slice(0, 100)
+                  .map((p) => (
                   <tr
                     key={p.id}
                     className={p.visible_en_app ? "" : "admin-row-hidden"}
@@ -335,9 +353,17 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
                 ))}
               </tbody>
             </table>
-            {products.length > 100 && (
+            {products.filter((p) => {
+                    if (visibilityFilter === "all") return true;
+                    if (visibilityFilter === "visible") return p.visible_en_app;
+                    return !p.visible_en_app;
+                  }).length > 100 && (
               <p className="admin-table-footer">
-                Mostrando 100 de {products.length} resultados. Refina la
+                Mostrando 100 de {products.filter((p) => {
+                    if (visibilityFilter === "all") return true;
+                    if (visibilityFilter === "visible") return p.visible_en_app;
+                    return !p.visible_en_app;
+                  }).length} resultados. Refina la
                 búsqueda para ver más.
               </p>
             )}
