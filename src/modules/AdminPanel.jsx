@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback } from "react";
  * Password-protected admin panel for managing product visibility,
  * editing product fields, creating new products, and viewing activity log.
  */
-export default function AdminPanel({ contaminants, onDataChanged }) {
+export default function AdminPanel({ onDataChanged }) {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -51,23 +51,16 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
   };
 
   // ─── Data Fetching ────────────────────────────────────────────────
-  const fetchProducts = useCallback(
-    async (q = "") => {
-      try {
-        const url = q
-          ? `${API_BASE}/api/admin/products?q=${encodeURIComponent(q)}`
-          : `${API_BASE}/api/admin/products`;
-        const res = await fetch(url, {
-          headers: { "X-Admin-Password": password },
-        });
-        const data = await res.json();
-        if (Array.isArray(data)) setProducts(data);
-      } catch (e) {
-        console.error("Error fetching products:", e);
-      }
-    },
-    [password],
-  );
+  const fetchProducts = useCallback(async () => {
+    try {
+      const url = `${API_BASE}/api/admin/products`;
+      const res = await fetch(url, { headers: { "X-Admin-Password": password } });
+      const data = await res.json();
+      if (Array.isArray(data)) setProducts(data);
+    } catch (e) {
+      console.error("Error fetching products:", e);
+    }
+  }, [password]);
 
   const fetchLog = useCallback(async () => {
     try {
@@ -81,28 +74,31 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
     }
   }, [password]);
 
-  // Search debounce
+  // Initial fetch on authenticated
   useEffect(() => {
-    if (!authenticated) return;
-    const timer = setTimeout(() => fetchProducts(searchQuery), 300);
-    return () => clearTimeout(timer);
-  }, [searchQuery, authenticated, fetchProducts]);
-
+    if (authenticated) {
+      fetchProducts();
+      fetchLog();
+    }
+  }, [authenticated, fetchProducts, fetchLog]);
   // ─── Actions ──────────────────────────────────────────────────────
   const toggleVisibility = async (id) => {
     setSaving(true);
+    // Optimistic UI update
+    setProducts((prev) => prev.map((p) => p.id === id ? { ...p, visible_en_app: !p.visible_en_app } : p));
     try {
       const res = await fetch(`${API_BASE}/api/admin/products/${id}/visibility`, {
         method: "PUT",
         headers: { "X-Admin-Password": password },
       });
       if (!res.ok) throw new Error("Fallo al contactar con el backend.");
-      await fetchProducts(searchQuery);
       fetchLog();
       if (onDataChanged) onDataChanged();
     } catch (e) {
       console.error("Toggle error:", e);
-      alert("Error: No se pudo conectar con el servidor backend (python3 scripts/server.py). Los cambios no se guardarán.");
+      alert("Error: No se guardaron los cambios. La sesión podría haber caducado o GitHub tarda en responder.");
+      // Revert optimistic
+      setProducts((prev) => prev.map((p) => p.id === id ? { ...p, visible_en_app: !p.visible_en_app } : p));
     }
     setSaving(false);
   };
@@ -120,13 +116,13 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
         body: JSON.stringify(fields),
       });
       if (!res.ok) throw new Error("Fallo al contactar con el backend.");
-      await fetchProducts(searchQuery);
+      await fetchProducts();
       fetchLog();
       setEditProduct(null);
       if (onDataChanged) onDataChanged();
     } catch (e) {
       console.error("Save error:", e);
-      alert("Error: No se pudo conectar con el servidor backend. Asegúrate de ejecutar (python3 scripts/server.py).");
+      alert("Error: No se pudo conectar con el servidor backend.");
     }
     setSaving(false);
   };
@@ -143,13 +139,13 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
         body: JSON.stringify(product),
       });
       if (!res.ok) throw new Error("Fallo al contactar con el backend.");
-      await fetchProducts(searchQuery);
+      await fetchProducts();
       fetchLog();
       setShowNewModal(false);
       if (onDataChanged) onDataChanged();
     } catch (e) {
       console.error("Create error:", e);
-      alert("Error: No se pudo conectar con el servidor backend. Asegúrate de ejecutar (python3 scripts/server.py).");
+      alert("Error: No se pudo conectar con el servidor backend.");
     }
     setSaving(false);
   };
@@ -244,7 +240,7 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
           className={`admin-tab ${activeTab === "products" ? "active" : ""}`}
           onClick={() => setActiveTab("products")}
         >
-          📦 Productos ({products.length})
+          📦 Productos
         </button>
         <button
           className={`admin-tab ${activeTab === "log" ? "active" : ""}`}
@@ -312,6 +308,14 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
               <tbody>
                 {products
                   .filter((p) => {
+                    // Search purely locally
+                    if (searchQuery) {
+                      const qMatch = searchQuery.toLowerCase();
+                      const nMatch = (p.contaminante_display || p.contaminante || "").toLowerCase().includes(qMatch);
+                      const sMatch = (p.sinonimo || "").toLowerCase().includes(qMatch);
+                      const cMatch = (p.cas || "").toLowerCase().includes(qMatch);
+                      if (!nMatch && !sMatch && !cMatch) return false;
+                    }
                     if (visibilityFilter === "all") return true;
                     if (visibilityFilter === "visible") return p.visible_en_app;
                     return !p.visible_en_app;
@@ -354,17 +358,19 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
               </tbody>
             </table>
             {products.filter((p) => {
+                    if (searchQuery) {
+                      const qMatch = searchQuery.toLowerCase();
+                      const nMatch = (p.contaminante_display || p.contaminante || "").toLowerCase().includes(qMatch);
+                      const sMatch = (p.sinonimo || "").toLowerCase().includes(qMatch);
+                      const cMatch = (p.cas || "").toLowerCase().includes(qMatch);
+                      if (!nMatch && !sMatch && !cMatch) return false;
+                    }
                     if (visibilityFilter === "all") return true;
                     if (visibilityFilter === "visible") return p.visible_en_app;
                     return !p.visible_en_app;
                   }).length > 100 && (
               <p className="admin-table-footer">
-                Mostrando 100 de {products.filter((p) => {
-                    if (visibilityFilter === "all") return true;
-                    if (visibilityFilter === "visible") return p.visible_en_app;
-                    return !p.visible_en_app;
-                  }).length} resultados. Refina la
-                búsqueda para ver más.
+                La búsqueda ha encontrado demasiados resultados, mostrando los 100 primeros. Refina la búsqueda para ver más.
               </p>
             )}
           </div>
