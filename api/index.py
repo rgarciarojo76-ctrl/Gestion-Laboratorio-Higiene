@@ -59,7 +59,9 @@ def resolve_apa_url(search_term):
 def get_file_from_github(filepath):
     """Fetch the current file content and SHA from GitHub."""
     url = f"https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/contents/{filepath}"
-    headers = {"Authorization": f"token {GITHUB_TOKEN}", "Accept": "application/vnd.github.v3+json"}
+    headers = {"Accept": "application/vnd.github.v3+json"}
+    if GITHUB_TOKEN:
+        headers["Authorization"] = f"token {GITHUB_TOKEN}"
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         data = response.json()
