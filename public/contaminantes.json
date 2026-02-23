@@ -4948,7 +4948,8 @@
     "screening_condiciones_ed": "Al tratarse de un nº pruebas que conforma un perfil analítico muy numeroso (>50AQ diferentes) se consideran unas condiciones de muestreo generales que puedan satisfacer a la mayoría, pero no a todos (p.ej serían insuficientes para: cianuro de vinilo, tetracloruro de carbono, benceno, isoforona). Así, en caso de interés particular en alguno de ellos, es preferible revisar la estrategia para asegurar que cubra nuestra necesidad concreta.\nCondiciones de muestreo generales planteadas: 0,2L/min y 120min (24L). Para otras condiciones de interés, valorar nuevas opciones considerando un rango de caudales (0,01-0,2 L/min) y volúmenes (1-30L) definidos en los métodos asociados a los VOC´s particulares.",
     "screening_condiciones_ec": "Muestreo de 15min en las condiciones de exposición más desfavorables: 0,2L/min y 15min (3L); podrían considerarse adecuadas para la mayoría de los VOC´s que conforman el screening. En cualquier caso, será necesario verificarlo para los VOC´s de interés.",
     "screening_comentarios": "Al tratarse de un nº pruebas que conforma un perfil analítico muy numeroso (>50AQ diferentes) se consideran unas condiciones de muestreo generales que puedan satisfacer a la mayoría, pero no a todos (p.ej serían insuficientes para: cianuro de vinilo, tetracloruro de carbono, benceno, isoforona). Así, en caso de interés particular en alguno de ellos, es preferible revisar la estrategia para asegurar que cubra nuestra necesidad concreta.\nCondiciones de muestreo generales planteadas: 0,2L/min y 120min (24L). Para otras condiciones de interés, valorar nuevas opciones considerando un rango de caudales (0,01-0,2 L/min) y volúmenes (1-30L) definidos en los métodos asociados a los VOC´s particulares.",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "visible_en_app": false
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -12973,7 +12974,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "visible_en_app": true
   },
   {
     "contaminante": "VOC especial urgente 8 días",
