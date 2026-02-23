@@ -364,11 +364,22 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   /tubo|filtro|ciclón|monitor|bomba|impactador/i.test(
                     equipmentStr,
                   );
-                const searchFocus =
+                const searchFocusRaw =
                   selected.soporte_captacion_display
                     ?.split("(")[0]
                     ?.split("->")[0]
                     ?.trim() || selected.contaminante;
+
+                let searchFocus = searchFocusRaw;
+                const lowerEquip = searchFocusRaw.toLowerCase();
+                if (lowerEquip.includes("sílica") || lowerEquip.includes("silica")) searchFocus = "Tubo Sílica Gel";
+                else if (lowerEquip.includes("carbón") || lowerEquip.includes("carbon")) searchFocus = "Tubo Carbón Activo";
+                else if (lowerEquip.includes("ciclón") || lowerEquip.includes("ciclon")) searchFocus = "Ciclón";
+                else if (lowerEquip.includes("filtro")) searchFocus = "Filtro";
+                else if (lowerEquip.includes("pasivo") || lowerEquip.includes("monitor")) searchFocus = "Monitor Pasivo";
+                else if (lowerEquip.includes("impactador")) searchFocus = "Impactador";
+                else if (lowerEquip.includes("burbujeador")) searchFocus = "Burbujeador";
+                else if (lowerEquip.includes("tubo")) searchFocus = "Tubo Absorbente";
 
                 return (
                   <>
