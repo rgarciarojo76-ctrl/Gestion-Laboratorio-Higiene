@@ -110,12 +110,18 @@ def save_contaminants_to_github(contaminants_data, commit_message="Panel Admin: 
 
 
 def load_local_contaminants():
-    """Load contaminants directly from Vercel's read-only filesystem for fast GET requests."""
+    """Load contaminants directly from Vercel's filesystem or via GitHub fallback."""
     try:
         with open(LOCAL_DATA_PATH, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
-        print(f"Error loading local json: {e}")
+        print(f"Error loading local json from disk: {e}. Falling back to GitHub API...")
+        try:
+            content, _ = get_file_from_github("public/contaminantes.json")
+            if content:
+                return json.loads(content)
+        except Exception as gh_e:
+            print(f"GitHub fallback failed: {gh_e}")
         return []
 
 
