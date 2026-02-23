@@ -344,7 +344,14 @@ export default function AdminPanel({ onDataChanged }) {
                       {p.contaminante_display || p.contaminante}
                     </td>
                     <td className="mono">{p.cas || "—"}</td>
-                    <td>{p.descripcion_tecnica || "—"}</td>
+                    <td>
+                      <div>{p.descripcion_tecnica || "—"}</div>
+                      <div style={{ fontSize: "11px", color: "#64748b", marginTop: "4px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                        {p.codigo_prueba && <span>Gral: <strong>{p.codigo_prueba}</strong></span>}
+                        {p.codigo_8d && <span style={{ color: "#92400e" }}>8d: <strong>{p.codigo_8d}</strong></span>}
+                        {p.codigo_15d && <span style={{ color: "#065f46" }}>15d: <strong>{p.codigo_15d}</strong></span>}
+                      </div>
+                    </td>
                     <td>
                       <button
                         className="admin-btn-edit"
@@ -449,6 +456,9 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
     { key: "cas", label: "Nº CAS" },
     { key: "sinonimo", label: "Sinónimos" },
     { key: "descripcion_tecnica", label: "Descripción Técnica" },
+    { key: "codigo_prueba", label: "Código Prueba (General)" },
+    { key: "codigo_8d", label: "Código Urgente (8 días)" },
+    { key: "codigo_15d", label: "Código Estándar (15 días)" },
     { key: "soporte_captacion", label: "Soporte de Captación (Código)" },
     { key: "soporte_captacion_display", label: "Soporte de Captación (Display)" },
     { key: "ref_soporte", label: "Referencia Soporte" },

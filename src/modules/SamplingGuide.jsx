@@ -537,17 +537,44 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               </div>
             </div>
 
-            {/* Card 2: Descripción Técnica */}
-            <div className="info-card">
+            {/* Card 2: Descripción Técnica + Códigos Lab */}
+            <div className="info-card" style={{ flex: "1 1 100%" }}>
               <div className="info-card-icon icon-blue">🔬</div>
               <div className="info-card-content">
                 <span className="info-card-label">Descripción Técnica</span>
                 <span
                   className="info-card-value"
+                  style={{ fontWeight: 600 }}
                   title={selected.descripcion_tecnica}
                 >
                   {selected.descripcion_tecnica || "—"}
                 </span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginTop: "8px", fontSize: "13px", color: "#475569" }}>
+                  {selected.codigo_prueba && (
+                    <span>
+                      <strong>Código Gral:</strong>{" "}
+                      <code style={{ background: "#e0f2fe", padding: "2px 6px", borderRadius: "4px", fontWeight: 600, color: "#0369a1" }}>
+                        {selected.codigo_prueba}
+                      </code>
+                    </span>
+                  )}
+                  {selected.codigo_8d && (
+                    <span>
+                      <strong>Urgente (8 días):</strong>{" "}
+                      <code style={{ background: "#fef3c7", padding: "2px 6px", borderRadius: "4px", fontWeight: 600, color: "#92400e" }}>
+                        {selected.codigo_8d}
+                      </code>
+                    </span>
+                  )}
+                  {selected.codigo_15d && (
+                    <span>
+                      <strong>Estándar (15 días):</strong>{" "}
+                      <code style={{ background: "#d1fae5", padding: "2px 6px", borderRadius: "4px", fontWeight: 600, color: "#065f46" }}>
+                        {selected.codigo_15d}
+                      </code>
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </div>
