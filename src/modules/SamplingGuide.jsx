@@ -644,54 +644,62 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
 
             return (
               <div style={{ padding: "0 28px 24px" }}>
-                <div className="capa1-stats-grid" style={{ marginTop: 24 }}>
+                <div className="info-cards-grid-4" style={{ marginTop: 24 }}>
                   {/* VLA-ED */}
-                  <div className="capa1-stat-card">
-                    <div className="capa1-label">VLA-ED</div>
-                    <div className="capa1-value">
-                      {selected.vla_ed || selected.vla_ed_mg_m3
-                        ? `${selected.vla_ed || selected.vla_ed_mg_m3} mg/m³`
-                        : "N/A"}
+                  <div className="info-card">
+                    <div className="info-card-icon icon-blue">⏱️</div>
+                    <div className="info-card-content">
+                      <span className="info-card-label">VLA-ED</span>
+                      <span className="info-card-value">
+                        {selected.vla_ed || selected.vla_ed_mg_m3
+                          ? `${selected.vla_ed || selected.vla_ed_mg_m3} mg/m³`
+                          : "N/A"}
+                      </span>
                     </div>
                   </div>
 
                   {/* VLA-EC */}
-                  <div className="capa1-stat-card">
-                    <div className="capa1-label">VLA-EC</div>
-                    <div className="capa1-value">
-                      {selected.vla_ec || selected.vla_ec_mg_m3
-                        ? `${selected.vla_ec || selected.vla_ec_mg_m3} mg/m³`
-                        : "N/A"}
+                  <div className="info-card">
+                    <div className="info-card-icon icon-blue">⚡</div>
+                    <div className="info-card-content">
+                      <span className="info-card-label">VLA-EC</span>
+                      <span className="info-card-value">
+                        {selected.vla_ec || selected.vla_ec_mg_m3
+                          ? `${selected.vla_ec || selected.vla_ec_mg_m3} mg/m³`
+                          : "N/A"}
+                      </span>
                     </div>
                   </div>
 
                   {/* Vol. Mín. VLA-ED (UNE 482) */}
-                  <div className={`capa1-stat-card ${showWarningED ? "warning" : ""}`}>
-                    <div className="capa1-label">Vol. Mín. VLA-ED (UNE 482)</div>
-                    <div className="capa1-value-wrapper">
-                      <span className="capa1-value">
+                  <div className={`info-card ${showWarningED ? "warning" : ""}`}>
+                    <div className="info-card-icon icon-teal">📦</div>
+                    <div className="info-card-content">
+                      <span className="info-card-label">Vol. Mín. VLA-ED (UNE 482)</span>
+                      <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                         {volMinED_UNE !== null ? `${volMinED_UNE} L` : "N/A"}
+                        {showWarningED && (
+                          <span className="warning-icon" title={`Atención: El volumen requerido por UNE-EN 482 (${volMinED_UNE} L) supera lo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
+                            ⚠️
+                          </span>
+                        )}
                       </span>
-                      {showWarningED && (
-                        <span className="warning-icon" title={`Atención: El volumen requerido por UNE-EN 482 (${volMinED_UNE} L) supera lo recomendado por el método analítico (${maxVolMethod} L).`}>
-                          ⚠️
-                        </span>
-                      )}
                     </div>
                   </div>
 
                   {/* Vol. Mín. VLA-EC (UNE 482) */}
-                  <div className={`capa1-stat-card ${showWarningEC ? "warning" : ""}`}>
-                    <div className="capa1-label">Vol. Mín. VLA-EC (UNE 482)</div>
-                    <div className="capa1-value-wrapper">
-                      <span className="capa1-value">
+                  <div className={`info-card ${showWarningEC ? "warning" : ""}`}>
+                    <div className="info-card-icon icon-teal">📦</div>
+                    <div className="info-card-content">
+                      <span className="info-card-label">Vol. Mín. VLA-EC (UNE 482)</span>
+                      <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                         {volMinEC_UNE !== null ? `${volMinEC_UNE} L` : "N/A"}
+                        {showWarningEC && (
+                          <span className="warning-icon" title={`Atención: El volumen requerido por UNE-EN 482 (${volMinEC_UNE} L) supera lo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
+                            ⚠️
+                          </span>
+                        )}
                       </span>
-                      {showWarningEC && (
-                        <span className="warning-icon" title={`Atención: El volumen requerido por UNE-EN 482 (${volMinEC_UNE} L) supera lo recomendado por el método analítico (${maxVolMethod} L).`}>
-                          ⚠️
-                        </span>
-                      )}
                     </div>
                   </div>
                 </div>

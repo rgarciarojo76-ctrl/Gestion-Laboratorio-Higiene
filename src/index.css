@@ -1536,72 +1536,6 @@ h1, h2, h3, h4 {
 
 /* === CAPA 1: Cálculos UNE-EN 482 === */
 
-.capa1-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.capa1-stat-card {
-  background: linear-gradient(145deg, #ffffff 0%, #fafbfd 100%);
-  border: 1px solid #cbd5e1;
-  border-radius: 12px;
-  padding: 20px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
-}
-
-.capa1-stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
-}
-
-.capa1-stat-card.warning {
-  background: linear-gradient(135deg, #fff1f2, #ffe4e6);
-  border-color: #fca5a5;
-  box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.1);
-}
-
-.capa1-label {
-  font-size: 11.5px;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-}
-
-.capa1-stat-card.warning .capa1-label {
-  color: #be123c;
-}
-
-.capa1-value-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.capa1-value {
-  font-size: 24px;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.02em;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-}
-
-.capa1-stat-card.warning .capa1-value {
-  color: #9f1239;
-}
-
-.warning-icon {
-  font-size: 20px;
-  cursor: help;
-  animation: pulseWarning 2s infinite;
-}
-
 @keyframes pulseWarning {
   0% { transform: scale(1); }
   50% { transform: scale(1.15); }
@@ -1663,6 +1597,20 @@ h1, h2, h3, h4 {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
   border-color: #cbd5e1;
+}
+
+.info-card.warning {
+  background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+  border-color: #fca5a5;
+  box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.1);
+}
+
+.info-card.warning .info-card-label {
+  color: #be123c;
+}
+
+.info-card.warning .info-card-value {
+  color: #9f1239;
 }
 
 .info-card:nth-child(1):hover::after {
