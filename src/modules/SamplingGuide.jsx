@@ -634,16 +634,16 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
           {/* 4-column Grid for Params */}
           <div className="info-cards-grid-4">
             {/* Caudal (Dynamic & Editable) */}
-            <div className="info-card" style={{ flex: "1 1 100%" }}>
+            <div className="info-card" style={{ display: "flex", flexDirection: "column" }}>
               <div className="info-card-icon icon-teal">💨</div>
               <div className="info-card-content" style={{ width: "100%" }}>
-                <span className="info-card-label">Caudal de Muestreo (UNE-EN 482)</span>
+                <span className="info-card-label" style={{ marginBottom: "12px" }}>Caudal Muestreo (UNE 482)</span>
                 
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", marginTop: "8px", alignItems: "flex-start" }}>
-                  {/* Left: Original Method Read-Only */}
-                  <div style={{ flex: "1 1 200px" }}>
-                    <span style={{ fontSize: "11px", color: "#64748b", display: "block", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Rango del Método</span>
-                    <span className="info-card-value">
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {/* Top: Original Method Read-Only */}
+                  <div>
+                    <span className="info-card-label" style={{ color: "#94a3b8", fontSize: "10px", marginBottom: "4px" }}>Rango del Método</span>
+                    <span className="info-card-value" style={{ fontSize: "14px" }}>
                       {selected.caudal_metodo_min && selected.caudal_metodo_max 
                         ? (selected.caudal_metodo_min === selected.caudal_metodo_max
                             ? `${selected.caudal_metodo_min.toString().replace('.', ',')} L/min`
@@ -654,23 +654,20 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                     </span>
                   </div>
 
-                  {/* Right: Assigned / Editable */}
-                  <div style={{ flex: "1 1 200px" }}>
-                    <span style={{ fontSize: "11px", color: "#64748b", display: "block", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Caudal Asignado (L/min)</span>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                      <input 
-                        type="text" 
-                        className="search-input"
-                        style={{ width: "120px", padding: "6px 10px", fontSize: "14px", height: "auto", margin: 0, border: "1px solid #cbd5e1" }}
-                        value={editableCaudal}
-                        onChange={(e) => {
-                          // Allow numbers and commas/dots
-                          const val = e.target.value.replace(/[^0-9.,]/g, '');
-                          setEditableCaudal(val);
-                        }}
-                        placeholder="Ej: 1,5"
-                      />
-                    </div>
+                  {/* Bottom: Assigned / Editable */}
+                  <div>
+                    <span className="info-card-label" style={{ color: "#94a3b8", fontSize: "10px", marginBottom: "6px" }}>Caudal Asignado (L/min)</span>
+                    <input 
+                      type="text" 
+                      className="caudal-input-premium"
+                      value={editableCaudal}
+                      onChange={(e) => {
+                        // Allow numbers and commas/dots
+                        const val = e.target.value.replace(/[^0-9.,]/g, '');
+                        setEditableCaudal(val);
+                      }}
+                      placeholder="Ej: 1,5"
+                    />
                   </div>
                 </div>
                 
