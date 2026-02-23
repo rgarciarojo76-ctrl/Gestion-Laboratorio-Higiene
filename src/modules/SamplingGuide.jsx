@@ -394,10 +394,16 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       </a>
                     )}
                     {isCommonEquipment && (
-                      <a
-                        href={`/api/link/apa/${encodeURIComponent(searchFocus)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        onClick={async () => {
+                          try {
+                            const res = await fetch(`/api/link/apa/${encodeURIComponent(searchFocus)}`);
+                            const data = await res.json();
+                            if (data.url) window.open(data.url, '_blank');
+                          } catch (e) {
+                            console.error("Error fetching video link", e);
+                          }
+                        }}
                         className="btn-pro btn-pro-secondary"
                         style={{
                           fontSize: 13,
@@ -405,12 +411,15 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                           alignItems: "center",
                           gap: 6,
                           textDecoration: "none",
+                          border: "1px solid #e2e8f0",
+                          background: "white",
+                          cursor: "pointer"
                         }}
-                        title={`Ver tutorial APA para ${searchFocus}`}
+                        title={`Ver tutorial para ${searchFocus}`}
                       >
                         <span style={{ fontSize: "16px" }}>▶️</span>
-                        Vídeo APA
-                      </a>
+                        Vídeo
+                      </button>
                     )}
                   </>
                 );
