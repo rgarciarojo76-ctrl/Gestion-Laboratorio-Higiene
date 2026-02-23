@@ -11,6 +11,7 @@ import { useState, useMemo, useEffect, useRef } from "react";
 export default function SamplingGuide({ contaminants, allContaminants, loading }) {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+  const [editableCaudal, setEditableCaudal] = useState("");
   const searchInputRef = useRef(null);
 
   // Modal state for Anexo I
@@ -129,6 +130,20 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
   const selected =
     contaminants.find((c) => c.id === selectedId) ||
     contaminants.find((c) => c.contaminante === selectedId);
+
+  // Synchronize editable flow rate when a new chemical is selected
+  useEffect(() => {
+    if (selected) {
+      if (selected.caudal_asignado !== undefined && selected.caudal_asignado !== null) {
+        setEditableCaudal(selected.caudal_asignado.toString().replace('.', ','));
+      } else {
+        const fallback = parseNum(selected.caudal) || parseNum(selected.caudal_l_min);
+        setEditableCaudal(fallback !== null ? fallback.toString().replace('.', ',') : "");
+      }
+    } else {
+      setEditableCaudal("");
+    }
+  }, [selected]);
 
   // Derive compounds for a screening profile
   const screeningCompounds = useMemo(() => {
@@ -438,12 +453,34 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                 className="btn-pro btn-pro-primary"
                 onClick={async () => {
                   try {
+                    // Extract values dynamically for the PDF Engine to stamp the custom ones instead of static ones
+                    const methodCaudal = parseFloat(editableCaudal.replace(',', '.')) || parseNum(selected.caudal) || parseNum(selected.caudal_l_min);
+                    const volMinED_UNE = calcVolMinUNE482(selected.lq || selected.loq, selected.vla_ed || selected.vla_ed_mg_m3, 0.1);
+                    const volMinEC_UNE = calcVolMinUNE482(selected.lq || selected.loq, selected.vla_ec || selected.vla_ec_mg_m3, 0.5);
+                    const timeMinED = (volMinED_UNE !== null && methodCaudal) ? parseFloat((volMinED_UNE / methodCaudal).toFixed(1)) : null;
+                    const timeMinEC = (volMinEC_UNE !== null && methodCaudal) ? parseFloat((volMinEC_UNE / methodCaudal).toFixed(1)) : null;
+                    
+                    const formatTime = (minutes) => {
+                      if (minutes === null || isNaN(minutes)) return null;
+                      if (minutes < 60) return `${minutes} min`;
+                      const hrs = Math.floor(minutes / 60);
+                      const mins = Math.round(minutes % 60);
+                      return mins > 0 ? `${hrs}h ${mins}min` : `${hrs}h`;
+                    };
+
+                    const payload = { 
+                      ...selected,
+                      caudal_asignado_final: methodCaudal,
+                      tiempo_minimo_ed_final: formatTime(timeMinED),
+                      tiempo_minimo_ec_final: formatTime(timeMinEC)
+                    };
+
                     const response = await fetch(
                       "/api/generate-ficha",
                       {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(selected),
+                        body: JSON.stringify(payload),
                       },
                     );
                     if (!response.ok) throw new Error("API Error");
@@ -596,18 +633,62 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
 
           {/* 4-column Grid for Params */}
           <div className="info-cards-grid-4">
-            {/* Caudal */}
-            <div className="info-card">
+            {/* Caudal (Dynamic & Editable) */}
+            <div className="info-card" style={{ flex: "1 1 100%" }}>
               <div className="info-card-icon icon-teal">💨</div>
-              <div className="info-card-content">
-                <span className="info-card-label">Caudal</span>
-                <span className="info-card-value">
-                  {selected.caudal
-                    ? `${selected.caudal} L/min`
-                    : selected.caudal_l_min
-                      ? `${selected.caudal_l_min} L/min`
-                      : "—"}
-                </span>
+              <div className="info-card-content" style={{ width: "100%" }}>
+                <span className="info-card-label">Caudal de Muestreo (UNE-EN 482)</span>
+                
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", marginTop: "8px", alignItems: "flex-start" }}>
+                  {/* Left: Original Method Read-Only */}
+                  <div style={{ flex: "1 1 200px" }}>
+                    <span style={{ fontSize: "11px", color: "#64748b", display: "block", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Rango del Método</span>
+                    <span className="info-card-value">
+                      {selected.caudal_metodo_min && selected.caudal_metodo_max 
+                        ? (selected.caudal_metodo_min === selected.caudal_metodo_max
+                            ? `${selected.caudal_metodo_min.toString().replace('.', ',')} L/min`
+                            : `${selected.caudal_metodo_min.toString().replace('.', ',')} - ${selected.caudal_metodo_max.toString().replace('.', ',')} L/min`)
+                        : selected.caudal || selected.caudal_l_min
+                          ? `${selected.caudal || selected.caudal_l_min} L/min`
+                          : "—"}
+                    </span>
+                  </div>
+
+                  {/* Right: Assigned / Editable */}
+                  <div style={{ flex: "1 1 200px" }}>
+                    <span style={{ fontSize: "11px", color: "#64748b", display: "block", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Caudal Asignado (L/min)</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <input 
+                        type="text" 
+                        className="search-input"
+                        style={{ width: "120px", padding: "6px 10px", fontSize: "14px", height: "auto", margin: 0, border: "1px solid #cbd5e1" }}
+                        value={editableCaudal}
+                        onChange={(e) => {
+                          // Allow numbers and commas/dots
+                          const val = e.target.value.replace(/[^0-9.,]/g, '');
+                          setEditableCaudal(val);
+                        }}
+                        placeholder="Ej: 1,5"
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Validation Warning */}
+                {(() => {
+                  const currentVal = parseFloat(editableCaudal.replace(',', '.'));
+                  if (!isNaN(currentVal) && selected.caudal_metodo_min && selected.caudal_metodo_max) {
+                    if (currentVal < selected.caudal_metodo_min || currentVal > selected.caudal_metodo_max) {
+                      return (
+                        <div style={{ marginTop: "12px", padding: "8px 12px", backgroundColor: "#fee2e2", borderLeft: "4px solid #ef4444", borderRadius: "4px", fontSize: "12px", color: "#991b1b" }}>
+                          ⚠️ Error: El caudal debe estar entre <strong>{selected.caudal_metodo_min.toString().replace('.', ',')}</strong> y <strong>{selected.caudal_metodo_max.toString().replace('.', ',')}</strong> L/min según el método analítico.
+                        </div>
+                      );
+                    }
+                  }
+                  return null;
+                })()}
+
               </div>
             </div>
 
@@ -676,7 +757,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               parseNum(selected.volumen_recomendado_l) ||
               parseNum(selected.volumen_minimo);
 
-            const methodCaudal = parseNum(selected.caudal) || parseNum(selected.caudal_l_min);
+            const methodCaudal = parseFloat(editableCaudal.replace(',', '.')) || parseNum(selected.caudal) || parseNum(selected.caudal_l_min);
 
             const timeMinED_UNE = (volMinED_UNE !== null && methodCaudal) 
               ? parseFloat((volMinED_UNE / methodCaudal).toFixed(1)) 
@@ -685,6 +766,14 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             const timeMinEC_UNE = (volMinEC_UNE !== null && methodCaudal) 
               ? parseFloat((volMinEC_UNE / methodCaudal).toFixed(1)) 
               : null;
+              
+            const formatTime = (minutes) => {
+              if (minutes === null || isNaN(minutes)) return "N/A";
+              if (minutes < 60) return `${minutes} min`;
+              const hrs = Math.floor(minutes / 60);
+              const mins = Math.round(minutes % 60);
+              return mins > 0 ? `${hrs}h ${mins}min` : `${hrs}h`;
+            };
 
             let showWarningED = false;
             let showWarningEC = false;
@@ -724,15 +813,20 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   </div>
 
                   {/* Tiempo Mín. VLA-ED (UNE 482) */}
-                  <div className={`info-card ${showWarningED ? "warning" : ""}`}>
+                  <div className={`info-card ${showWarningED || (timeMinED_UNE > 480) ? "warning" : ""}`}>
                     <div className="info-card-icon icon-teal">⏳</div>
                     <div className="info-card-content">
                       <span className="info-card-label">Tiempo Mín. ED (UNE 482)</span>
                       <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        {timeMinED_UNE !== null ? `${timeMinED_UNE} min` : "N/A"}
+                        {formatTime(timeMinED_UNE)}
                         {showWarningED && (
-                          <span className="warning-icon" title={`Atención: El tiempo requerido (${timeMinED_UNE} min a ${methodCaudal} L/min) equivale a ${volMinED_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
+                          <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinED_UNE)} a ${methodCaudal} L/min) equivale a ${volMinED_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
                             ⚠️
+                          </span>
+                        )}
+                        {(timeMinED_UNE > 480) && !showWarningED && (
+                           <span className="warning-icon" title="Excede jornada de 8h" style={{ fontSize: "15px" }}>
+                            ⏱️
                           </span>
                         )}
                       </span>
@@ -745,9 +839,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                     <div className="info-card-content">
                       <span className="info-card-label">Tiempo Mín. EC (UNE 482)</span>
                       <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        {timeMinEC_UNE !== null ? `${timeMinEC_UNE} min` : "N/A"}
+                        {formatTime(timeMinEC_UNE)}
                         {showWarningEC && (
-                          <span className="warning-icon" title={`Atención: El tiempo requerido (${timeMinEC_UNE} min a ${methodCaudal} L/min) equivale a ${volMinEC_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
+                          <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinEC_UNE)} a ${methodCaudal} L/min) equivale a ${volMinEC_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
                             ⚠️
                           </span>
                         )}
@@ -759,9 +853,16 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                 {/* Banner de Advertencia Global */}
                 {showWarningTotal && (
                   <div className="capa1-warning-banner" style={{ margin: "24px 28px 0" }}>
-                    ⚠️ <b>Atención:</b> El volumen requerido por la norma UNE-EN 482:2021 supera 
+                    ⚠️ <b>Atención (Saturación Soporte):</b> El volumen requerido por la norma UNE-EN 482:2021 supera 
                     el volumen recomendado o máximo del método analítico ({maxVolMethod} L). 
                     Se requiere ajustar la estrategia de muestreo.
+                  </div>
+                )}
+                
+                {/* Banner de Advertencia Jornada Laboral */}
+                {timeMinED_UNE > 480 && (
+                  <div className="capa1-warning-banner banner-orange" style={{ margin: "24px 28px 0", backgroundColor: "#fff7ed", color: "#9a3412", borderLeft: "4px solid #f97316" }}>
+                    ⚠️ <b>Atención (Planificación):</b> El tiempo necesario para cumplir la norma UNE 482 ({formatTime(timeMinED_UNE)}) supera la jornada laboral de 8 horas con este caudal ({methodCaudal} L/min). Considere aumentar el caudal dentro del rango permitido por el método analítico.
                   </div>
                 )}
               </div>

@@ -318,13 +318,20 @@ def api_generate_ficha():
         Story.append(Spacer(1, 15))
 
         Story.append(Paragraph("2. Parámetros de Captación", heading_style))
+        # Use dynamic final values if available, else static fallbacks
+        final_caudal = data.get("caudal_asignado_final")
+        if final_caudal is not None:
+            caudal_str = f"{final_caudal} L/min (Estrategia Asignada)"
+        else:
+            caudal_str = str(data.get("caudal", data.get("caudal_l_min", "—")))
+
         b2_data = [
             ["Soporte de Captación", Paragraph(str(data.get("soporte_captacion_display", data.get("soporte_captacion", "—"))), normal_style)],
             ["Ref. Soporte", str(data.get("ref_soporte", "—"))],
             ["Técnica Analítica", Paragraph(str(data.get("tecnica_analitica", "—")), normal_style)],
             ["Ref. Técnica", str(data.get("ref_tecnica", "—"))],
             ["Método de Análisis", Paragraph(str(data.get("metodo_analisis", "—")), normal_style)],
-            ["Caudal (L/min)", str(data.get("caudal", data.get("caudal_l_min", "—")))],
+            ["Caudal (L/min)", caudal_str],
             ["Volumen Recomendado (L)", str(data.get("volumen_minimo", data.get("volumen_recomendado_l", "—")))],
             ["Desorción", Paragraph(str(data.get("desorcion", "—")), normal_style)]
         ]
@@ -332,9 +339,14 @@ def api_generate_ficha():
         Story.append(Spacer(1, 15))
 
         Story.append(Paragraph("3. Criterios Analíticos y Límites", heading_style))
+        # Append calculated times if provided by the frontend payload
+        time_ed = data.get("tiempo_minimo_ed_final")
+        time_ec = data.get("tiempo_minimo_ec_final")
+        
         b3_data = [
             ["LOQ / LOD", f"{data.get('lq', data.get('loq', '—'))} µg / {data.get('ld', data.get('lod', '—'))} µg"],
             ["VLA-ED / VLA-EC", f"{str(data.get('vla_ed', data.get('vla_ed_mg_m3', '—')))} / {str(data.get('vla_ec', data.get('vla_ec_mg_m3', '—')))}"],
+            ["Tiempo Mínimo UNE 482", f"ED: {time_ed if time_ed else '—'} | EC: {time_ec if time_ec else '—'}"],
             ["Frases H", Paragraph(str(data.get("frases_h", "—")), normal_style)],
         ]
         Story.append(create_table(b3_data))
