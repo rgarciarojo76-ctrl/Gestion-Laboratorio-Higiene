@@ -451,16 +451,16 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
   };
 
   const fields = [
-    { key: "contaminante", label: "Nombre Interno (Contaminante)" },
-    { key: "contaminante_display", label: "Nombre para Mostrar (Display)" },
+    { key: "contaminante", label: "Nombre Interno (Contaminante)", wide: true },
+    { key: "contaminante_display", label: "Nombre para Mostrar (Display)", wide: true },
     { key: "cas", label: "Nº CAS" },
-    { key: "sinonimo", label: "Sinónimos" },
-    { key: "descripcion_tecnica", label: "Descripción Técnica" },
+    { key: "sinonimo", label: "Sinónimos", wide: true },
+    { key: "descripcion_tecnica", label: "Descripción Técnica", wide: true },
     { key: "codigo_prueba", label: "Código Prueba (General)" },
     { key: "codigo_8d", label: "Código Urgente (8 días)" },
     { key: "codigo_15d", label: "Código Estándar (15 días)" },
     { key: "soporte_captacion", label: "Soporte de Captación (Código)" },
-    { key: "soporte_captacion_display", label: "Soporte de Captación (Display)" },
+    { key: "soporte_captacion_display", label: "Soporte de Captación (Display)", wide: true },
     { key: "ref_soporte", label: "Referencia Soporte" },
     { key: "caudal", label: "Caudal (L/min)" },
     { key: "volumen_minimo", label: "Volumen Mínimo (L)" },
@@ -478,13 +478,13 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
     { key: "is_cmr", label: "Es CMR", type: "boolean" },
     { key: "familia_cmr", label: "Familia CMR" },
     { key: "rd_665", label: "RD 665", type: "boolean" },
-    { key: "frases_h", label: "Frases H" },
+    { key: "frases_h", label: "Frases H", wide: true },
     { key: "gestis_pais", label: "Gestis País" },
     { key: "gestis_twa", label: "Gestis TWA" },
     { key: "gestis_stel", label: "Gestis STEL" },
     { key: "tecnica_analitica", label: "Técnica Analítica (Acrónimo)" },
-    { key: "metodo_analisis", label: "Método de Análisis" },
-    { key: "metodo_interno_basado_en", label: "Método Interno Basado En" },
+    { key: "metodo_analisis", label: "Método de Análisis", wide: true },
+    { key: "metodo_interno_basado_en", label: "Método Interno Basado En", wide: true },
     { key: "ref_tecnica", label: "Referencia Técnica" },
     { key: "laboratorio", label: "Laboratorio" },
     { key: "plazo_entrega", label: "Plazo de Entrega" },
@@ -495,7 +495,7 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
     { key: "coeficiente_desorcion", label: "Coeficiente de Desorción" },
     { key: "cv_analitico", label: "CV Analítico" },
     { key: "cv_total", label: "CV Total" },
-    { key: "observaciones_concepto", label: "Observaciones Concepto" },
+    { key: "observaciones_concepto", label: "Observaciones Concepto", wide: true },
     { key: "evaluacion_apendice_1", label: "Evaluación Apéndice 1", type: "select", options: ["Sí", "No", "N/A"] },
     { key: "ie_limite_condiciones_ed", label: "IE Límite Condiciones ED" },
     { key: "ie_limite_condiciones_twa", label: "IE Límite Condiciones TWA" },
@@ -503,9 +503,9 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
     { key: "ie_minimo_teorico_twa", label: "IE Mínimo Teórico TWA" },
     { key: "screening_perfil", label: "Perfil Screening" },
     { key: "screening_desc", label: "Descripción Screening" },
-    { key: "screening_condiciones_ed", label: "Screening Condiciones ED" },
-    { key: "screening_condiciones_ec", label: "Screening Condiciones EC" },
-    { key: "screening_comentarios", label: "Screening Comentarios" },
+    { key: "screening_condiciones_ed", label: "Screening Condiciones ED", wide: true },
+    { key: "screening_condiciones_ec", label: "Screening Condiciones EC", wide: true },
+    { key: "screening_comentarios", label: "Screening Comentarios", wide: true },
     { key: "sin_metodo_disponible", label: "Sin Método Disponible", type: "boolean" },
     { key: "tabla", label: "Grupo/Tabla" }
   ];
@@ -520,8 +520,8 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
           </button>
         </div>
         <div className="admin-modal-body">
-          {fields.map(({ key, label, type, options }) => (
-            <div key={key} className="admin-modal-field">
+          {fields.map(({ key, label, type, options, wide }) => (
+            <div key={key} className={`admin-modal-field ${wide ? "wide" : ""}`}>
               <label>{label}</label>
               {type === "boolean" ? (
                 <select 

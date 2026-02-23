@@ -2222,9 +2222,9 @@ h1, h2, h3, h4 {
 .admin-modal {
   background: white;
   border-radius: 16px;
-  max-width: 560px;
-  width: 100%;
-  max-height: 80vh;
+  max-width: 1000px;
+  width: 90vw;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
@@ -2264,9 +2264,13 @@ h1, h2, h3, h4 {
 .admin-modal-body {
   padding: 20px 24px;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.admin-modal-field.wide {
+  grid-column: 1 / -1;
 }
 
 .admin-modal-field label {
