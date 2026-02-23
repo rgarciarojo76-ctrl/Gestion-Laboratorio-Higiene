@@ -65,7 +65,17 @@ def get_file_from_github(filepath):
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         data = response.json()
-        content = base64.b64decode(data['content']).decode('utf-8')
+        if data.get('content'):
+            content = base64.b64decode(data['content']).decode('utf-8')
+        elif data.get('download_url'):
+            # Fetch from raw download link (files > 1MB)
+            headers_dl = {}
+            if GITHUB_TOKEN:
+                headers_dl["Authorization"] = f"token {GITHUB_TOKEN}"
+            resp_dl = requests.get(data['download_url'], headers=headers_dl)
+            content = resp_dl.text if resp_dl.status_code == 200 else ""
+        else:
+            content = ""
         return content, data['sha']
     return None, None
 
