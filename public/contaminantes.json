@@ -12975,7 +12975,7 @@
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
-    "visible_en_app": true
+    "visible_en_app": false
   },
   {
     "contaminante": "VOC especial urgente 8 días",
