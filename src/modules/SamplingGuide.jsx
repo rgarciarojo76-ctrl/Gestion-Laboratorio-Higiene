@@ -430,7 +430,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                 onClick={async () => {
                   try {
                     const response = await fetch(
-                      "http://localhost:5003/api/generate-ficha",
+                      "/api/generate-ficha",
                       {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
