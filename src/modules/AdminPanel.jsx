@@ -25,8 +25,7 @@ export default function AdminPanel({ contaminants, onDataChanged }) {
   // Loading state
   const [saving, setSaving] = useState(false);
 
-  const API_BASE = "http://localhost:5003";
-  const storedPw = authenticated ? password : "";
+  const API_BASE = "";
 
   // ─── Authentication ───────────────────────────────────────────────
   const handleLogin = async () => {

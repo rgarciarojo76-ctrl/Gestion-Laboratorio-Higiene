@@ -30,7 +30,7 @@ function App() {
 
   // Load contaminant data from Flask API (live state)
   const loadContaminants = useCallback(() => {
-    fetch('http://localhost:5003/api/contaminants/all')
+    fetch('/api/contaminants/all')
       .then(res => res.json())
       .then(data => {
         setContaminants(data)

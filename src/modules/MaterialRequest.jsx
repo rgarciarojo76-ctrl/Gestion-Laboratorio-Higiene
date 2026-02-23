@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useEffect } from 'react'
+import { useState, useRef, useMemo } from 'react'
 
 /**
  * Módulo II: Solicitud de Material (F01655)
@@ -150,12 +150,45 @@ export default function MaterialRequest({ contaminants = [], memory, updateMemor
 
   const handleGenerate = async () => {
     setGenerating(true)
-    // In a real setup, this would call the Flask backend
-    // For now, simulate with a delay
-    setTimeout(() => {
-      setGenerating(false)
+    try {
+      const response = await fetch('/api/generate-f01655', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ...form, materials })
+      })
+
+      if (!response.ok) throw new Error('Error al generar el documento')
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = url
+
+      const disposition = response.headers.get('content-disposition')
+      let filename = 'Solicitud_Material_F01655.docx'
+      if (disposition && disposition.indexOf('attachment') !== -1) {
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+        const matches = filenameRegex.exec(disposition)
+        if (matches != null && matches[1]) {
+          filename = matches[1].replace(/['"]/g, '')
+        }
+      }
+
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      
       setGenerated(true)
-    }, 2000)
+    } catch (error) {
+      console.error('Error generando F01655:', error)
+      alert('Error de conexión con el servidor backend.')
+    } finally {
+      setGenerating(false)
+    }
   }
 
   const renderStep = () => {

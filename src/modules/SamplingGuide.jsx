@@ -376,7 +376,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   <>
                     {mtaCode && (
                       <a
-                        href={`http://localhost:5003/api/link/mta/${encodeURIComponent(mtaCode)}`}
+                        href={`/api/link/mta/${encodeURIComponent(mtaCode)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn-pro btn-pro-secondary"
@@ -395,7 +395,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                     )}
                     {isCommonEquipment && (
                       <a
-                        href={`http://localhost:5003/api/link/apa/${encodeURIComponent(searchFocus)}`}
+                        href={`/api/link/apa/${encodeURIComponent(searchFocus)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn-pro btn-pro-secondary"
