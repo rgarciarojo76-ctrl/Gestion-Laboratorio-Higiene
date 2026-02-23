@@ -528,7 +528,7 @@ def link_apa(term):
 def check_admin_password():
     """Validate admin password from header."""
     pw = request.headers.get("X-Admin-Password", "")
-    return pw == ADMIN_PASSWORD
+    return pw.strip() == ADMIN_PASSWORD.strip()
 
 def save_contaminants():
     """Persist contaminants to both data/ and public/ JSON files."""
@@ -554,8 +554,9 @@ def log_activity(action, product_name="", cas=""):
 def admin_auth():
     """Validate admin password."""
     pw = request.json.get("password", "") if request.is_json else ""
-    if pw == ADMIN_PASSWORD:
+    if pw.strip() == ADMIN_PASSWORD.strip():
         return jsonify({"ok": True})
+    print(f"Failed login attempt with password: '{pw}'")
     return jsonify({"ok": False, "error": "Contraseña incorrecta"}), 401
 
 
