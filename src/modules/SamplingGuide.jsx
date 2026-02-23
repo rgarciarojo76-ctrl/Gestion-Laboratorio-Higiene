@@ -634,6 +634,16 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               parseNum(selected.volumen_recomendado_l) ||
               parseNum(selected.volumen_minimo);
 
+            const methodCaudal = parseNum(selected.caudal) || parseNum(selected.caudal_l_min);
+
+            const timeMinED_UNE = (volMinED_UNE !== null && methodCaudal) 
+              ? parseFloat((volMinED_UNE / methodCaudal).toFixed(1)) 
+              : null;
+              
+            const timeMinEC_UNE = (volMinEC_UNE !== null && methodCaudal) 
+              ? parseFloat((volMinEC_UNE / methodCaudal).toFixed(1)) 
+              : null;
+
             let showWarningED = false;
             let showWarningEC = false;
             if (maxVolMethod) {
@@ -671,15 +681,15 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                     </div>
                   </div>
 
-                  {/* Vol. Mín. VLA-ED (UNE 482) */}
+                  {/* Tiempo Mín. VLA-ED (UNE 482) */}
                   <div className={`info-card ${showWarningED ? "warning" : ""}`}>
-                    <div className="info-card-icon icon-teal">📦</div>
+                    <div className="info-card-icon icon-teal">⏳</div>
                     <div className="info-card-content">
-                      <span className="info-card-label">Vol. Mín. ED (UNE 482)</span>
+                      <span className="info-card-label">Tiempo Mín. ED (UNE 482)</span>
                       <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        {volMinED_UNE !== null ? `${volMinED_UNE} L` : "N/A"}
+                        {timeMinED_UNE !== null ? `${timeMinED_UNE} min` : "N/A"}
                         {showWarningED && (
-                          <span className="warning-icon" title={`Atención: El volumen requerido por UNE-EN 482 (${volMinED_UNE} L) supera lo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
+                          <span className="warning-icon" title={`Atención: El tiempo requerido (${timeMinED_UNE} min a ${methodCaudal} L/min) equivale a ${volMinED_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
                             ⚠️
                           </span>
                         )}
@@ -687,15 +697,15 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                     </div>
                   </div>
 
-                  {/* Vol. Mín. VLA-EC (UNE 482) */}
+                  {/* Tiempo Mín. VLA-EC (UNE 482) */}
                   <div className={`info-card ${showWarningEC ? "warning" : ""}`}>
-                    <div className="info-card-icon icon-teal">📦</div>
+                    <div className="info-card-icon icon-teal">⏳</div>
                     <div className="info-card-content">
-                      <span className="info-card-label">Vol. Mín. EC (UNE 482)</span>
+                      <span className="info-card-label">Tiempo Mín. EC (UNE 482)</span>
                       <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        {volMinEC_UNE !== null ? `${volMinEC_UNE} L` : "N/A"}
+                        {timeMinEC_UNE !== null ? `${timeMinEC_UNE} min` : "N/A"}
                         {showWarningEC && (
-                          <span className="warning-icon" title={`Atención: El volumen requerido por UNE-EN 482 (${volMinEC_UNE} L) supera lo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
+                          <span className="warning-icon" title={`Atención: El tiempo requerido (${timeMinEC_UNE} min a ${methodCaudal} L/min) equivale a ${volMinEC_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
                             ⚠️
                           </span>
                         )}
