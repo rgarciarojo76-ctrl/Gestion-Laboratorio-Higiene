@@ -461,6 +461,8 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
     { key: "codigo_15d", label: "Código Estándar (15 días)" },
     { key: "soporte_captacion", label: "Soporte de Captación (Código)" },
     { key: "soporte_captacion_display", label: "Soporte de Captación (Display)", wide: true },
+    { key: "codigo_soporte", label: "Código Soporte Principal" },
+    { key: "codigo_soporte_alt", label: "Código Soporte Alternativo", wide: true },
     { key: "ref_soporte", label: "Referencia Soporte" },
     { key: "caudal", label: "Caudal (L/min)" },
     { key: "volumen_minimo", label: "Volumen Mínimo (L)" },

@@ -9,6 +9,7 @@ from flask_cors import CORS
 import urllib.parse
 from docx import Document
 from docx.shared import Pt
+import openpyxl
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
@@ -136,6 +137,69 @@ def load_local_contaminants():
             print(f"GitHub fallback failed: {gh_e}")
         return []
 
+
+def update_excel_in_github(cas, codigo_soporte, codigo_soporte_alt, commit_message):
+    """Update the Support Codes in the Excel file stored in GitHub."""
+    if not GITHUB_TOKEN or not cas:
+        return False
+        
+    url = f"https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/contents/data/Base%20de%20conocimiento%20completa%202026.xlsx"
+    headers = {
+        "Accept": "application/vnd.github.v3+json",
+        "Authorization": f"token {GITHUB_TOKEN}"
+    }
+    resp = requests.get(url, headers=headers)
+    if resp.status_code != 200:
+        return False
+        
+    data = resp.json()
+    dl_url = data.get("download_url")
+    if not dl_url: return False
+    
+    resp_dl = requests.get(dl_url, headers=headers)
+    if resp_dl.status_code != 200:
+        return False
+        
+    try:
+        wb = openpyxl.load_workbook(io.BytesIO(resp_dl.content))
+        ws = wb["Intranet Cargar PRUEBAS"]
+        modified = False
+        
+        for row in ws.iter_rows(min_row=2):
+            row_cas = str(row[0].value or "").strip()
+            if row_cas == cas:
+                curr_18 = str(row[18].value or "").strip()
+                curr_19 = str(row[19].value or "").strip()
+                
+                new_18 = str(codigo_soporte or "").strip()
+                new_19 = str(codigo_soporte_alt or "").strip()
+                
+                if curr_18 != new_18:
+                    row[18].value = new_18 if new_18 else None
+                    modified = True
+                if curr_19 != new_19:
+                    row[19].value = new_19 if new_19 else None
+                    modified = True
+                    
+        if modified:
+            buf = io.BytesIO()
+            wb.save(buf)
+            buf.seek(0)
+            encoded = base64.b64encode(buf.read()).decode("utf-8")
+            payload = {
+                "message": commit_message,
+                "content": encoded,
+                "sha": data["sha"],
+                "branch": "main"
+            }
+            put_resp = requests.put(url, headers=headers, json=payload)
+            return put_resp.status_code in [200, 201]
+            
+    except Exception as e:
+        print(f"Error modifying Excel: {e}")
+        return False
+        
+    return True
 
 # --- Document Generation ---
     
@@ -349,6 +413,55 @@ def admin_list_products():
             or q in (c.get("sinonimo") or "").lower()
         ]
     return jsonify(contaminants)
+
+
+@app.route("/api/admin/products/<path:product_id>", methods=["PUT"])
+def admin_update_product(product_id):
+    if not check_admin_password(): return jsonify({"error": "No autorizado"}), 401
+    updated_data = request.json
+    
+    content, sha = get_file_from_github("data/contaminantes.json")
+    if not content:
+        return jsonify({"error": "No se pudo leer GitHub"}), 500
+        
+    contaminants = json.loads(content)
+    found = False
+    
+    # Store old values to check for Excel update
+    cas_to_update = None
+    old_soporte = ""
+    old_soporte_alt = ""
+    new_soporte = updated_data.get("codigo_soporte", "")
+    new_soporte_alt = updated_data.get("codigo_soporte_alt", "")
+    
+    for c in contaminants:
+        if str(c.get("id")) == str(product_id):
+            cas_to_update = c.get("cas")
+            old_soporte = c.get("codigo_soporte", "")
+            old_soporte_alt = c.get("codigo_soporte_alt", "")
+            
+            c.update(updated_data)
+            found = True
+            break
+            
+    if not found:
+        return jsonify({"error": "Producto no encontrado"}), 404
+        
+    # Save the JSON changes
+    msg = f"Panel Admin: Editado {updated_data.get('contaminante')}"
+    success = save_contaminants_to_github(contaminants, msg)
+    
+    if success:
+        # Check if we need to update the Excel file
+        if cas_to_update and (old_soporte != new_soporte or old_soporte_alt != new_soporte_alt):
+            update_excel_in_github(
+                cas=cas_to_update, 
+                codigo_soporte=new_soporte, 
+                codigo_soporte_alt=new_soporte_alt,
+                commit_message=f"Panel Admin: Actualizados soportes en Excel para {cas_to_update}"
+            )
+        return jsonify({"ok": True})
+    return jsonify({"error": "Error guardando en GitHub"}), 500
 
 
 @app.route("/api/admin/products/<path:product_id>/visibility", methods=["PUT"])

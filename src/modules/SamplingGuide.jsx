@@ -523,17 +523,23 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       "—",
                   )}
                 </span>
-                {selected.ref_soporte && (
-                  <span
-                    style={{
-                      fontSize: "11px",
-                      color: "#64748b",
-                      fontFamily: "monospace",
-                    }}
-                  >
-                    Ref: {selected.ref_soporte}
-                  </span>
-                )}
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginTop: "6px" }}>
+                  {selected.codigo_soporte && (
+                    <span style={{ fontSize: "11px", color: "#64748b" }}>
+                      Soporte Principal — Ref: <span style={{ fontFamily: "monospace", fontWeight: 600 }}>{selected.codigo_soporte}</span>
+                    </span>
+                  )}
+                  {selected.codigo_soporte_alt && (
+                    <span style={{ fontSize: "11px", color: "#64748b" }}>
+                      Soporte Alternativo — Ref: <span style={{ fontFamily: "monospace", fontWeight: 600 }}>{selected.codigo_soporte_alt}</span>
+                    </span>
+                  )}
+                  {!selected.codigo_soporte && selected.ref_soporte && (
+                    <span style={{ fontSize: "11px", color: "#64748b" }}>
+                      Ref: <span style={{ fontFamily: "monospace", fontWeight: 600 }}>{selected.ref_soporte}</span>
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
