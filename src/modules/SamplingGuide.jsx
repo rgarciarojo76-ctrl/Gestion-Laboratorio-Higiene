@@ -643,7 +643,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             const showWarningTotal = showWarningED || showWarningEC;
 
             return (
-              <div style={{ padding: "0 28px 24px" }}>
+              <div style={{ paddingBottom: "24px" }}>
                 <div className="info-cards-grid-4" style={{ marginTop: 24 }}>
                   {/* VLA-ED */}
                   <div className="info-card">
@@ -675,7 +675,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   <div className={`info-card ${showWarningED ? "warning" : ""}`}>
                     <div className="info-card-icon icon-teal">📦</div>
                     <div className="info-card-content">
-                      <span className="info-card-label">Vol. Mín. VLA-ED (UNE 482)</span>
+                      <span className="info-card-label">Vol. Mín. ED (UNE 482)</span>
                       <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                         {volMinED_UNE !== null ? `${volMinED_UNE} L` : "N/A"}
                         {showWarningED && (
@@ -691,7 +691,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   <div className={`info-card ${showWarningEC ? "warning" : ""}`}>
                     <div className="info-card-icon icon-teal">📦</div>
                     <div className="info-card-content">
-                      <span className="info-card-label">Vol. Mín. VLA-EC (UNE 482)</span>
+                      <span className="info-card-label">Vol. Mín. EC (UNE 482)</span>
                       <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                         {volMinEC_UNE !== null ? `${volMinEC_UNE} L` : "N/A"}
                         {showWarningEC && (
@@ -706,7 +706,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
 
                 {/* Banner de Advertencia Global */}
                 {showWarningTotal && (
-                  <div className="capa1-warning-banner">
+                  <div className="capa1-warning-banner" style={{ margin: "24px 28px 0" }}>
                     ⚠️ <b>Atención:</b> El volumen requerido por la norma UNE-EN 482:2021 supera 
                     el volumen recomendado o máximo del método analítico ({maxVolMethod} L). 
                     Se requiere ajustar la estrategia de muestreo.
