@@ -6,3 +6,8 @@
 [2026-02-22 21:02:16] - USUARIO: Admin - ACCIÓN: Visibilidad: Activado - PRODUCTO: Formaldehído - aire (CAS: 50-00-0)
 [2026-02-22 21:05:05] - USUARIO: Admin - ACCIÓN: Visibilidad: Desactivado - PRODUCTO: Formaldehído - aire (CAS: 50-00-0)
 [2026-02-22 21:47:41] - USUARIO: Admin - ACCIÓN: Visibilidad: Activado - PRODUCTO: Formaldehído - aire (CAS: 50-00-0)
+[2026-02-23 08:17:49] - USUARIO: Admin - ACCIÓN: Visibilidad: Desactivado - PRODUCTO: Formaldehído - aire (CAS: 50-00-0)
+[2026-02-23 08:17:56] - USUARIO: Admin - ACCIÓN: Visibilidad: Activado - PRODUCTO: Formaldehído - aire (CAS: 50-00-0)
+[2026-02-23 10:14:12] - USUARIO: Admin - ACCIÓN: Visibilidad: Activado - PRODUCTO: Benceno - aire (CAS: 71-43-2)
+[2026-02-23 10:19:39] - USUARIO: Admin - ACCIÓN: Visibilidad: Activado - PRODUCTO: N,N-Dimetilacetamida - aire (CAS: 127-19-5)
+[2026-02-23 18:06:54] - USUARIO: Admin - ACCIÓN: Visibilidad: Desactivado - PRODUCTO: Benceno - aire (CAS: 71-43-2)
