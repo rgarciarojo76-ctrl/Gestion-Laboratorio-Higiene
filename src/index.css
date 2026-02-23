@@ -390,7 +390,7 @@ h1, h2, h3, h4 {
 .detail-title {
   margin: 0;
   color: #0f172a;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.25;
@@ -1348,7 +1348,7 @@ h1, h2, h3, h4 {
 }
 
 .detail-title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text-main);
   line-height: 1.2;
