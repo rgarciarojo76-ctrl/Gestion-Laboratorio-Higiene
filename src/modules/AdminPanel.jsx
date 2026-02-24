@@ -115,14 +115,25 @@ export default function AdminPanel({ onDataChanged }) {
         },
         body: JSON.stringify(fields),
       });
-      if (!res.ok) throw new Error("Fallo al contactar con el backend.");
+      if (!res.ok) {
+        let errMsg = `Error del servidor (HTTP ${res.status})`;
+        try {
+          const errData = await res.json();
+          if (errData.error) errMsg = errData.error;
+        } catch (_) {}
+        throw new Error(errMsg);
+      }
       await fetchProducts();
       fetchLog();
       setEditProduct(null);
       if (onDataChanged) onDataChanged();
     } catch (e) {
       console.error("Save error:", e);
-      alert("Error: No se pudo conectar con el servidor backend.");
+      if (e.message && e.message.includes("Failed to fetch")) {
+        alert("Error de red: No se pudo conectar con el servidor. Verifica tu conexión a internet.");
+      } else {
+        alert(`Error al guardar: ${e.message}`);
+      }
     }
     setSaving(false);
   };

@@ -502,6 +502,59 @@ def admin_toggle_visibility(product_id):
                 
     return jsonify({"error": "Producto no encontrado"}), 404
 
+
+@app.route("/api/admin/products", methods=["POST"])
+def admin_create_product():
+    if not check_admin_password(): return jsonify({"error": "No autorizado"}), 401
+    new_product = request.json
+
+    content, sha = get_file_from_github("data/contaminantes.json")
+    if not content:
+        return jsonify({"error": "No se pudo leer GitHub"}), 500
+
+    contaminants = json.loads(content)
+    # Generate a new ID
+    max_id = max((c.get("id", 0) for c in contaminants), default=0)
+    new_product["id"] = max_id + 1
+    new_product["visible_en_app"] = True
+    contaminants.append(new_product)
+
+    msg = f"Panel Admin: Creado {new_product.get('contaminante', 'Nuevo')}"
+    success = save_contaminants_to_github(contaminants, msg)
+    if success:
+        return jsonify({"ok": True, "product": new_product})
+    return jsonify({"error": "Error guardando en GitHub"}), 500
+
+
+@app.route("/api/admin/log", methods=["GET"])
+def admin_log():
+    if not check_admin_password(): return jsonify({"error": "No autorizado"}), 401
+    try:
+        content, _ = get_file_from_github("data/log_actividad.txt")
+        if content:
+            lines = [l.strip() for l in content.strip().split("\n") if l.strip()]
+            lines.reverse()  # Most recent first
+            return jsonify(lines[:50])
+        return jsonify([])
+    except Exception as e:
+        print(f"Log read error: {e}")
+        return jsonify([])
+
+
+@app.route("/api/admin/deploy", methods=["POST"])
+def admin_deploy():
+    if not check_admin_password(): return jsonify({"error": "No autorizado"}), 401
+    # Trigger Vercel deploy hook if configured
+    deploy_hook = os.environ.get("VERCEL_DEPLOY_HOOK", "")
+    if deploy_hook:
+        try:
+            resp = requests.post(deploy_hook)
+            return jsonify({"ok": True, "status": resp.status_code})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+    return jsonify({"ok": True, "message": "Deploy triggered (auto via GitHub push)"})
+
+
 # For vercel
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
