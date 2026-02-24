@@ -94,9 +94,9 @@ def update_file_in_github(filepath, content, commit_message, sha):
     payload = {
         "message": commit_message,
         "content": encoded_content,
-        "sha": sha,
-        "branch": "main"
-    }
+    if sha:
+        payload["sha"] = sha
+        
     response = requests.put(url, headers=headers, json=payload)
     return response.status_code in [200, 201]
 
@@ -123,19 +123,33 @@ def save_contaminants_to_github(contaminants_data, commit_message="Panel Admin: 
     return success
 
 
+def log_admin_action(action_text):
+    """Appends an action to the log file in GitHub."""
+    if not GITHUB_TOKEN: return
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    new_line = f"[{timestamp}] {action_text}"
+    
+    content, sha = get_file_from_github("data/log_actividad.txt")
+    # Append to existing or create new
+    updated_content = (content.strip() + "\n" + new_line) if content else new_line
+    update_file_in_github("data/log_actividad.txt", updated_content, "Log: " + action_text, sha)
+
+
 def load_local_contaminants():
-    """Load contaminants directly from Vercel's filesystem or via GitHub fallback."""
-    try:
-        with open(LOCAL_DATA_PATH, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"Error loading local json from disk: {e}. Falling back to GitHub API...")
+    """Load contaminants. Prefer GitHub (Live) if token is available, else local filesystem."""
+    if GITHUB_TOKEN:
         try:
             content, _ = get_file_from_github("public/contaminantes.json")
             if content:
                 return json.loads(content)
-        except Exception as gh_e:
-            print(f"GitHub fallback failed: {gh_e}")
+        except Exception as e:
+            print(f"GitHub fetch failed, using local: {e}")
+
+    try:
+        with open(LOCAL_DATA_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Local load failed: {e}")
         return []
 
 
@@ -473,6 +487,8 @@ def admin_update_product(product_id):
                 codigo_soporte_alt=new_soporte_alt,
                 commit_message=f"Panel Admin: Actualizados soportes en Excel para {cas_to_update}"
             )
+        
+        log_admin_action(f"Editado {updated_data.get('contaminante_display') or updated_data.get('contaminante')}")
         return jsonify({"ok": True})
     return jsonify({"error": "Error guardando en GitHub"}), 500
 
@@ -496,6 +512,7 @@ def admin_toggle_visibility(product_id):
             # Save back to GitHub
             success = save_contaminants_to_github(contaminants, f"Panel Admin: {'Visible' if new_val else 'Oculto'} {c.get('contaminante')}")
             if success:
+                log_admin_action(f"{'Activada' if new_val else 'Desactivada'} visibilidad de {c.get('contaminante_display') or c.get('contaminante')}")
                 return jsonify({"ok": True, "product": c})
             else:
                 return jsonify({"error": "Error guardando en GitHub"}), 500
@@ -522,6 +539,7 @@ def admin_create_product():
     msg = f"Panel Admin: Creado {new_product.get('contaminante', 'Nuevo')}"
     success = save_contaminants_to_github(contaminants, msg)
     if success:
+        log_admin_action(f"Creado nuevo producto: {new_product.get('contaminante_display') or new_product.get('contaminante')}")
         return jsonify({"ok": True, "product": new_product})
     return jsonify({"error": "Error guardando en GitHub"}), 500
 
@@ -533,9 +551,10 @@ def admin_log():
         content, _ = get_file_from_github("data/log_actividad.txt")
         if content:
             lines = [l.strip() for l in content.strip().split("\n") if l.strip()]
-            lines.reverse()  # Most recent first
-            return jsonify(lines[:50])
-        return jsonify([])
+            # We return them in order, frontend can reverse if it wants, 
+            # but usually we return the list and let frontend handle it.
+            return jsonify({"entries": lines})
+        return jsonify({"entries": []})
     except Exception as e:
         print(f"Log read error: {e}")
         return jsonify([])
