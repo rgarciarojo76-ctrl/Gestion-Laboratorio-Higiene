@@ -131,7 +131,7 @@ def log_admin_action(action_text):
     
     content, sha = get_file_from_github("data/log_actividad.txt")
     # Append to existing or create new
-    updated_content = (content.strip() + "\n" + new_line) if content else new_line
+    updated_content = ((content.strip() + "\n") if content else "") + new_line
     update_file_in_github("data/log_actividad.txt", updated_content, "Log: " + action_text, sha)
 
 
@@ -557,7 +557,7 @@ def admin_log():
         return jsonify({"entries": []})
     except Exception as e:
         print(f"Log read error: {e}")
-        return jsonify([])
+        return jsonify({"entries": []})
 
 
 @app.route("/api/admin/deploy", methods=["POST"])

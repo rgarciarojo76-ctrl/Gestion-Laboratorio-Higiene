@@ -68,7 +68,11 @@ export default function AdminPanel({ onDataChanged }) {
         headers: { "X-Admin-Password": password },
       });
       const data = await res.json();
-      if (data.entries) setLogEntries(data.entries.reverse());
+      if (data && Array.isArray(data.entries)) {
+        setLogEntries([...data.entries].reverse());
+      } else {
+        setLogEntries([]);
+      }
     } catch (e) {
       console.error("Error fetching log:", e);
     }
