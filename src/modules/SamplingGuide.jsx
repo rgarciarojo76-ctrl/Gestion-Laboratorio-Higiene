@@ -696,7 +696,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                 <span className="info-card-label">Volumen Método</span>
                 <span className="info-card-value">
                   {selected.volumen_minimo
-                    ? `${selected.volumen_minimo} L`
+                    ? (String(selected.volumen_minimo).toLowerCase().includes('l') 
+                        ? selected.volumen_minimo 
+                        : `${selected.volumen_minimo} L`)
                     : selected.volumen_recomendado_l
                       ? `${selected.volumen_recomendado_l} L`
                       : "—"}
