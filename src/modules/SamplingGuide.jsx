@@ -559,7 +559,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                     ? "análisis simultáneo"
                     : "análisis no simultáneo"}
                 </div>
-                {screeningCompounds.length > 0 && (
+                {selected.screening_compuestos_formatted && (
                   <div
                     style={{
                       fontSize: "11px",
@@ -569,7 +569,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       lineHeight: 1.4,
                     }}
                   >
-                    {screeningCompounds.join(", ")}
+                    {selected.screening_compuestos_formatted}
                   </div>
                 )}
               </div>

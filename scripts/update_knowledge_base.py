@@ -376,6 +376,9 @@ def main():
     # BUILD MAIN DATASET
     # =========================================================================
     contaminants = []
+    # Aggregator for screening compounds: profile_id -> set of "(Name) (CAS)"
+    screening_aggregator = {}
+    
     seen_ids = set()
 
     for row in m_data:
@@ -562,10 +565,29 @@ def main():
                 break
 
         contaminants.append(c)
+        
+        # Collect for screening aggregation
+        if perfil_code:
+            if perfil_code not in screening_aggregator:
+                screening_aggregator[perfil_code] = {} # Use dict to avoid same code appearing twice
+            
+            c_code = c.get("codigo_prueba", "")
+            if c_code:
+                c_name = (c.get("contaminante_display", "") or c.get("contaminante", "")).split(" - ")[0].strip()
+                c_cas = c.get("cas", "").strip()
+                formatted = f"{c_name} ({c_cas})" if c_cas else c_name
+                screening_aggregator[perfil_code][c_code] = formatted
 
     wb.close()
 
-    # --- Preserve existing visible_en_app values ---
+    # --- Final Polish: Add formatted screening list and preserve visibility ---
+    # Prepare the formatted strings
+    screening_formatted_lookup = {}
+    for p_id, comp_dict in screening_aggregator.items():
+        # Sort by name
+        sorted_comps = sorted(comp_dict.values())
+        screening_formatted_lookup[p_id] = ", ".join(sorted_comps)
+
     existing_visibility = {}
     if os.path.exists(OUTPUT_PATH):
         try:
@@ -585,6 +607,13 @@ def main():
             c['visible_en_app'] = existing_visibility[cid]
         else:
             c['visible_en_app'] = False  # Default: hidden
+            
+        # Inject the pre-formatted screening list
+        p_code = c.get("codigo_perfil", "")
+        if p_code in screening_formatted_lookup:
+            c["screening_compuestos_formatted"] = screening_formatted_lookup[p_code]
+        else:
+            c["screening_compuestos_formatted"] = ""
 
     print(f"\nExtracted {len(contaminants)} contaminants. Writing to JSON...")
 
