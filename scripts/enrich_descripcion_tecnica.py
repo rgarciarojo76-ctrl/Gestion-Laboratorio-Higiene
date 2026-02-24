@@ -77,6 +77,15 @@ def enrich():
                     c["codigo_15d"] = info["codigo_15d"]
                 if info["descripcion_tecnica"] and not c.get("descripcion_tecnica"):
                     c["descripcion_tecnica"] = info["descripcion_tecnica"]
+                    
+                # Synchronize plazo_entrega with the primary reference code
+                primary_code = c.get("conc_fact_prueba", "")
+                if primary_code:
+                    if primary_code == info["codigo_8d"]:
+                        c["plazo_entrega"] = "8 días laborables"
+                    elif primary_code == info["codigo_15d"]:
+                        c["plazo_entrega"] = "15 días laborables"
+                        
                 enriched += 1
 
         with open(path, "w", encoding="utf-8") as f:
