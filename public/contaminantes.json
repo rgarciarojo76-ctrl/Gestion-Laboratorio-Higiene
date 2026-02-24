@@ -78,7 +78,7 @@
     "caudal_metodo_min": 0.03,
     "caudal_metodo_max": 1.5,
     "screening_compuestos_formatted": "Acetaldehído (75-07-0), Acroleína (107-02-8), Benzaldehído (100-52-7), Formaldehído (50-00-0), Furfural (98-01-1), Glutaraldehído (111-30-8)",
-    "visible_en_app": false
+    "visible_en_app": true
   },
   {
     "contaminante": "1 aldehído (rutina)",
@@ -395,7 +395,8 @@
     "codigo_8d": "MA173",
     "caudal_metodo_min": 0.03,
     "caudal_metodo_max": 1.5,
-    "codigo_15d": "MA051"
+    "codigo_15d": "MA051",
+    "visible_en_app": true
   },
   {
     "contaminante": "1 aldehído urgente 8 días",
