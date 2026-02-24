@@ -633,59 +633,20 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
 
           {/* 4-column Grid for Params */}
           <div className="info-cards-grid-4">
-            {/* Caudal (Dynamic & Editable) */}
-            <div className="info-card" style={{ display: "flex", flexDirection: "column" }}>
+            {/* Caudal (Referencia) */}
+            <div className="info-card">
               <div className="info-card-icon icon-teal">💨</div>
-              <div className="info-card-content" style={{ width: "100%" }}>
-                <span className="info-card-label" style={{ marginBottom: "12px" }}>Caudal Muestreo (UNE 482)</span>
-                
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  {/* Top: Original Method Read-Only */}
-                  <div>
-                    <span className="info-card-label" style={{ color: "#94a3b8", fontSize: "10px", marginBottom: "4px" }}>Rango del Método</span>
-                    <span className="info-card-value" style={{ fontSize: "14px" }}>
-                      {selected.caudal_metodo_min && selected.caudal_metodo_max 
-                        ? (selected.caudal_metodo_min === selected.caudal_metodo_max
-                            ? `${selected.caudal_metodo_min.toString().replace('.', ',')} L/min`
-                            : `${selected.caudal_metodo_min.toString().replace('.', ',')} - ${selected.caudal_metodo_max.toString().replace('.', ',')} L/min`)
-                        : selected.caudal || selected.caudal_l_min
-                          ? `${selected.caudal || selected.caudal_l_min} L/min`
-                          : "—"}
-                    </span>
-                  </div>
-
-                  {/* Bottom: Assigned / Editable */}
-                  <div>
-                    <span className="info-card-label" style={{ color: "#94a3b8", fontSize: "10px", marginBottom: "6px" }}>Caudal Asignado (L/min)</span>
-                    <input 
-                      type="text" 
-                      className="caudal-input-premium"
-                      value={editableCaudal}
-                      onChange={(e) => {
-                        // Allow numbers and commas/dots
-                        const val = e.target.value.replace(/[^0-9.,]/g, '');
-                        setEditableCaudal(val);
-                      }}
-                      placeholder="Ej: 1,5"
-                    />
-                  </div>
-                </div>
-                
-                {/* Validation Warning */}
-                {(() => {
-                  const currentVal = parseFloat(editableCaudal.replace(',', '.'));
-                  if (!isNaN(currentVal) && selected.caudal_metodo_min && selected.caudal_metodo_max) {
-                    if (currentVal < selected.caudal_metodo_min || currentVal > selected.caudal_metodo_max) {
-                      return (
-                        <div style={{ marginTop: "12px", padding: "8px 12px", backgroundColor: "#fee2e2", borderLeft: "4px solid #ef4444", borderRadius: "4px", fontSize: "12px", color: "#991b1b" }}>
-                          ⚠️ Error: El caudal debe estar entre <strong>{selected.caudal_metodo_min.toString().replace('.', ',')}</strong> y <strong>{selected.caudal_metodo_max.toString().replace('.', ',')}</strong> L/min según el método analítico.
-                        </div>
-                      );
-                    }
-                  }
-                  return null;
-                })()}
-
+              <div className="info-card-content">
+                <span className="info-card-label">Caudal, rango método</span>
+                <span className="info-card-value">
+                  {selected.caudal_metodo_min && selected.caudal_metodo_max 
+                    ? (selected.caudal_metodo_min === selected.caudal_metodo_max
+                        ? `${selected.caudal_metodo_min.toString().replace('.', ',')} L/min`
+                        : `${selected.caudal_metodo_min.toString().replace('.', ',')} - ${selected.caudal_metodo_max.toString().replace('.', ',')} L/min`)
+                    : selected.caudal || selected.caudal_l_min
+                      ? `${selected.caudal || selected.caudal_l_min} L/min`
+                      : "—"}
+                </span>
               </div>
             </div>
 
@@ -782,6 +743,13 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             }
             const showWarningTotal = showWarningED || showWarningEC;
 
+            let isCaudalOutOfRange = false;
+            if (!isNaN(methodCaudal) && selected.caudal_metodo_min && selected.caudal_metodo_max) {
+              if (methodCaudal < selected.caudal_metodo_min || methodCaudal > selected.caudal_metodo_max) {
+                 isCaudalOutOfRange = true;
+              }
+            }
+
             return (
               <div style={{ paddingBottom: "24px" }}>
                 <div className="info-cards-grid-4" style={{ marginTop: 24 }}>
@@ -810,9 +778,40 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       </span>
                     </div>
                   </div>
+                </div>
+
+                {/* Control Operativo Row */}
+                <div className="section-title" style={{ padding: "16px 28px 8px", fontSize: "14px", fontWeight: "600", color: "#1e293b", borderTop: "1px solid #e2e8f0" }}>
+                  Control Operativo (UNE 482)
+                </div>
+                
+                <div className="info-cards-grid-4" style={{ padding: "0 28px" }}>
+                  {/* Caudal Asignado */}
+                  <div className={`info-card ${isCaudalOutOfRange ? "warning" : ""}`} style={{ display: "flex", flexDirection: "column" }}>
+                    <div className="info-card-icon icon-teal">💨</div>
+                    <div className="info-card-content" style={{ width: "100%" }}>
+                      <span className="info-card-label" style={{ marginBottom: "6px" }}>Caudal Asignado (L/min)</span>
+                      <input 
+                        type="text" 
+                        className="caudal-input-premium"
+                        value={editableCaudal}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/[^0-9.,]/g, '');
+                          setEditableCaudal(val);
+                        }}
+                        placeholder="Ej: 1,5"
+                        style={{ width: "100px", padding: "6px 12px" }}
+                      />
+                      {isCaudalOutOfRange && (
+                         <div style={{ marginTop: "8px", fontSize: "11px", color: "#ef4444", fontWeight: "500" }}>
+                           ⚠️ Valor fuera de rango oficial
+                         </div>
+                      )}
+                    </div>
+                  </div>
 
                   {/* Tiempo Mín. VLA-ED (UNE 482) */}
-                  <div className={`info-card ${showWarningED || (timeMinED_UNE > 480) ? "warning" : ""}`}>
+                  <div className={`info-card ${(timeMinED_UNE > 480) ? "warning" : ""}`}>
                     <div className="info-card-icon icon-teal">⏳</div>
                     <div className="info-card-content">
                       <span className="info-card-label">Tiempo Mín. ED (UNE 482)</span>
@@ -821,11 +820,6 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         {showWarningED && (
                           <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinED_UNE)} a ${methodCaudal} L/min) equivale a ${volMinED_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
                             ⚠️
-                          </span>
-                        )}
-                        {(timeMinED_UNE > 480) && !showWarningED && (
-                           <span className="warning-icon" title="Excede jornada de 8h" style={{ fontSize: "15px" }}>
-                            ⏱️
                           </span>
                         )}
                       </span>
@@ -860,8 +854,8 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                 
                 {/* Banner de Advertencia Jornada Laboral */}
                 {timeMinED_UNE > 480 && (
-                  <div className="capa1-warning-banner banner-orange" style={{ margin: "24px 28px 0", backgroundColor: "#fff7ed", color: "#9a3412", borderLeft: "4px solid #f97316" }}>
-                    ⚠️ <b>Atención (Planificación):</b> El tiempo necesario para cumplir la norma UNE 482 ({formatTime(timeMinED_UNE)}) supera la jornada laboral de 8 horas con este caudal ({methodCaudal} L/min). Considere aumentar el caudal dentro del rango permitido por el método analítico.
+                  <div className="capa1-warning-banner banner-orange" style={{ margin: "24px 28px 0", backgroundColor: "#fff7ed", color: "#9a3412", borderLeft: "4px solid #ea580c" }}>
+                    ⚠️ <b>Atención:</b> El muestreo excede la jornada laboral estándar (8 horas).
                   </div>
                 )}
               </div>
