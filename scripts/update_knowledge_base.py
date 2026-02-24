@@ -117,6 +117,28 @@ def build_lookup(rows, headers, key_names, extract_fields):
     return result
 
 
+def build_multi_lookup(rows, headers, key_names, extract_fields):
+    """Build a dict of lists lookup from a sheet, keyed by the first matching key column."""
+    key_idx = get_col_index(headers, key_names)
+    if key_idx is None:
+        return {}
+
+    result = {}
+    for row in rows:
+        key_val = safe_str(row, key_idx)
+        if not key_val:
+            continue
+        data = {}
+        for json_key, col_names in extract_fields.items():
+            idx = get_col_index(headers, col_names)
+            data[json_key] = safe_str(row, idx)
+        
+        if key_val not in result:
+            result[key_val] = []
+        result[key_val].append(data)
+    return result
+
+
 def main():
     print(f"Reading {EXCEL_PATH}...")
     wb = openpyxl.load_workbook(EXCEL_PATH, read_only=True, data_only=True)
@@ -254,7 +276,18 @@ def main():
                 "rango_trabajo": ["rango trabajo"],
             }
         )
-        print(f"  Intranet PRUEBAS: {len(intra_pruebas_by_codigo)} entries")
+        
+        # New multi-lookup by CAS to aggregate all MA codes and descriptions
+        pruebas_by_cas = build_multi_lookup(ip_rows[1:], ip_headers,
+            ["cas"],
+            {
+                "codigo_ma": ["conc fact prueba"],
+                "nombre_ma": ["descr conc"],
+                "plazo": ["plazo entrega"],
+                "codigo_n": ["código prueba"],
+            }
+        )
+        print(f"  Intranet PRUEBAS: {len(intra_pruebas_by_codigo)} by code, {len(pruebas_by_cas)} by CAS")
     except Exception as e:
         print(f"  Warning: Intranet PRUEBAS: {e}")
 
@@ -528,6 +561,31 @@ def main():
             c["codigo_soporte_alt"] = ip_data.get("codigo_soporte_alt", "")
             c["descripcion_tecnica"] = ip_data.get("descripcion_tecnica", "")
             c["rango_trabajo"] = ip_data.get("rango_trabajo", "")
+
+        # --- Aggregate all MA codes for this CAS ---
+        if cas and cas in pruebas_by_cas:
+            all_codes = pruebas_by_cas[cas]
+            # Build list of "MAxxx - Name (Plazo)"
+            formatted_list = []
+            seen_combos = set()
+            for p in all_codes:
+                ma = p.get("codigo_ma", "")
+                name = p.get("nombre_ma", "")
+                plazo = p.get("plazo", "").replace(" laborables", "").replace("laborables", "")
+                
+                if ma and name:
+                    combo = f"* {ma} - {name} ({plazo})" if plazo else f"* {ma} - {name}"
+                    if combo not in seen_combos:
+                        formatted_list.append(combo)
+                        seen_combos.add(combo)
+            
+            if formatted_list:
+                # Prepend the existing technical description if it exists
+                base_desc = c.get("descripcion_tecnica", "")
+                if base_desc:
+                    c["descripcion_tecnica"] = base_desc + "\n\n" + "\n".join(formatted_list)
+                else:
+                    c["descripcion_tecnica"] = "\n".join(formatted_list)
             # Better soporte display
             if ip_data.get("codigo_soporte"):
                 c["ref_soporte"] = ip_data["codigo_soporte"]

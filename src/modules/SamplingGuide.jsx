@@ -623,7 +623,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                 <span className="info-card-label">Descripción Técnica</span>
                 <span
                   className="info-card-value"
-                  style={{ fontWeight: 600 }}
+                  style={{ fontWeight: 600, whiteSpace: "pre-wrap" }}
                   title={selected.descripcion_tecnica}
                 >
                   {selected.descripcion_tecnica || "—"}
@@ -981,7 +981,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               {selected.descripcion_tecnica && (
                 <div className="detail-item full-width">
                   <div className="detail-item-label">Descripción Técnica</div>
-                  <div className="detail-item-value">{selected.descripcion_tecnica}</div>
+                  <div className="detail-item-value" style={{ whiteSpace: "pre-wrap" }}>{selected.descripcion_tecnica}</div>
                 </div>
               )}
               {selected.tabla && (
