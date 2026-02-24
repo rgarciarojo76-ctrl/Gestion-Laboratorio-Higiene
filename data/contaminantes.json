@@ -392,7 +392,8 @@
     "sin_metodo_disponible": false,
     "codigo_8d": "MA173",
     "caudal_metodo_min": 0.03,
-    "caudal_metodo_max": 1.5
+    "caudal_metodo_max": 1.5,
+    "codigo_15d": "MA051"
   },
   {
     "contaminante": "1 aldehído urgente 8 días",
@@ -1407,7 +1408,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA143"
   },
   {
     "contaminante": "1 VOC extra especial (rutina)",
@@ -1634,7 +1636,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA439"
   },
   {
     "contaminante": "Budesonida - aire",
@@ -1709,7 +1712,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA440"
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -2496,7 +2500,8 @@
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 1.0
+    "caudal_metodo_max": 1.0,
+    "codigo_15d": "PCG"
   },
   {
     "contaminante": "Ciclohexanol",
@@ -7546,7 +7551,8 @@
     "screening_comentarios": "Al tratarse de un nº pruebas que conforma un perfil analítico muy numeroso (>50AQ diferentes) se consideran unas condiciones de muestreo generales que puedan satisfacer a la mayoría, pero no a todos (p.ej serían insuficientes para: cianuro de vinilo, tetracloruro de carbono, benceno, isoforona). Así, en caso de interés particular en alguno de ellos, es preferible revisar la estrategia para asegurar que cubra nuestra necesidad concreta.\nCondiciones de muestreo generales planteadas: 0,2L/min y 120min (24L). Para otras condiciones de interés, valorar nuevas opciones considerando un rango de caudales (0,01-0,2 L/min) y volúmenes (1-30L) definidos en los métodos asociados a los VOC´s particulares.",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "codigo_15d": "MA163"
   },
   {
     "contaminante": "1 hidrocarburo urgente 8 días",
@@ -7939,7 +7945,8 @@
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "codigo_15d": "MA274"
   },
   {
     "contaminante": "1 Acetato/deriv.glicol (rutina)",
@@ -9515,7 +9522,8 @@
     "screening_condiciones_ed": "Una nafta presenta una valoración conjunta, no excluyente, a partir de los compuestos individuales que la conforman (cuantificación individual de cada VOC y estimar la exposición con su valor límite individual correspondiente) y, además, como conjunto (suma de las cuantificaciones particulares en un único resultado analítico que facilita el Laboratorio como nafta y que a su vez es necesario enfrentar a un valor límite particular como mezcla). Aunque se utilice el mismo perfil analítico, según el objetivo del estudio, el foco puede encontrarse en los agentes individuales para los que será necesario fijarse en las condiciones particulares de esos VOC´s (el benceno es el más restrictivo del listado) o en la mezcla conjunta, donde LEP 2025 solamente presenta una única propuesta de valor límite y que a falta de uno más específico (disponible en otras bases de datos, clasificadas por peso molecular o nº carbonos) puede ser adecuado. Las condiciones de muestreo generales planteadas: 0,2L/min y 120min (24L) pueden considerarse adecuadas para la mayor parte de casos, excepto en los que el foco tenga que estar en el benceno (6h30 para 10%VLA-ED, que puede saturar el soporte al exceder ampliamente el volumen máximo fijado en metodología) o se esperen cantidades elevadas de VOC´s (se podría plantear muestreo asignando caudal entre 0,01-0,2L/min, según histórico).",
     "screening_condiciones_ec": "Las condiciones de muestreo generales planteadas: 0,2L/min y 15min (3L); son suficientes para la mayor parte de los VOC´s individuales y también como conjunto HC/nafta, excepto para el benceno (se llegaría a un índice límite de 0,52; limitación de método sin alternativa en este momento y que tendríamos que asumir).",
     "screening_comentarios": "Una nafta presenta una valoración conjunta, no excluyente, a partir de los compuestos individuales que la conforman (cuantificación individual de cada VOC y estimar la exposición con su valor límite individual correspondiente) y, además, como conjunto (suma de las cuantificaciones particulares en un único resultado analítico que facilita el Laboratorio como nafta y que a su vez es necesario enfrentar a un valor límite particular como mezcla). Aunque se utilice el mismo perfil analítico, según el objetivo del estudio, el foco puede encontrarse en los agentes individuales para los que será necesario fijarse en las condiciones particulares de esos VOC´s (el benceno es el más restrictivo del listado) o en la mezcla conjunta, donde LEP 2025 solamente presenta una única propuesta de valor límite y que a falta de uno más específico (disponible en otras bases de datos, clasificadas por peso molecular o nº carbonos) puede ser adecuado. Las condiciones de muestreo generales planteadas: 0,2L/min y 120min (24L) pueden considerarse adecuadas para la mayor parte de casos, excepto en los que el foco tenga que estar en el benceno (6h30 para 10%VLA-ED, que puede saturar el soporte al exceder ampliamente el volumen máximo fijado en metodología) o se esperen cantidades elevadas de VOC´s (se podría plantear muestreo asignando caudal entre 0,01-0,2L/min, según histórico).",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA165"
   },
   {
     "contaminante": "Pentaclorobenceno",
@@ -9592,7 +9600,8 @@
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "codigo_15d": "MA434"
   },
   {
     "contaminante": "VOC especial (rutina)",
@@ -13449,7 +13458,8 @@
     "sin_metodo_disponible": false,
     "codigo_8d": "MA378",
     "caudal_metodo_min": 0.1,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "codigo_15d": "MA378"
   },
   {
     "contaminante": "VOC especial (rutina)",
@@ -14080,7 +14090,8 @@
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 4.0
+    "caudal_metodo_max": 4.0,
+    "codigo_15d": "MA062"
   },
   {
     "contaminante": "VOC especial (rutina)",
@@ -17688,7 +17699,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA361"
   },
   {
     "contaminante": "1 Hidrocarb halogenado (rutina)",
@@ -29454,7 +29466,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA410"
   },
   {
     "contaminante": "Cloruro de Benzalconio - aire",
@@ -29531,7 +29544,8 @@
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "codigo_15d": "MA412"
   },
   {
     "contaminante": "Metal",
@@ -30001,7 +30015,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA371"
   },
   {
     "contaminante": "Metal",
@@ -30076,7 +30091,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA008"
   },
   {
     "contaminante": "Metal",
@@ -30546,7 +30562,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA442"
   },
   {
     "contaminante": "Consultar precio con Gerencia Industria",
@@ -30858,7 +30875,8 @@
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "codigo_15d": "MA008"
   },
   {
     "contaminante": "urgente 8 días",
@@ -30935,7 +30953,8 @@
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "codigo_15d": "MA191"
   },
   {
     "contaminante": "Metal",
@@ -32976,7 +32995,8 @@
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 4.0
+    "caudal_metodo_max": 4.0,
+    "codigo_15d": "MA444"
   },
   {
     "contaminante": "Alcohol metílico - aire (Anasorb 400/200)",
@@ -33131,7 +33151,8 @@
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 4.0
+    "caudal_metodo_max": 4.0,
+    "codigo_15d": "MA445"
   },
   {
     "contaminante": "Citrato en superficie (sub)",
@@ -33206,7 +33227,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA446"
   },
   {
     "contaminante": "Glicina en aire (sub)",
@@ -33433,7 +33455,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA449"
   },
   {
     "contaminante": "Hidrazina en aire (sub)",
@@ -33586,7 +33609,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA074"
   },
   {
     "contaminante": "Fracción soluble en ciclohexano",
@@ -33740,7 +33764,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA168"
   },
   {
     "contaminante": "Materia particulada",
@@ -33815,7 +33840,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA033"
   },
   {
     "contaminante": "urgente 8 días",
@@ -33890,7 +33916,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA168"
   },
   {
     "contaminante": "Amoniaco en aire",
@@ -34516,7 +34543,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA409"
   },
   {
     "contaminante": "Óx. etileno (monitor 3M)",
@@ -34668,7 +34696,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA192"
   },
   {
     "contaminante": "Sílice Cristalina (urgente 8 días)",
@@ -34824,7 +34853,8 @@
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 4.2,
-    "caudal_metodo_max": 4.2
+    "caudal_metodo_max": 4.2,
+    "codigo_15d": "MA357"
   },
   {
     "contaminante": "Sílice cristalina (RX)",
@@ -34901,7 +34931,8 @@
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 4.2,
-    "caudal_metodo_max": 4.2
+    "caudal_metodo_max": 4.2,
+    "codigo_15d": "MA357"
   },
   {
     "contaminante": "Silice cristalina INS (Sub) - aire",
@@ -34976,7 +35007,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "MA458"
   },
   {
     "contaminante": "Prueba de perfil",
@@ -35521,7 +35553,8 @@
     "screening_comentarios": "De manera general, las condiciones planteadas (0,2L/min y 120min: 24L) superan el volumen máximo establecido en el método NIOSH 2555 (10L), aunque pueden ser igualmente de interés en caso de no esperar cantidades elevadas de los VOC´s que confoman este perfil analítico; de lo contrario sería necesario reducir el caudal de muestreo dentro del rango establecido en el método NIOSH 2555 (0,01-0,2L/min). Si se quiere ser más conservador de manera general, 0,1L/min y 120min podrían ser igualmente consideradas adecuadas.",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "codigo_15d": "PP"
   },
   {
     "contaminante": "Prueba de perfil",
@@ -35906,7 +35939,8 @@
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 0.05,
-    "caudal_metodo_max": 0.05
+    "caudal_metodo_max": 0.05,
+    "codigo_15d": "2307Q"
   },
   {
     "contaminante": "3-Etoxipropionato de etilo",
@@ -36296,7 +36330,8 @@
     "screening_condiciones_ed": "",
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "codigo_15d": "AÑADIDO"
   },
   {
     "contaminante": "",
