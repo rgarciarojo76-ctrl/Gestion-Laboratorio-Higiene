@@ -87,7 +87,7 @@ export default function AdminPanel({ onDataChanged }) {
     // Optimistic UI update
     setProducts((prev) => prev.map((p) => p.id === id ? { ...p, visible_en_app: !p.visible_en_app } : p));
     try {
-      const res = await fetch(`${API_BASE}/api/admin/products/${id}/visibility`, {
+      const res = await fetch(`${API_BASE}/api/admin/products/${encodeURIComponent(id)}/visibility`, {
         method: "PUT",
         headers: { "X-Admin-Password": password },
       });
@@ -107,7 +107,7 @@ export default function AdminPanel({ onDataChanged }) {
     setSaving(true);
     try {
       const { id, ...fields } = product;
-      const res = await fetch(`${API_BASE}/api/admin/products/${id}`, {
+      const res = await fetch(`${API_BASE}/api/admin/products/${encodeURIComponent(id)}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
