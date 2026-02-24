@@ -11,3 +11,4 @@
 [2026-02-23 10:14:12] - USUARIO: Admin - ACCIÓN: Visibilidad: Activado - PRODUCTO: Benceno - aire (CAS: 71-43-2)
 [2026-02-23 10:19:39] - USUARIO: Admin - ACCIÓN: Visibilidad: Activado - PRODUCTO: N,N-Dimetilacetamida - aire (CAS: 127-19-5)
 [2026-02-23 18:06:54] - USUARIO: Admin - ACCIÓN: Visibilidad: Desactivado - PRODUCTO: Benceno - aire (CAS: 71-43-2)
+[2026-02-24 16:16:47] Editado Furfural - aire Prueba
