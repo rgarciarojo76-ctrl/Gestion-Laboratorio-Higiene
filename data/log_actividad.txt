@@ -13,3 +13,4 @@
 [2026-02-23 18:06:54] - USUARIO: Admin - ACCIÓN: Visibilidad: Desactivado - PRODUCTO: Benceno - aire (CAS: 71-43-2)
 [2026-02-24 16:16:47] Editado Furfural - aire Prueba
 [2026-02-24 16:18:57] Editado Furfural - aire (prueba)
+[2026-02-24 16:22:12] Editado Furfural - aire (prueba)
