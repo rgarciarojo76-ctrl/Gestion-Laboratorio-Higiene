@@ -5,7 +5,7 @@
     "sinonimo": "2-Furaldehído",
     "compuestos": "",
     "cas": "98-01-1",
-    "contaminante_display": "Furfural - aire",
+    "contaminante_display": "Furfural - aire (prueba)",
     "codigo_prueba": "N0000",
     "conc_fact_prueba": "MA173",
     "laboratorio": "",
@@ -863,7 +863,7 @@
     "codigo_15d": "MA178",
     "caudal_metodo_min": 0.2,
     "caudal_metodo_max": 0.5,
-    "visible_en_app": true
+    "visible_en_app": false
   },
   {
     "contaminante": "Ácido inorgánico fracción inhalable",
