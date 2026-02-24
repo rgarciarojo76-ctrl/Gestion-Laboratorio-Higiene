@@ -63,6 +63,32 @@ def safe_num(row, idx):
     return s
 
 
+def parse_caudal_range(val_str):
+    """
+    Parses a string like '0,03 - 1,5' or '0.5' into floats (min_val, max_val).
+    If single value, min_val == max_val.
+    Returns (None, None) if invalid.
+    """
+    if not val_str:
+        return None, None
+    val_str = str(val_str).strip().replace(',', '.')
+    
+    # Try range pattern first "A - B"
+    m_range = re.match(r'^([\d\.]+)\s*-\s*([\d\.]+)$', val_str)
+    if m_range:
+        try:
+            return float(m_range.group(1)), float(m_range.group(2))
+        except ValueError:
+            return None, None
+            
+    # Try single numeric value "A"
+    try:
+        val = float(val_str)
+        return val, val
+    except ValueError:
+        return None, None
+
+
 def clean_string(s):
     """Removes inherited Excel artifacts like '(CAS: 123-45-6)' from strings."""
     if not s:
@@ -407,6 +433,13 @@ def main():
         # Derived caudal for backward compat
         c["caudal"] = c.get("caudal_asignado", "") or c.get("caudal_preferente", "") or c.get("caudal_metodo", "")
         c["volumen_minimo"] = c.get("v_minimo_muestreo_ed", "")
+
+        # Extract strict min and max boundaries from caudal_metodo
+        c_min, c_max = parse_caudal_range(c.get("caudal_metodo", ""))
+        if c_min is not None:
+            c["caudal_metodo_min"] = c_min
+        if c_max is not None:
+            c["caudal_metodo_max"] = c_max
 
         # --- Cross-correlate Notas LEP by CAS ---
         if cas and cas in notas_by_cas:
