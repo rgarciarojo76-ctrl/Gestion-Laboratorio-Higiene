@@ -145,6 +145,21 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
     }
   }, [selected]);
 
+  // Calculate validation state globally
+  const methodCaudalGlobal = useMemo(() => {
+    return parseFloat(editableCaudal.replace(',', '.')) || parseNum(selected?.caudal) || parseNum(selected?.caudal_l_min) || 0;
+  }, [editableCaudal, selected]);
+
+  const isCaudalOutOfRangeGlobal = useMemo(() => {
+    if (!selected) return false;
+    if (!isNaN(methodCaudalGlobal) && selected.caudal_metodo_min !== undefined && selected.caudal_metodo_max !== undefined) {
+      if (methodCaudalGlobal < selected.caudal_metodo_min || methodCaudalGlobal > selected.caudal_metodo_max) {
+         return true;
+      }
+    }
+    return false;
+  }, [methodCaudalGlobal, selected]);
+
   // Derive compounds for a screening profile
   const screeningCompounds = useMemo(() => {
     if (!selected || !selected.screening_perfil) return [];
@@ -450,7 +465,10 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               })()}
 
               <button
-                className="btn-pro btn-pro-primary"
+                className={`btn-pro btn-pro-primary ${isCaudalOutOfRangeGlobal ? 'disabled-btn' : ''}`}
+                disabled={isCaudalOutOfRangeGlobal}
+                title={isCaudalOutOfRangeGlobal ? "⚠️ Caudal asignado fuera de rango oficial" : "Descargar informe validado en PDF"}
+                style={isCaudalOutOfRangeGlobal ? { opacity: 0.5, cursor: "not-allowed" } : {}}
                 onClick={async () => {
                   try {
                     // Extract values dynamically for the PDF Engine to stamp the custom ones instead of static ones
@@ -634,11 +652,11 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
           {/* 4-column Grid for Params */}
           <div className="info-cards-grid-4">
             {/* Caudal (Referencia) */}
-            <div className="info-card">
-              <div className="info-card-icon icon-teal">💨</div>
+            <div className="info-card" style={{ backgroundColor: "#f8fafc", border: "1px dashed #cbd5e1" }}>
+              <div className="info-card-icon icon-teal" style={{ opacity: 0.6 }}>💨</div>
               <div className="info-card-content">
-                <span className="info-card-label">Caudal, rango método</span>
-                <span className="info-card-value">
+                <span className="info-card-label" style={{ color: "#64748b" }}>Caudal, rango método</span>
+                <span className="info-card-value" style={{ color: "#334155" }}>
                   {selected.caudal_metodo_min && selected.caudal_metodo_max 
                     ? (selected.caudal_metodo_min === selected.caudal_metodo_max
                         ? `${selected.caudal_metodo_min.toString().replace('.', ',')} L/min`
@@ -743,13 +761,6 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             }
             const showWarningTotal = showWarningED || showWarningEC;
 
-            let isCaudalOutOfRange = false;
-            if (!isNaN(methodCaudal) && selected.caudal_metodo_min && selected.caudal_metodo_max) {
-              if (methodCaudal < selected.caudal_metodo_min || methodCaudal > selected.caudal_metodo_max) {
-                 isCaudalOutOfRange = true;
-              }
-            }
-
             return (
               <div style={{ paddingBottom: "24px" }}>
                 <div className="info-cards-grid-4" style={{ marginTop: 24 }}>
@@ -787,7 +798,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                 
                 <div className="info-cards-grid-4" style={{ padding: "0 28px" }}>
                   {/* Caudal Asignado */}
-                  <div className={`info-card ${isCaudalOutOfRange ? "warning" : ""}`} style={{ display: "flex", flexDirection: "column" }}>
+                  <div className={`info-card ${isCaudalOutOfRangeGlobal ? "warning" : ""}`} style={{ display: "flex", flexDirection: "column" }}>
                     <div className="info-card-icon icon-teal">💨</div>
                     <div className="info-card-content" style={{ width: "100%" }}>
                       <span className="info-card-label" style={{ marginBottom: "6px" }}>Caudal Asignado (L/min)</span>
@@ -802,7 +813,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         placeholder="Ej: 1,5"
                         style={{ width: "100px", padding: "6px 12px" }}
                       />
-                      {isCaudalOutOfRange && (
+                      {isCaudalOutOfRangeGlobal && (
                          <div style={{ marginTop: "8px", fontSize: "11px", color: "#ef4444", fontWeight: "500" }}>
                            ⚠️ Valor fuera de rango oficial
                          </div>
