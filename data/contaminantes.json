@@ -859,7 +859,8 @@
     "codigo_8d": "MA179",
     "codigo_15d": "MA178",
     "caudal_metodo_min": 0.2,
-    "caudal_metodo_max": 0.5
+    "caudal_metodo_max": 0.5,
+    "visible_en_app": true
   },
   {
     "contaminante": "Ácido inorgánico fracción inhalable",
