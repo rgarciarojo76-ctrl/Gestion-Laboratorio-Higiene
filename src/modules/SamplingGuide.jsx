@@ -763,7 +763,12 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
 
             return (
               <div style={{ paddingBottom: "24px" }}>
-                <div className="info-cards-grid-4" style={{ marginTop: 24 }}>
+                {/* Límites Comparativos Row */}
+                <div className="section-title" style={{ padding: "8px 28px 8px", fontSize: "14px", fontWeight: "600", color: "#1e293b", marginTop: 16 }}>
+                  Límites Comparativos (Nacional e Internacional)
+                </div>
+
+                <div className="info-cards-grid-4" style={{ padding: "0 28px" }}>
                   {/* VLA-ED */}
                   <div className="info-card">
                     <div className="info-card-icon icon-blue">⏱️</div>
@@ -787,6 +792,38 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                           ? `${selected.vla_ec || selected.vla_ec_mg_m3} mg/m³`
                           : "N/A"}
                       </span>
+                    </div>
+                  </div>
+
+                  {/* Gestis TWA */}
+                  <div className="info-card" style={{ position: "relative" }}>
+                    <div className="info-card-icon icon-indigo">🌍</div>
+                    <div className="info-card-content">
+                      <span className="info-card-label">Gestis TWA</span>
+                      <span className="info-card-value">
+                        {selected.gestis_twa ? `${selected.gestis_twa} mg/m³` : "N/A"}
+                      </span>
+                      {selected.gestis_pais && selected.gestis_twa && (
+                        <span style={{ position: "absolute", top: "12px", right: "12px", fontSize: "10px", fontWeight: "600", color: "#4f46e5", backgroundColor: "#e0e7ff", padding: "2px 6px", borderRadius: "4px" }}>
+                          {selected.gestis_pais}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Gestis STEL */}
+                  <div className="info-card" style={{ position: "relative" }}>
+                    <div className="info-card-icon icon-indigo">🌍</div>
+                    <div className="info-card-content">
+                      <span className="info-card-label">Gestis STEL</span>
+                      <span className="info-card-value">
+                        {selected.gestis_stel ? `${selected.gestis_stel} mg/m³` : "N/A"}
+                      </span>
+                      {selected.gestis_pais && selected.gestis_stel && (
+                        <span style={{ position: "absolute", top: "12px", right: "12px", fontSize: "10px", fontWeight: "600", color: "#4f46e5", backgroundColor: "#e0e7ff", padding: "2px 6px", borderRadius: "4px" }}>
+                          {selected.gestis_pais}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
