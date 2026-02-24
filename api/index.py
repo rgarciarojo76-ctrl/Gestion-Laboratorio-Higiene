@@ -50,10 +50,10 @@ def resolve_mta_url(mta_code):
 
 def resolve_apa_url(search_term):
     clean_term = search_term.split('(')[0].split('->')[0].strip()
-    # Relax pure strict exact-match to allow broader YouTube findings on APA
-    query = f'site:youtube.com "tutorial muestreo higiene industrial" {clean_term}'
-    encoded_query = urllib.parse.quote(query)
-    return f"https://www.google.com/search?q={encoded_query}&btnI=I"
+    # Use native YouTube search instead of strict Google site search
+    query = f"tutorial muestreo higiene industrial {clean_term}"
+    encoded_query = urllib.parse.quote_plus(query)
+    return f"https://www.youtube.com/results?search_query={encoded_query}"
 
 
 # --- GitHub API Integration ---
