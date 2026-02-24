@@ -527,6 +527,7 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
     { key: "screening_desc", label: "Descripción Screening" },
     { key: "screening_condiciones_ed", label: "Screening Condiciones ED", wide: true },
     { key: "screening_condiciones_ec", label: "Screening Condiciones EC", wide: true },
+    { key: "screening_comentarios", label: "Screening Comentarios", wide: true },
     { key: "screening_compuestos_formatted", label: "Screening Lista Compuestos (Manual)", wide: true },
     { key: "sin_metodo_disponible", label: "Sin Método Disponible", type: "boolean" },
     { key: "tabla", label: "Grupo/Tabla" }

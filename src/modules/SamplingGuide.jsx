@@ -183,7 +183,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
       }
     });
     
-    return Array.from(uniqueMap.values()).sort();
+    const result = Array.from(uniqueMap.values()).sort();
+    console.log("Screening Compounds for", selected.contaminante, ":", result);
+    return result;
   }, [selected, contaminants, allContaminants]);
 
   // Quick Tags constant
@@ -946,6 +948,25 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   >
                     Código {selected.screening_perfil} — {selected.screening_desc}
                   </div>
+                  {/* List of compounds fallback for expanded view */}
+                  {(selected.screening_compuestos_formatted || screeningCompounds.length > 0) && (
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        color: "#475569",
+                        fontWeight: 400,
+                        marginTop: 6,
+                        lineHeight: 1.5,
+                        padding: "8px",
+                        background: "rgba(255,255,255,0.5)",
+                        borderRadius: "4px",
+                        border: "1px dashed #bae6fd"
+                      }}
+                    >
+                      <strong>Compuestos Incluidos:</strong><br/>
+                      {selected.screening_compuestos_formatted || screeningCompounds.join(", ")}
+                    </div>
+                  )}
                 </div>
               )}
               {selected.screening_condiciones_ed && (
