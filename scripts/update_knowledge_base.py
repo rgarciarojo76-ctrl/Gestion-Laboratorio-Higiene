@@ -539,7 +539,7 @@ def main():
             with open(OUTPUT_PATH, 'r', encoding='utf-8') as f:
                 existing_data = json.load(f)
             existing_visibility = {
-                c.get('id'): c.get('visible_en_app', True)
+                c.get('id'): c.get('visible_en_app', False)
                 for c in existing_data if c.get('id') is not None
             }
             print(f"  Preserved visibility for {len(existing_visibility)} existing records")
@@ -551,7 +551,7 @@ def main():
         if cid is not None and cid in existing_visibility:
             c['visible_en_app'] = existing_visibility[cid]
         else:
-            c['visible_en_app'] = True  # Default: visible
+            c['visible_en_app'] = False  # Default: hidden
 
     print(f"\nExtracted {len(contaminants)} contaminants. Writing to JSON...")
 
