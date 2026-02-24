@@ -5,7 +5,7 @@
     "sinonimo": "2-Furaldehído",
     "compuestos": "",
     "cas": "98-01-1",
-    "contaminante_display": "Furfural - aire prueba (prueba save) 2 (VERIFIED FIX)Furfural - aire prueba (prueba save) 2",
+    "contaminante_display": "Furfural - aire Prueba",
     "codigo_prueba": "N0000",
     "conc_fact_prueba": "MA173",
     "laboratorio": "",
@@ -47,7 +47,7 @@
     "volumen_minimo": "1-30 L\n(15 L)",
     "contenedor": "Tubo Sílica Gel Tubo sílica gel impregnado con 2,4- DNFH -> MAE10",
     "transporte": "Refrigerada (5°C ± 3°C) y preservar de la luz",
-    "plazo_entrega": "15 días laborables",
+    "plazo_entrega": "8 días laborables",
     "observaciones_concepto": "Para más de un aldehído consultad precio en pestaña  PERFIL",
     "comentarios_prueba": "",
     "soporte_captacion_display": "Tubo Sílica Gel Tubo sílica gel impregnado con 2,4- DNFH -> MAE10",
@@ -55,7 +55,7 @@
     "ref_soporte": "MAE10",
     "codigo_soporte": "MAE10",
     "codigo_soporte_alt": "MAE39 (para Q>0,6L/min)",
-    "descripcion_tecnica": "Cromatografía Líquida de Alta Resolución (HPLC)",
+    "descripcion_tecnica": "Cromatografía Líquida de Alta Resolución (HPLC)\n\n* MA173 - 1 aldehído urgente 8 días (8 días)\n* MA051 - 1 aldehído (rutina) (15 días)",
     "rango_trabajo": "",
     "precio_soporte": "",
     "precio_analisis": "",
@@ -78,7 +78,7 @@
     "caudal_metodo_min": 0.03,
     "caudal_metodo_max": 1.5,
     "screening_compuestos_formatted": "Acetaldehído (75-07-0), Acroleína (107-02-8), Benzaldehído (100-52-7), Formaldehído (50-00-0), Furfural (98-01-1), Glutaraldehído (111-30-8)",
-    "visible_en_app": false
+    "visible_en_app": true
   },
   {
     "contaminante": "1 aldehído (rutina)",
