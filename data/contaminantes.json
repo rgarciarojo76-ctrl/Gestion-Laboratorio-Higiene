@@ -34471,7 +34471,7 @@
     "caudal_metodo_max": 1.0
   },
   {
-    "contaminante": "Carbono Orgánico y Elemental - aire (INS)",
+    "contaminante": "Carbono Orgánico y Elemental - aire (INS)- humo diesel",
     "metodo_analisis": "UNE EN 16909",
     "sinonimo": "Emisiones de motores diésel; humos diesel",
     "compuestos": "Emisiones de motores diésel; humos diesel",
@@ -34544,7 +34544,8 @@
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
-    "codigo_15d": "MA409"
+    "codigo_15d": "MA409",
+    "visible_en_app": false
   },
   {
     "contaminante": "Óx. etileno (monitor 3M)",
