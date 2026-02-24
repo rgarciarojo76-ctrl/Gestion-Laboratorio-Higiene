@@ -94,6 +94,8 @@ def update_file_in_github(filepath, content, commit_message, sha):
     payload = {
         "message": commit_message,
         "content": encoded_content,
+        "branch": "main"
+    }
     if sha:
         payload["sha"] = sha
         
