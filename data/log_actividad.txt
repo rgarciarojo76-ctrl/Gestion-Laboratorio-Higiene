@@ -26,3 +26,4 @@
 [2026-02-24 16:45:58] Activada visibilidad de Benzaldehído - aire
 [2026-02-24 16:48:19] Desactivada visibilidad de Furfural - aire
 [2026-02-24 16:48:24] Desactivada visibilidad de Ácido nítrico - aire
+[2026-02-24 17:00:15] Desactivada visibilidad de Furfural - aire
