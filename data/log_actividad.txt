@@ -20,3 +20,4 @@
 [2026-02-24 16:25:03] Desactivada visibilidad de Ácido nítrico - aire
 [2026-02-24 16:25:15] Editado Furfural - aire
 [2026-02-24 16:42:46] Editado Furfural - aire
+[2026-02-24 16:42:55] Desactivada visibilidad de Ácido nítrico - aire
