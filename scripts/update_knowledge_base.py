@@ -258,6 +258,28 @@ def main():
     except Exception as e:
         print(f"  Warning: Intranet PRUEBAS: {e}")
 
+    # --- Pre-build lookup for 8d/15d codes (CAS, cod_prueba) -> {8d, 15d} ---
+    # This matches the logic in enrich_descripcion_tecnica.py
+    code_variants_lookup = {}
+    try:
+        ws_ip = wb['Intranet Cargar PRUEBAS']
+        for row in ws_ip.iter_rows(min_row=2, values_only=True):
+            v_cas = str(row[0] or "").strip()
+            v_cod = str(row[4] or "").strip()
+            v_fact = str(row[5] or "").strip()
+            v_plazo = str(row[14] or "").lower()
+            if not v_cas or not v_cod: continue
+            
+            key = (v_cas, v_cod)
+            if key not in code_variants_lookup:
+                code_variants_lookup[key] = {"8d": "", "15d": ""}
+            
+            if "8" in v_plazo: code_variants_lookup[key]["8d"] = v_fact
+            elif "15" in v_plazo: code_variants_lookup[key]["15d"] = v_fact
+        print(f"  Code variants lookup built for {len(code_variants_lookup)} keys")
+    except Exception as e:
+        print(f"  Warning: Code variants: {e}")
+
     # =========================================================================
     # 5. AUXILIARY: Consultas, respuesta (indexed by CÓDIGO prueba)
     # =========================================================================
@@ -480,6 +502,25 @@ def main():
         c["soporte_captacion"] = codigo
         c["ref_soporte"] = codigo
 
+        # --- Enrichment: 8d/15d codes and Plazo Synchronization ---
+        if cas and codigo:
+            v_key = (cas, codigo)
+            if v_key in code_variants_lookup:
+                variants = code_variants_lookup[v_key]
+                c["codigo_8d"] = variants["8d"]
+                c["codigo_15d"] = variants["15d"]
+                
+        # --- Explicit Overrides: Plazo and Visibility based on Technical Reference ---
+        # Rule: MA008 is always 15 days, MA173 is always 8 days.
+        if conc_fact == "MA008":
+            c["plazo_entrega"] = "15 días laborables"
+        elif conc_fact == "MA173":
+            c["plazo_entrega"] = "8 días laborables"
+        elif conc_fact == "MA051" or conc_fact == "MA052":
+            # These are usually 15 days, but let's be conservative if not explicitly defined
+            if not c.get("plazo_entrega"):
+                c["plazo_entrega"] = "15 días laborables"
+
         # --- Cross-correlate Intranet Cargar PRUEBAS ---
         if codigo and codigo in intra_pruebas_by_codigo:
             ip_data = intra_pruebas_by_codigo[codigo]
@@ -603,11 +644,15 @@ def main():
 
     for c in contaminants:
         cid = c.get('id')
-        if cid is not None and cid in existing_visibility:
+        ref = c.get('conc_fact_prueba', '')
+        
+        if ref in ["MA008", "MA173", "MA163", "MA205", "MA165", "MA051", "MA052"]:
+            c['visible_en_app'] = True
+        elif cid is not None and cid in existing_visibility:
             c['visible_en_app'] = existing_visibility[cid]
         else:
             c['visible_en_app'] = False  # Default: hidden
-            
+
         # Inject the pre-formatted screening list
         p_code = c.get("codigo_perfil", "")
         if p_code in screening_formatted_lookup:
