@@ -32,3 +32,4 @@
 [2026-02-24 21:34:04] Activada visibilidad de Furfural - aire
 [2026-02-25 06:25:19] Editado n-Heptano - aire
 [2026-02-25 06:50:36] Editado Carbono Orgánico y Elemental - aire (INS)
+[2026-02-25 06:51:39] Editado Carbono Orgánico y Elemental - aire (INS) - Humos diesel
