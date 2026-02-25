@@ -669,21 +669,41 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                 >
                   {selected.descripcion_tecnica || "—"}
                 </span>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginTop: "6px" }}>
-                  {selected.codigo_prueba && (
-                    <span style={{ fontSize: "11px", color: "#64748b", fontFamily: "monospace" }}>
-                      Código Gral: <strong>{selected.codigo_prueba}</strong>
-                    </span>
-                  )}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "12px" }}>
+                  {/* General code hidden as per user request */}
                   {selected.codigo_8d && (
-                    <span style={{ fontSize: "11px", color: "#64748b", fontFamily: "monospace" }}>
-                      Urgente (8 días): <strong>{selected.codigo_8d}</strong>
-                    </span>
+                    <div style={{ 
+                      backgroundColor: "#fef2f2", 
+                      color: "#991b1b", 
+                      padding: "4px 10px", 
+                      borderRadius: "6px", 
+                      fontSize: "12px", 
+                      fontWeight: 600,
+                      border: "1px solid #fee2e2",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px"
+                    }}>
+                      <span title="Plazo 8 días">🚀 Urgente:</span>
+                      <span style={{ fontFamily: "monospace", letterSpacing: "0.5px" }}>{selected.codigo_8d}</span>
+                    </div>
                   )}
                   {selected.codigo_15d && (
-                    <span style={{ fontSize: "11px", color: "#64748b", fontFamily: "monospace" }}>
-                      Estándar (15 días): <strong>{selected.codigo_15d}</strong>
-                    </span>
+                    <div style={{ 
+                      backgroundColor: "#f0f9ff", 
+                      color: "#075985", 
+                      padding: "4px 10px", 
+                      borderRadius: "6px", 
+                      fontSize: "12px", 
+                      fontWeight: 600,
+                      border: "1px solid #e0f2fe",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px"
+                    }}>
+                      <span title="Plazo 15 días">📅 Estándar:</span>
+                      <span style={{ fontFamily: "monospace", letterSpacing: "0.5px" }}>{selected.codigo_15d}</span>
+                    </div>
                   )}
                 </div>
               </div>
@@ -1048,12 +1068,6 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               )}
 
               {/* === CÓDIGOS Y REFERENCIAS === */}
-              {selected.codigo_prueba && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Código Prueba</div>
-                  <div className="detail-item-value mono">{selected.codigo_prueba}</div>
-                </div>
-              )}
               {selected.conc_fact_prueba && (
                 <div className="detail-item">
                   <div className="detail-item-label">Conc. Fact. Prueba</div>
