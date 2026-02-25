@@ -696,7 +696,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             <div className="info-card" style={{ backgroundColor: "#f8fafc", border: "1px dashed #cbd5e1" }}>
               <div className="info-card-icon icon-teal" style={{ opacity: 0.6 }}>💨</div>
               <div className="info-card-content">
-                <span className="info-card-label" style={{ color: "#64748b" }}>Caudal, rango método</span>
+                <span className="info-card-label" style={{ color: "#64748b" }}>CAUDAL MÉTODO</span>
                 <span className="info-card-value" style={{ color: "#334155" }}>
                   {selected.caudal_metodo_min && selected.caudal_metodo_max 
                     ? (selected.caudal_metodo_min === selected.caudal_metodo_max
