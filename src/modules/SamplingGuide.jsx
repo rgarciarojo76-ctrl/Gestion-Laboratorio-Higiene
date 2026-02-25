@@ -733,6 +733,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
 
           {/* --- CAPA 1: Cálculos UNE-EN 482 --- */}
           {(() => {
+            // All calculations performed once for the entire detail section
             const volMinED_UNE = calcVolMinUNE482(
               selected.lq || selected.loq,
               selected.vla_ed || selected.vla_ed_mg_m3,
@@ -744,7 +745,6 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               0.5
             );
 
-            // Get max volume recommended by method to compare
             const maxVolMethod =
               parseNum(selected.v_maximo_muestreo) ||
               parseNum(selected.volumen_recomendado_l) ||
@@ -777,175 +777,153 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             const showWarningTotal = showWarningED || showWarningEC;
 
             return (
-              <div style={{ paddingBottom: "24px" }}>
-                {/* Campos de Límites (sin título) */}
-                <div className="info-cards-grid-4" style={{ padding: "0 28px", marginTop: "16px", marginBottom: "16px" }}>
-                  {/* VLA-ED */}
-                  <div className="info-card">
-                    <div className="info-card-icon icon-blue">⏱️</div>
-                    <div className="info-card-content">
-                      <span className="info-card-label">VLA-ED</span>
-                      <span className="info-card-value">
-                        {selected.vla_ed || selected.vla_ed_mg_m3
-                          ? `${selected.vla_ed || selected.vla_ed_mg_m3} mg/m³`
-                          : "N/A"}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* VLA-EC */}
-                  <div className="info-card">
-                    <div className="info-card-icon icon-blue">⚡</div>
-                    <div className="info-card-content">
-                      <span className="info-card-label">VLA-EC</span>
-                      <span className="info-card-value">
-                        {selected.vla_ec || selected.vla_ec_mg_m3
-                          ? `${selected.vla_ec || selected.vla_ec_mg_m3} mg/m³`
-                          : "N/A"}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Gestis TWA */}
-                  <div className="info-card" style={{ position: "relative" }}>
-                    <div className="info-card-icon icon-indigo">🌍</div>
-                    <div className="info-card-content">
-                      <span className="info-card-label">Gestis TWA</span>
-                      <span className="info-card-value">
-                        {selected.gestis_twa ? `${selected.gestis_twa} mg/m³` : "N/A"}
-                      </span>
-                      {selected.gestis_pais && selected.gestis_twa && (
-                        <span style={{ position: "absolute", top: "12px", right: "12px", fontSize: "10px", fontWeight: "600", color: "#4f46e5", backgroundColor: "#e0e7ff", padding: "2px 6px", borderRadius: "4px" }}>
-                          {selected.gestis_pais}
+              <>
+                <div style={{ paddingBottom: "24px" }}>
+                  {/* Campos de Límites (VLA-ED, VLA-EC, Gestis) */}
+                  <div className="info-cards-grid-4" style={{ padding: "0 28px", marginTop: "16px", marginBottom: "16px" }}>
+                    <div className="info-card">
+                      <div className="info-card-icon icon-blue">⏱️</div>
+                      <div className="info-card-content">
+                        <span className="info-card-label">VLA-ED</span>
+                        <span className="info-card-value">
+                          {selected.vla_ed || selected.vla_ed_mg_m3
+                            ? `${selected.vla_ed || selected.vla_ed_mg_m3} mg/m³`
+                            : "N/A"}
                         </span>
-                      )}
+                      </div>
                     </div>
-                  </div>
-
-                  {/* Gestis STEL */}
-                  <div className="info-card" style={{ position: "relative" }}>
-                    <div className="info-card-icon icon-indigo">🌍</div>
-                    <div className="info-card-content">
-                      <span className="info-card-label">Gestis STEL</span>
-                      <span className="info-card-value">
-                        {selected.gestis_stel ? `${selected.gestis_stel} mg/m³` : "N/A"}
-                      </span>
-                      {selected.gestis_pais && selected.gestis_stel && (
-                        <span style={{ position: "absolute", top: "12px", right: "12px", fontSize: "10px", fontWeight: "600", color: "#4f46e5", backgroundColor: "#e0e7ff", padding: "2px 6px", borderRadius: "4px" }}>
-                          {selected.gestis_pais}
+                    <div className="info-card">
+                      <div className="info-card-icon icon-blue">⚡</div>
+                      <div className="info-card-content">
+                        <span className="info-card-label">VLA-EC</span>
+                        <span className="info-card-value">
+                          {selected.vla_ec || selected.vla_ec_mg_m3
+                            ? `${selected.vla_ec || selected.vla_ec_mg_m3} mg/m³`
+                            : "N/A"}
                         </span>
-                      )}
+                      </div>
                     </div>
-                  </div>
-                </div>
-
-                {/* Control Operativo Row */}
-                <div className="section-title" style={{ padding: "16px 28px 8px", fontSize: "14px", fontWeight: "600", color: "#1e293b", borderTop: "1px solid #e2e8f0" }}>
-                  Control Operativo (UNE 482)
-                </div>
-                
-                <div className="info-cards-grid-4" style={{ padding: "0 28px" }}>
-                  {/* Caudal Asignado */}
-                  <div className={`info-card ${isCaudalOutOfRangeGlobal ? "warning" : ""}`} style={{ display: "flex", flexDirection: "column" }}>
-                    <div className="info-card-icon icon-teal">💨</div>
-                    <div className="info-card-content" style={{ width: "100%" }}>
-                      <span className="info-card-label" style={{ marginBottom: "6px" }}>Caudal Asignado (L/min)</span>
-                      <input 
-                        type="text" 
-                        className="caudal-input-premium"
-                        value={editableCaudal}
-                        onChange={(e) => {
-                          const val = e.target.value.replace(/[^0-9.,]/g, '');
-                          setEditableCaudal(val);
-                        }}
-                        placeholder="Ej: 1,5"
-                        style={{ width: "100px", padding: "6px 12px" }}
-                      />
-                      {isCaudalOutOfRangeGlobal && (
-                         <div style={{ marginTop: "8px", fontSize: "11px", color: "#ef4444", fontWeight: "500" }}>
-                           ⚠️ Valor fuera de rango oficial
-                         </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Tiempo Mín. VLA-ED (UNE 482) */}
-                  <div className={`info-card ${(timeMinED_UNE > 480) ? "warning" : ""}`}>
-                    <div className="info-card-icon icon-teal">⏳</div>
-                    <div className="info-card-content">
-                      <span className="info-card-label">Tiempo Mín. ED (UNE 482)</span>
-                      <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        {formatTime(timeMinED_UNE)}
-                        {showWarningED && (
-                          <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinED_UNE)} a ${methodCaudal} L/min) equivale a ${volMinED_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
-                            ⚠️
+                    <div className="info-card" style={{ position: "relative" }}>
+                      <div className="info-card-icon icon-indigo">🌍</div>
+                      <div className="info-card-content">
+                        <span className="info-card-label">Gestis TWA</span>
+                        <span className="info-card-value">
+                          {selected.gestis_twa ? `${selected.gestis_twa} mg/m³` : "N/A"}
+                        </span>
+                        {selected.gestis_pais && selected.gestis_twa && (
+                          <span style={{ position: "absolute", top: "12px", right: "12px", fontSize: "10px", fontWeight: "600", color: "#4f46e5", backgroundColor: "#e0e7ff", padding: "2px 6px", borderRadius: "4px" }}>
+                            {selected.gestis_pais}
                           </span>
                         )}
-                      </span>
+                      </div>
                     </div>
-                  </div>
-
-                  {/* Tiempo Mín. VLA-EC (UNE 482) */}
-                  <div className={`info-card ${showWarningEC ? "warning" : ""}`}>
-                    <div className="info-card-icon icon-teal">⏳</div>
-                    <div className="info-card-content">
-                      <span className="info-card-label">Tiempo Mín. EC (UNE 482)</span>
-                      <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        {formatTime(timeMinEC_UNE)}
-                        {showWarningEC && (
-                          <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinEC_UNE)} a ${methodCaudal} L/min) equivale a ${volMinEC_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
-                            ⚠️
+                    <div className="info-card" style={{ position: "relative" }}>
+                      <div className="info-card-icon icon-indigo">🌍</div>
+                      <div className="info-card-content">
+                        <span className="info-card-label">Gestis STEL</span>
+                        <span className="info-card-value">
+                          {selected.gestis_stel ? `${selected.gestis_stel} mg/m³` : "N/A"}
+                        </span>
+                        {selected.gestis_pais && selected.gestis_stel && (
+                          <span style={{ position: "absolute", top: "12px", right: "12px", fontSize: "10px", fontWeight: "600", color: "#4f46e5", backgroundColor: "#e0e7ff", padding: "2px 6px", borderRadius: "4px" }}>
+                            {selected.gestis_pais}
                           </span>
                         )}
-                      </span>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Banner de Advertencia Global */}
-                {showWarningTotal && (
-                  <div className="capa1-warning-banner" style={{ margin: "24px 28px 0" }}>
-                    ⚠️ <b>Atención (Saturación Soporte):</b> El volumen requerido por la norma UNE-EN 482:2021 supera 
-                    el volumen recomendado o máximo del método analítico ({maxVolMethod} L). 
-                    Se requiere ajustar la estrategia de muestreo.
-                  </div>
-                )}
-                
-                {/* Banner de Advertencia Jornada Laboral */}
-                {timeMinED_UNE > 480 && (
-                  <div className="capa1-warning-banner banner-orange" style={{ margin: "24px 28px 0", backgroundColor: "#fff7ed", color: "#9a3412", borderLeft: "4px solid #ea580c" }}>
-                    ⚠️ <b>Atención:</b> El muestreo excede la jornada laboral estándar (8 horas).
-                  </div>
-                )}
-              </div>
-            );
-          })()}
+                <div style={{ padding: "0 28px 24px" }}>
+                  <button
+                    className="btn-expand-info"
+                    onClick={() => {
+                      const panel = document.getElementById("expanded-info");
+                      if (panel.style.display === "none") {
+                        panel.style.display = "block";
+                      } else {
+                        panel.style.display = "none";
+                      }
+                    }}
+                  >
+                    <span>Ampliar información</span>
+                    <span style={{ fontSize: 16, transition: "transform 0.3s" }}>⬇️</span>
+                  </button>
+                </div>
 
-          {/* Toggle Expanded View */}
-          <div style={{ padding: "0 28px 24px" }}>
-            <button
-              className="btn-expand-info"
-              onClick={() => {
-                const panel = document.getElementById("expanded-info");
-                if (panel.style.display === "none") {
-                  panel.style.display = "block";
-                } else {
-                  panel.style.display = "none";
-                }
-              }}
-            >
-              <span>Ampliar información</span>
-              <span style={{ fontSize: 16, transition: "transform 0.3s" }}>⬇️</span>
-            </button>
-          </div>
+                <div id="expanded-info" className="expanded-info-section" style={{ display: "none" }}>
+                  {/* Section UNE 482 at the TOP of expanded details as requested */}
+                  <div className="section-title" style={{ padding: "16px 28px 8px", fontSize: "14px", fontWeight: "600", color: "#1e293b" }}>
+                    Control Operativo (UNE 482)
+                  </div>
+                  
+                  <div className="info-cards-grid-4" style={{ padding: "0 28px", marginBottom: "20px" }}>
+                    <div className={`info-card ${isCaudalOutOfRangeGlobal ? "warning" : ""}`} style={{ display: "flex", flexDirection: "column" }}>
+                      <div className="info-card-icon icon-teal">💨</div>
+                      <div className="info-card-content" style={{ width: "100%" }}>
+                        <span className="info-card-label" style={{ marginBottom: "6px" }}>Caudal Asignado (L/min)</span>
+                        <input 
+                          type="text" 
+                          className="caudal-input-premium"
+                          value={editableCaudal}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/[^0-9.,]/g, '');
+                            setEditableCaudal(val);
+                          }}
+                          placeholder="Ej: 1,5"
+                          style={{ width: "100px", padding: "6px 12px" }}
+                        />
+                        {isCaudalOutOfRangeGlobal && (
+                            <div style={{ marginTop: "8px", fontSize: "11px", color: "#ef4444", fontWeight: "500" }}>
+                              ⚠️ Valor fuera de rango oficial
+                            </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className={`info-card ${(timeMinED_UNE > 480) ? "warning" : ""}`}>
+                      <div className="info-card-icon icon-teal">⏳</div>
+                      <div className="info-card-content">
+                        <span className="info-card-label">Tiempo Mín. ED (UNE 482)</span>
+                        <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                          {formatTime(timeMinED_UNE)}
+                          {showWarningED && (
+                            <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinED_UNE)} a ${methodCaudal} L/min) equivale a ${volMinED_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
+                              ⚠️
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                    <div className={`info-card ${showWarningEC ? "warning" : ""}`}>
+                      <div className="info-card-icon icon-teal">⏳</div>
+                      <div className="info-card-content">
+                        <span className="info-card-label">Tiempo Mín. EC (UNE 482)</span>
+                        <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                          {formatTime(timeMinEC_UNE)}
+                          {showWarningEC && (
+                            <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinEC_UNE)} a ${methodCaudal} L/min) equivale a ${volMinEC_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
+                              ⚠️
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
 
-          {/* Expanded Information */}
-          <div
-            id="expanded-info"
-            className="expanded-info-section"
-            style={{ display: "none" }}
-          >
-            <div className="detail-grid" style={{ borderTop: "none", paddingTop: 8, marginTop: 8 }}>
+                  {showWarningTotal && (
+                    <div className="capa1-warning-banner" style={{ margin: "0 28px 20px" }}>
+                      ⚠️ <b>Atención (Saturación Soporte):</b> El volumen requerido por la norma UNE-EN 482:2021 supera 
+                      el volumen recomendado o máximo del método analítico ({maxVolMethod} L). 
+                    </div>
+                  )}
+                  {timeMinED_UNE > 480 && (
+                    <div className="capa1-warning-banner banner-orange" style={{ margin: "0 28px 20px", backgroundColor: "#fff7ed", color: "#9a3412", borderLeft: "4px solid #ea580c" }}>
+                      ⚠️ <b>Atención:</b> El muestreo excede la jornada laboral estándar (8 horas).
+                    </div>
+                  )}
+
+                  <div className="detail-grid" style={{ borderTop: "none", paddingTop: 8, marginTop: 8 }}>
+                    {/* REST OF DETAIL GRID STARTS HERE */}
               {/* === SCREENING / PERFIL ANALÍTICO === */}
               {selected.screening_perfil && (
                 <div
@@ -1303,6 +1281,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               )}
             </div>
           </div>
+        </>
+            );
+          })()}
         </div>
       )}
 
