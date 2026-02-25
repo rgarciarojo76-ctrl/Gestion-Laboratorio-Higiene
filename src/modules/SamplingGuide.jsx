@@ -392,26 +392,58 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   (selected.soporte_captacion_display || "") +
                   " " +
                   (selected.contenedor || "");
-                const isCommonEquipment =
-                  /tubo|filtro|ciclón|monitor|bomba|impactador/i.test(
-                    equipmentStr,
-                  );
                 const searchFocusRaw =
                   selected.soporte_captacion_display
                     ?.split("(")[0]
                     ?.split("->")[0]
                     ?.trim() || selected.contaminante;
 
-                let searchFocus = searchFocusRaw;
-                const lowerEquip = searchFocusRaw.toLowerCase();
-                if (lowerEquip.includes("sílica") || lowerEquip.includes("silica")) searchFocus = "Tubo Sílica Gel";
-                else if (lowerEquip.includes("carbón") || lowerEquip.includes("carbon")) searchFocus = "Tubo Carbón Activo";
-                else if (lowerEquip.includes("ciclón") || lowerEquip.includes("ciclon")) searchFocus = "Ciclón";
-                else if (lowerEquip.includes("filtro")) searchFocus = "Filtro";
-                else if (lowerEquip.includes("pasivo") || lowerEquip.includes("monitor")) searchFocus = "Monitor Pasivo";
-                else if (lowerEquip.includes("impactador")) searchFocus = "Impactador";
-                else if (lowerEquip.includes("burbujeador")) searchFocus = "Burbujeador";
-                else if (lowerEquip.includes("tubo")) searchFocus = "Tubo Absorbente";
+                // --- APA Video Mapping (client-side) ---
+                const APA_VIDEO_MAP = {
+                  // Tubos absorbentes (sílica gel, carbón activo, aldehídos, NOx, etc.)
+                  tubos:     "https://www.youtube.com/watch?v=ulD_fwpP2YU",
+                  // Portafiltros de gravimetría (PGP) — fracción inhalable
+                  pgp:       "https://www.youtube.com/watch?v=tIty4FQxq4w",
+                  // IOM Sampler — fracción inhalable
+                  iom:       "https://www.youtube.com/watch?v=cSPMWxenylI",
+                  // Ciclón GK 2.69 — fracción respirable
+                  ciclon:    "https://www.youtube.com/watch?v=RH2Nl4Yfhvg",
+                  // Higgins & Dewell — fracción respirable
+                  higgins:   "https://www.youtube.com/watch?v=ujwe9v92ulI",
+                  // Captadores / Monitores Pasivos
+                  pasivo:    "https://www.youtube.com/watch?v=m9fpzq6e0lk",
+                  // HAP — Teflón + XAD-2
+                  hap:       "https://www.youtube.com/watch?v=4VfS9voIaww",
+                  // Fibras / Amianto
+                  fibras:    "https://www.youtube.com/watch?v=zMCY-Kcn8Qg",
+                  // Calibración de bombas (genérico)
+                  bombas:    "https://www.youtube.com/watch?v=EKFBtCH5Enc",
+                  // Calibración PGP
+                  cal_pgp:   "https://www.youtube.com/watch?v=-0ZDyJYxLmI",
+                  // Calibración IOM
+                  cal_iom:   "https://www.youtube.com/watch?v=56gyf0korrg",
+                };
+
+                // Determine video URL from capture support description
+                const getVideoUrl = (supportStr) => {
+                  const s = (supportStr || "").toLowerCase();
+                  if (/s[ií]lica|aldeh[ií]d|carb[oó]n|anasorb|xad|hopcalita|nox|ó?xido/i.test(s)) return APA_VIDEO_MAP.tubos;
+                  if (/tubo/i.test(s)) return APA_VIDEO_MAP.tubos;
+                  if (/pgp|porta.?filtro.?gravi/i.test(s)) return APA_VIDEO_MAP.pgp;
+                  if (/iom/i.test(s)) return APA_VIDEO_MAP.iom;
+                  if (/cicl[oó]n|gk.?2/i.test(s)) return APA_VIDEO_MAP.ciclon;
+                  if (/higgins|dewell/i.test(s)) return APA_VIDEO_MAP.higgins;
+                  if (/pasivo|monitor.*pasivo|captador.*pasivo|skc/i.test(s)) return APA_VIDEO_MAP.pasivo;
+                  if (/hap|polic[ií]clico|teflon.*xad|xad.*teflon/i.test(s)) return APA_VIDEO_MAP.hap;
+                  if (/fibra|amianto|edc.*reticulado/i.test(s)) return APA_VIDEO_MAP.fibras;
+                  if (/cassette.*fv|filtro.*fibra.*vidrio|filtro.*cuarzo|filtro.*pvc|filtro.*celulosa|filtro.*mcef|cassette.*2|cassette.*3/i.test(s)) return APA_VIDEO_MAP.pgp;
+                  if (/impinger|burbuj/i.test(s)) return APA_VIDEO_MAP.tubos;
+                  if (/bolsa|tedlar/i.test(s)) return null; // No specific video
+                  return null;
+                };
+
+                const videoUrl = getVideoUrl(equipmentStr) || "https://apa.es/higiene-industrial/videos-higiene-industrial/";
+                const hasSpecificVideo = getVideoUrl(equipmentStr) !== null;
 
                 return (
                   <>
@@ -434,34 +466,28 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         Método Exacto
                       </a>
                     )}
-                    {isCommonEquipment && (
-                      <button
-                        onClick={async () => {
-                          try {
-                            const res = await fetch(`/api/link/apa/${encodeURIComponent(searchFocus)}`);
-                            const data = await res.json();
-                            if (data.url) window.open(data.url, '_blank');
-                          } catch (e) {
-                            console.error("Error fetching video link", e);
-                          }
-                        }}
-                        className="btn-pro btn-pro-secondary"
-                        style={{
-                          fontSize: 13,
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 6,
-                          textDecoration: "none",
-                          border: "1px solid #e2e8f0",
-                          background: "white",
-                          cursor: "pointer"
-                        }}
-                        title={`Ver tutorial para ${searchFocus}`}
-                      >
-                        <span style={{ fontSize: "16px" }}>▶️</span>
-                        Vídeo
-                      </button>
-                    )}
+                    <a
+                      href={videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-pro btn-pro-secondary"
+                      style={{
+                        fontSize: 13,
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 6,
+                        textDecoration: "none",
+                        border: "1px solid #e2e8f0",
+                        background: "white",
+                        cursor: "pointer"
+                      }}
+                      title={hasSpecificVideo 
+                        ? `Ver tutorial de muestreo para: ${searchFocusRaw}` 
+                        : "Ver todos los vídeos de muestreo de APA"}
+                    >
+                      <span style={{ fontSize: "16px" }}>▶️</span>
+                      Vídeo
+                    </a>
                   </>
                 );
               })()}
