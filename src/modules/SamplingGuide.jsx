@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 
 /**
- * Módulo I: Guía Técnica de Muestreo
+ * Módulo I: Guía técnica muestreo
  *
  * Mejoras V2:
  * - Búsqueda insensible a acentos/diacríticos (normalizeText)
@@ -211,7 +211,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
       {/* Search Header */}
       <div className="hero-search-section">
         <h2 className="search-title">
-          Guía Técnica de Muestreo
+          Guía técnica muestreo
           <span className="search-subtitle-inline">
             {" "}
             | Consulta de métodos de toma de muestra y análisis
@@ -1330,7 +1330,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               <div className="alert alert-info">
                 <span style={{ fontSize: 20 }}>ℹ️</span>
                 <span>
-                  Consulta las tablas del Anexo I en la Guía Técnica oficial
+                  Consulta las tablas del Anexo I en la Guía técnica muestreo oficial
                   para ver el listado completo de compuestos del screening.
                 </span>
               </div>

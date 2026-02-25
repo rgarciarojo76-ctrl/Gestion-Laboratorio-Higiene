@@ -101,7 +101,7 @@ function App() {
           className={`nav-tab ${activeModule === 'guide' ? 'active' : ''}`}
           onClick={() => setActiveModule('guide')}
         >
-          🔬 Guía Técnica
+          🔬 Guía técnica muestreo
         </div>
         <div
           className={`nav-tab ${activeModule === 'material' ? 'active' : ''}`}
