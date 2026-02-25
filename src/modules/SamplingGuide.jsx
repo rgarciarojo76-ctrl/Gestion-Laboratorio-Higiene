@@ -623,7 +623,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             <div className="info-card">
               <div className="info-card-icon icon-green">🧪</div>
               <div className="info-card-content">
-                <span className="info-card-label">Soporte de Muestreo</span>
+                <span className="info-card-label">SOPORTE DE MUESTREO</span>
                 <span
                   className="info-card-value"
                   title={
@@ -713,11 +713,11 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
           {/* 4-column Grid for Params */}
           <div className="info-cards-grid-4">
             {/* Caudal (Referencia) */}
-            <div className="info-card" style={{ backgroundColor: "#f8fafc", border: "1px dashed #cbd5e1" }}>
-              <div className="info-card-icon icon-teal" style={{ opacity: 0.6 }}>💨</div>
+            <div className="info-card info-card-dashed">
+              <div className="info-card-icon icon-teal">💨</div>
               <div className="info-card-content">
-                <span className="info-card-label" style={{ color: "#64748b" }}>CAUDAL MÉTODO</span>
-                <span className="info-card-value" style={{ color: "#334155" }}>
+                <span className="info-card-label">CAUDAL MÉTODO</span>
+                <span className="info-card-value">
                   {selected.caudal_metodo_min && selected.caudal_metodo_max 
                     ? (selected.caudal_metodo_min === selected.caudal_metodo_max
                         ? `${selected.caudal_metodo_min.toString().replace('.', ',')} L/min`
@@ -733,7 +733,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             <div className="info-card">
               <div className="info-card-icon icon-teal">📦</div>
               <div className="info-card-content">
-                <span className="info-card-label">Volumen Método</span>
+                <span className="info-card-label">VOLUMEN MÉTODO</span>
                 <span className="info-card-value">
                   {selected.volumen_minimo
                     ? (String(selected.volumen_minimo).toLowerCase().includes('l') 
@@ -828,7 +828,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   {/* Campos de Límites (VLA-ED, VLA-EC, Gestis) */}
                   <div className="info-cards-grid-4" style={{ padding: "0 28px", marginTop: "16px", marginBottom: "16px" }}>
                     <div className="info-card">
-                      <div className="info-card-icon icon-blue">⏱️</div>
+                      <div className="info-card-icon icon-blue">🕒</div>
                       <div className="info-card-content">
                         <span className="info-card-label">VLA-ED</span>
                         <span className="info-card-value">
@@ -850,9 +850,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       </div>
                     </div>
                     <div className="info-card" style={{ position: "relative" }}>
-                      <div className="info-card-icon icon-indigo">🌍</div>
+                      <div className="info-card-icon icon-globe">🌍</div>
                       <div className="info-card-content">
-                        <span className="info-card-label">Gestis TWA</span>
+                        <span className="info-card-label">GESTIS TWA</span>
                         <span className="info-card-value">
                           {selected.gestis_twa ? `${selected.gestis_twa} mg/m³` : "N/A"}
                         </span>
@@ -864,9 +864,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       </div>
                     </div>
                     <div className="info-card" style={{ position: "relative" }}>
-                      <div className="info-card-icon icon-indigo">🌍</div>
+                      <div className="info-card-icon icon-globe">🌍</div>
                       <div className="info-card-content">
-                        <span className="info-card-label">Gestis STEL</span>
+                        <span className="info-card-label">GESTIS STEL</span>
                         <span className="info-card-value">
                           {selected.gestis_stel ? `${selected.gestis_stel} mg/m³` : "N/A"}
                         </span>
