@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 
 /**
- * Módulo III: Solicitud de Análisis — Cadena de Custodia (F00662)
+ * Módulo III: Solicitud de Análisis — Envío muestras al laboratorio (F00662)
  *
  * Wizard de entrevista guiada con validación proactiva:
  * - Control de Volumen: V = Q × t
@@ -516,7 +516,7 @@ export default function ChainOfCustody({ contaminants, memory, updateMemory }) {
       case 'review':
         return (
           <div className="card">
-            <h3 style={{ marginBottom: 20, fontSize: 18, fontWeight: 700 }}>📋 Revisión — Cadena de Custodia</h3>
+            <h3 style={{ marginBottom: 20, fontSize: 18, fontWeight: 700 }}>📦 Revisión — Envío muestras al laboratorio</h3>
 
             <div className="detail-grid">
               <div className="detail-item">
@@ -619,7 +619,7 @@ export default function ChainOfCustody({ contaminants, memory, updateMemory }) {
                   <div>
                     <strong>F00662 generado correctamente.</strong>
                     <div style={{ fontSize: 13, marginTop: 4 }}>
-                      La cadena de custodia ha sido creada y está lista para descarga.
+                      El documento de envío de muestras ha sido creado y está listo para descarga.
                       <br />
                       <em style={{ color: 'var(--text-muted)' }}>
                         (Nota: La generación backend con python-docx se conectará cuando el servidor Flask esté activo)
@@ -640,7 +640,7 @@ export default function ChainOfCustody({ contaminants, memory, updateMemory }) {
   return (
     <div>
       <div className="page-header">
-        <h1 className="page-title">Cadena de Custodia</h1>
+        <h1 className="page-title">Envío muestras al laboratorio</h1>
         <p className="page-subtitle">
           Formulario F00662 — Solicitud de análisis con validación técnica proactiva
         </p>

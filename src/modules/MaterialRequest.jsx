@@ -1,10 +1,10 @@
 import { useState, useRef, useMemo } from 'react'
 
 /**
- * Módulo II: Solicitud de Material (F01655)
+ * Módulo II: Solicitud de soportes de captación (F01655)
  *
  * Wizard de entrevista guiada para generar el formulario F01655
- * de solicitud de material al laboratorio.
+ * de solicitud de soportes de captación al laboratorio.
  */
 
 const STEPS = [
@@ -168,7 +168,7 @@ export default function MaterialRequest({ contaminants = [], memory, updateMemor
       a.href = url
 
       const disposition = response.headers.get('content-disposition')
-      let filename = 'Solicitud_Material_F01655.docx'
+      let filename = 'Solicitud_soportes_captacion_F01655.docx'
       if (disposition && disposition.indexOf('attachment') !== -1) {
         const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
         const matches = filenameRegex.exec(disposition)
@@ -502,9 +502,9 @@ export default function MaterialRequest({ contaminants = [], memory, updateMemor
   return (
     <div>
       <div className="page-header">
-        <h1 className="page-title">Solicitud de Material</h1>
+        <h1 className="page-title">Solicitud soportes de captación</h1>
         <p className="page-subtitle">
-          Formulario F01655 — Solicitud de material al laboratorio
+          Formulario F01655 — Solicitud de soportes de captación al laboratorio
         </p>
       </div>
 

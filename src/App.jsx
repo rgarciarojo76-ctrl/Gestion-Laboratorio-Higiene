@@ -107,13 +107,13 @@ function App() {
           className={`nav-tab ${activeModule === 'material' ? 'active' : ''}`}
           onClick={() => setActiveModule('material')}
         >
-          📦 Solicitud Material
+          📦 Solicitud soportes de captación
         </div>
         <div
           className={`nav-tab ${activeModule === 'chain' ? 'active' : ''}`}
           onClick={() => setActiveModule('chain')}
         >
-          📋 Cadena de Custodia
+          📦 Envío muestras al laboratorio
         </div>
         <div
           className={`nav-tab ${activeModule === 'admin' ? 'active' : ''}`}
