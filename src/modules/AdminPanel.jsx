@@ -29,7 +29,22 @@ export default function AdminPanel({ onDataChanged }) {
   const API_BASE = "";
 
   // ─── Authentication ───────────────────────────────────────────────
+  const MAX_ATTEMPTS = 3;
+  const LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes
+
   const handleLogin = async () => {
+    // Check if locked out
+    const lockoutUntil = localStorage.getItem("adminLockout");
+    if (lockoutUntil && Date.now() < parseInt(lockoutUntil, 10)) {
+      const remainingMinutes = Math.ceil((parseInt(lockoutUntil, 10) - Date.now()) / 60000);
+      setAuthError(`Acceso bloqueado. Inténtelo de nuevo en ${remainingMinutes} minutos.`);
+      return;
+    } else if (lockoutUntil) {
+      // Lockout expired
+      localStorage.removeItem("adminLockout");
+      localStorage.removeItem("adminAttempts");
+    }
+
     setAuthError("");
     try {
       const res = await fetch(`${API_BASE}/api/admin/auth`, {
@@ -39,11 +54,27 @@ export default function AdminPanel({ onDataChanged }) {
       });
       const data = await res.json();
       if (data.ok) {
+        // Reset attempts on success
+        localStorage.removeItem("adminAttempts");
+        localStorage.removeItem("adminLockout");
+        
         setAuthenticated(true);
         fetchProducts("");
         fetchLog();
       } else {
-        setAuthError(data.error || "Contraseña incorrecta");
+        // Increment attempts on failure
+        let attempts = parseInt(localStorage.getItem("adminAttempts") || "0", 10) + 1;
+        if (attempts >= MAX_ATTEMPTS) {
+          localStorage.setItem("adminLockout", (Date.now() + LOCKOUT_TIME).toString());
+          setAuthError(`Demasiados intentos fallidos. Acceso bloqueado por 15 minutos.`);
+          // Log the brute force attempt
+          try {
+             await fetch(`${API_BASE}/api/admin/log-bruteforce`, { method: "POST" });
+          } catch(e) { console.error("Could not log brute force attempt", e); }
+        } else {
+          localStorage.setItem("adminAttempts", attempts.toString());
+          setAuthError(data.error || `Contraseña incorrecta. Intentos restantes: ${MAX_ATTEMPTS - attempts}`);
+        }
       }
     } catch {
       setAuthError("Error de conexión con el servidor");
@@ -464,6 +495,10 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
   const [form, setForm] = useState({ ...product });
 
   const update = (key, value) => {
+    if (key === "caudal_asignado" && value !== "") {
+      // Validate to prevent XSS / NoSQL Injection in numeric fields
+      if (!/^[0-9.,\- ]+$/.test(value)) return;
+    }
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 

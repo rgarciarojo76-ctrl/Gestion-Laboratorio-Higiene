@@ -428,6 +428,11 @@ def admin_auth():
         return jsonify({"ok": True})
     return jsonify({"ok": False, "error": "Contraseña incorrecta"}), 401
 
+@app.route("/api/admin/log-bruteforce", methods=["POST"])
+def admin_log_bruteforce():
+    log_admin_action("ALERTA: Intento de fuerza bruta detectado en el login de administración.")
+    return jsonify({"ok": True})
+
 
 @app.route("/api/admin/products", methods=["GET"])
 def admin_list_products():
