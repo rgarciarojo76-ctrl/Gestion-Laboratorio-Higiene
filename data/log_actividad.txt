@@ -42,3 +42,4 @@
 [2026-02-25 21:05:22] ALERTA: Intento de fuerza bruta detectado en el login de administración.
 [2026-02-25 21:36:52] Desactivada visibilidad de Formaldehído - aire
 [2026-02-25 21:37:29] Desactivada visibilidad de Formaldehído - aire
+[2026-02-25 21:42:10] Activada visibilidad de Furfural - aire (prueba)
