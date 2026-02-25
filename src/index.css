@@ -2288,11 +2288,37 @@ h1, h2, h3, h4 {
 }
 
 .admin-modal-body {
-  padding: 20px 24px;
+  padding: 12px 24px 20px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-modal-section {
+  border: 1px solid #e8ecf1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.admin-modal-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 1px solid #e8ecf1;
+  margin: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.admin-modal-section-fields {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+  gap: 14px;
+  padding: 14px 16px;
 }
 
 .admin-modal-field.wide {
@@ -2300,22 +2326,35 @@ h1, h2, h3, h4 {
 }
 
 .admin-modal-field label {
-  display: block;
-  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
   font-weight: 600;
-  color: #64748b;
+  color: #475569;
   margin-bottom: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
+}
+
+.admin-field-hint {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #94a3b8;
+  background: #f1f5f9;
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .admin-modal-field input,
 .admin-select {
   width: 100%;
-  padding: 10px 14px;
+  padding: 9px 12px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13.5px;
   color: #0f172a;
   outline: none;
   transition: border-color 0.2s;
@@ -2335,6 +2374,7 @@ h1, h2, h3, h4 {
   gap: 10px;
   padding: 16px 24px;
   border-top: 1px solid #e2e8f0;
+  background: #fafbfc;
 }
 
 /* ─── Activity Log ────────────────────────────────────────────────── */

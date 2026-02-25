@@ -25,6 +25,7 @@ export default function AdminPanel({ onDataChanged }) {
 
   // Loading state
   const [saving, setSaving] = useState(false);
+  const [statusMsg, setStatusMsg] = useState(null); // { type: 'success'|'error', text: '...' }
 
   const API_BASE = "";
 
@@ -119,6 +120,7 @@ export default function AdminPanel({ onDataChanged }) {
   // ─── Actions ──────────────────────────────────────────────────────
   const toggleVisibility = async (id) => {
     setSaving(true);
+    setStatusMsg(null);
     // Optimistic UI update
     setProducts((prev) => prev.map((p) => p.id === id ? { ...p, visible_en_app: !p.visible_en_app } : p));
     try {
@@ -126,20 +128,27 @@ export default function AdminPanel({ onDataChanged }) {
         method: "PUT",
         headers: { "X-Admin-Password": password },
       });
-      if (!res.ok) throw new Error("Fallo al contactar con el backend.");
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || `Error HTTP ${res.status}`);
+      }
+      await fetchProducts();
       fetchLog();
       if (onDataChanged) onDataChanged();
+      setStatusMsg({ type: "success", text: "✅ Visibilidad actualizada correctamente" });
     } catch (e) {
       console.error("Toggle error:", e);
-      alert("Error: No se guardaron los cambios. La sesión podría haber caducado o GitHub tarda en responder.");
+      setStatusMsg({ type: "error", text: `❌ Error al cambiar visibilidad: ${e.message}` });
       // Revert optimistic
       setProducts((prev) => prev.map((p) => p.id === id ? { ...p, visible_en_app: !p.visible_en_app } : p));
     }
     setSaving(false);
+    setTimeout(() => setStatusMsg(null), 5000);
   };
 
   const saveProduct = async (product) => {
     setSaving(true);
+    setStatusMsg(null);
     try {
       const { id, ...fields } = product;
       const res = await fetch(`${API_BASE}/api/admin/products/${encodeURIComponent(id)}`, {
@@ -164,15 +173,17 @@ export default function AdminPanel({ onDataChanged }) {
       fetchLog();
       setEditProduct(null);
       if (onDataChanged) onDataChanged();
+      setStatusMsg({ type: "success", text: "✅ Producto guardado correctamente" });
     } catch (e) {
       console.error("Save error:", e);
       if (e.message && e.message.includes("Failed to fetch")) {
-        alert("Error de red: No se pudo conectar con el servidor. Verifica tu conexión a internet.");
+        setStatusMsg({ type: "error", text: "❌ Error de red: No se pudo conectar con el servidor." });
       } else {
-        alert(`Error al guardar: ${e.message}`);
+        setStatusMsg({ type: "error", text: `❌ Error al guardar: ${e.message}` });
       }
     }
     setSaving(false);
+    setTimeout(() => setStatusMsg(null), 6000);
   };
 
   const createProduct = async (product) => {
@@ -281,6 +292,22 @@ export default function AdminPanel({ onDataChanged }) {
           🔓 Cerrar sesión
         </button>
       </div>
+
+      {/* Status Message Banner */}
+      {statusMsg && (
+        <div style={{
+          padding: "10px 20px",
+          borderRadius: "8px",
+          marginBottom: "12px",
+          fontWeight: 600,
+          fontSize: "13px",
+          background: statusMsg.type === "success" ? "#ecfdf5" : "#fef2f2",
+          color: statusMsg.type === "success" ? "#065f46" : "#991b1b",
+          border: `1px solid ${statusMsg.type === "success" ? "#a7f3d0" : "#fecaca"}`,
+        }}>
+          {statusMsg.text}
+        </div>
+      )}
 
       {/* Sub-tabs */}
       <div className="admin-tabs">
@@ -495,77 +522,139 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
   const [form, setForm] = useState({ ...product });
 
   const update = (key, value) => {
-    if (key === "caudal_asignado" && value !== "") {
-      // Validate to prevent XSS / NoSQL Injection in numeric fields
+    if ((key === "caudal_asignado" || key === "caudal_metodo_min" || key === "caudal_metodo_max" || key === "caudal") && value !== "") {
       if (!/^[0-9.,\- ]+$/.test(value)) return;
     }
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  const fields = [
-    { key: "contaminante", label: "Nombre Interno (Contaminante)", wide: true },
-    { key: "contaminante_display", label: "Nombre para Mostrar (Display)", wide: true },
-    { key: "cas", label: "Nº CAS" },
-    { key: "sinonimo", label: "Sinónimos", wide: true },
-    { key: "descripcion_tecnica", label: "DESCRIPCIÓN TÉCNICA ANALÍTICA", wide: true },
-    { key: "codigo_prueba", label: "Código Prueba (General)" },
-    { key: "codigo_8d", label: "Código Urgente (8 días)" },
-    { key: "codigo_15d", label: "Código Estándar (15 días)" },
-    { key: "soporte_captacion", label: "Soporte de Captación (Código)" },
-    { key: "soporte_captacion_display", label: "Soporte de Captación (Display)", wide: true },
-    { key: "codigo_soporte", label: "Código Soporte Principal" },
-    { key: "codigo_soporte_alt", label: "Código Soporte Alternativo", wide: true },
-    { key: "ref_soporte", label: "Referencia Soporte" },
-    { key: "caudal", label: "Caudal Estático Inicial (L/min)" },
-    { key: "caudal_metodo_min", label: "Caudal Método Mínimo (L/min)" },
-    { key: "caudal_metodo_max", label: "Caudal Método Máximo (L/min)" },
-    { key: "caudal_asignado", label: "Caudal Asignado por Defecto (L/min)", wide: true },
-    { key: "volumen_minimo", label: "Volumen Mínimo (L)" },
-    { key: "v_minimo_muestreo_ed", label: "V Mínimo Muestreo ED" },
-    { key: "v_minimo_muestreo_twa", label: "V Mínimo Muestreo TWA" },
-    { key: "v_maximo_muestreo", label: "V Máximo Muestreo" },
-    { key: "tiempo_minimo_asignado", label: "Tiempo Mínimo Asignado" },
-    { key: "tiempo_minimo_muestreo_ed", label: "Tiempo Mínimo Muestreo ED" },
-    { key: "tiempo_minimo_muestreo_twa", label: "Tiempo Mínimo Muestreo TWA" },
-    { key: "lq", label: "LÍMITE DE CUANTIFICACIÓN (µg)" },
-    { key: "loq_concentracion", label: "LÍMITE DE CUANTIFICACIÓN (Concentración)" },
-    { key: "vla_ed", label: "VLA-ED (mg/m³)" },
-    { key: "vla_ec", label: "VLA-EC (mg/m³)" },
-    { key: "notas_lep", label: "Notas LEP" },
-    { key: "is_cmr", label: "Es CMR", type: "boolean" },
-    { key: "familia_cmr", label: "Familia CMR" },
-    { key: "rd_665", label: "RD 665", type: "boolean" },
-    { key: "frases_h", label: "Frases H", wide: true },
-    { key: "gestis_pais", label: "Gestis País" },
-    { key: "gestis_twa", label: "Gestis TWA" },
-    { key: "gestis_stel", label: "Gestis STEL" },
-    { key: "tecnica_analitica", label: "Técnica Analítica (Acrónimo)" },
-    { key: "metodo_analisis", label: "Método de Análisis", wide: true },
-    { key: "metodo_interno_basado_en", label: "Método Interno Basado En", wide: true },
-    { key: "ref_tecnica", label: "Referencia Técnica" },
-    { key: "laboratorio", label: "Laboratorio" },
-    { key: "plazo_entrega", label: "Plazo de Entrega" },
-    { key: "transporte", label: "Transporte", type: "select", options: ["Ambiente", "Refrigerante", "Congelador"] },
-    { key: "precio_analisis", label: "Precio Análisis" },
-    { key: "precio_soporte", label: "Precio Soporte" },
-    { key: "rango_trabajo", label: "Rango de Trabajo" },
-    { key: "coeficiente_desorcion", label: "Coeficiente de Desorción" },
-    { key: "cv_analitico", label: "CV Analítico" },
-    { key: "cv_total", label: "CV Total" },
-    { key: "observaciones_concepto", label: "Observaciones Concepto", wide: true },
-    { key: "evaluacion_apendice_1", label: "Evaluación Apéndice 1", type: "select", options: ["Sí", "No", "N/A"] },
-    { key: "ie_limite_condiciones_ed", label: "IE Límite Condiciones ED" },
-    { key: "ie_limite_condiciones_twa", label: "IE Límite Condiciones TWA" },
-    { key: "ie_minimo_teorico_ed", label: "IE Mínimo Teórico ED" },
-    { key: "ie_minimo_teorico_twa", label: "IE Mínimo Teórico TWA" },
-    { key: "screening_perfil", label: "Perfil Screening" },
-    { key: "screening_desc", label: "Descripción Screening" },
-    { key: "screening_condiciones_ed", label: "Screening Condiciones ED", wide: true },
-    { key: "screening_condiciones_ec", label: "Screening Condiciones EC", wide: true },
-    { key: "screening_comentarios", label: "Screening Comentarios", wide: true },
-    { key: "screening_compuestos_formatted", label: "Screening Lista Compuestos (Manual)", wide: true },
-    { key: "sin_metodo_disponible", label: "Sin Método Disponible", type: "boolean" },
-    { key: "tabla", label: "Grupo/Tabla" }
+  // Field sections organized to match front-end views
+  const sections = [
+    {
+      title: "🔎 Identificación del Contaminante",
+      fields: [
+        { key: "contaminante", label: "Nombre Interno", hint: "Sistema", wide: true },
+        { key: "contaminante_display", label: "Nombre para Mostrar", hint: "Vista principal", wide: true },
+        { key: "cas", label: "Nº CAS", hint: "Vista principal" },
+        { key: "sinonimo", label: "Sinónimos", hint: "Vista principal", wide: true },
+      ],
+    },
+    {
+      title: "🔬 DESCRIPCIÓN TÉCNICA ANALÍTICA",
+      fields: [
+        { key: "descripcion_tecnica", label: "DESCRIPCIÓN TÉCNICA ANALÍTICA", hint: "Vista principal", wide: true },
+        { key: "codigo_8d", label: "Código Urgente 8 días", hint: "Vista principal" },
+        { key: "codigo_15d", label: "Código Estándar 15 días", hint: "Vista principal" },
+        { key: "codigo_prueba", label: "Código Prueba General", hint: "Oculto en front" },
+        { key: "tecnica_analitica", label: "Técnica Analítica (Acrónimo)", hint: "Vista secundaria" },
+        { key: "metodo_analisis", label: "Método de Análisis Interno", hint: "Vista secundaria", wide: true },
+        { key: "metodo_interno_basado_en", label: "Método Interno Basado En", hint: "Vista secundaria", wide: true },
+        { key: "ref_tecnica", label: "Referencia Técnica", hint: "Vista secundaria" },
+      ],
+    },
+    {
+      title: "🧪 Soporte de Muestreo",
+      fields: [
+        { key: "soporte_captacion_display", label: "Soporte de Muestreo (Display)", hint: "Vista principal", wide: true },
+        { key: "soporte_captacion", label: "Soporte de Captación (Código)", hint: "Sistema" },
+        { key: "codigo_soporte", label: "Código Soporte Principal (Ref)", hint: "Vista principal" },
+        { key: "codigo_soporte_alt", label: "Código Soporte Alternativo (Ref)", hint: "Vista principal", wide: true },
+        { key: "ref_soporte", label: "Referencia Soporte", hint: "Vista principal" },
+      ],
+    },
+    {
+      title: "💨 CAUDAL MÉTODO",
+      fields: [
+        { key: "caudal_metodo_min", label: "Caudal Método Mínimo (L/min)", hint: "Vista principal" },
+        { key: "caudal_metodo_max", label: "Caudal Método Máximo (L/min)", hint: "Vista principal" },
+        { key: "caudal_asignado", label: "Caudal Asignado por Defecto (L/min)", hint: "Vista principal — UNE 482", wide: true },
+        { key: "caudal", label: "Caudal Estático Inicial (L/min)", hint: "Sistema / Fallback" },
+      ],
+    },
+    {
+      title: "📦 Volumen y Tiempos de Muestreo",
+      fields: [
+        { key: "volumen_minimo", label: "Volumen Método", hint: "Vista principal" },
+        { key: "v_minimo_muestreo_ed", label: "V Mín. Muestreo VLA-ED (L)", hint: "Vista secundaria" },
+        { key: "v_minimo_muestreo_twa", label: "V Mín. Muestreo TWA (L)", hint: "Vista secundaria" },
+        { key: "v_maximo_muestreo", label: "V Máx. Muestreo 8h (L)", hint: "Vista secundaria" },
+        { key: "tiempo_minimo_asignado", label: "Tiempo Mín. Asignado (min)", hint: "Vista secundaria" },
+        { key: "tiempo_minimo_muestreo_ed", label: "Tiempo Mín. Muestreo 10%VLA-ED (min)", hint: "Vista secundaria" },
+        { key: "tiempo_minimo_muestreo_twa", label: "Tiempo Mín. Muestreo 10%TWA (min)", hint: "Vista secundaria" },
+      ],
+    },
+    {
+      title: "🎯 LÍMITES DE CUANTIFICACIÓN / DETECCIÓN",
+      fields: [
+        { key: "lq", label: "LÍMITE DE CUANTIFICACIÓN (µg)", hint: "Vista principal" },
+        { key: "loq_concentracion", label: "LÍMITE DE CUANTIFICACIÓN (mg/m³)", hint: "Vista secundaria" },
+        { key: "ld", label: "LÍMITE DE DETECCIÓN (µg)", hint: "Vista principal" },
+      ],
+    },
+    {
+      title: "⚖️ Valores Límite (VLA / Gestis)",
+      fields: [
+        { key: "vla_ed", label: "VLA-ED (mg/m³)", hint: "Vista principal" },
+        { key: "vla_ec", label: "VLA-EC (mg/m³)", hint: "Vista principal" },
+        { key: "notas_lep", label: "Notas LEP 2025", hint: "Vista secundaria", wide: true },
+        { key: "gestis_pais", label: "Gestis País", hint: "Vista principal" },
+        { key: "gestis_twa", label: "Gestis TWA", hint: "Vista principal" },
+        { key: "gestis_stel", label: "Gestis STEL", hint: "Vista principal" },
+      ],
+    },
+    {
+      title: "☣️ Clasificación CMR / Normativa",
+      fields: [
+        { key: "is_cmr", label: "Es CMR", hint: "Vista secundaria", type: "boolean" },
+        { key: "familia_cmr", label: "Familia CMR", hint: "Vista secundaria" },
+        { key: "rd_665", label: "Aplica RD 665/1997", hint: "Vista secundaria", type: "boolean" },
+        { key: "frases_h", label: "Frases H (LEP 2025)", hint: "Vista secundaria", wide: true },
+      ],
+    },
+    {
+      title: "📊 Screening / Perfil Analítico",
+      fields: [
+        { key: "screening_perfil", label: "Perfil Screening", hint: "Vista principal" },
+        { key: "screening_desc", label: "Descripción Screening", hint: "Vista principal", wide: true },
+        { key: "screening_condiciones_ed", label: "Condiciones Screening VLA-ED", hint: "Vista secundaria", wide: true },
+        { key: "screening_condiciones_ec", label: "Condiciones Screening VLA-EC", hint: "Vista secundaria", wide: true },
+        { key: "screening_comentarios", label: "Screening Comentarios", hint: "Vista secundaria", wide: true },
+        { key: "screening_compuestos_formatted", label: "Screening Lista Compuestos", hint: "Vista principal", wide: true },
+      ],
+    },
+    {
+      title: "🏢 Laboratorio y Logística",
+      fields: [
+        { key: "laboratorio", label: "Laboratorio", hint: "Vista secundaria" },
+        { key: "plazo_entrega", label: "Plazo Entrega Laboratorio", hint: "Vista secundaria" },
+        { key: "transporte", label: "Condiciones de Transporte", hint: "Vista secundaria", type: "select", options: ["Ambiente", "Refrigerante", "Congelador"] },
+        { key: "precio_analisis", label: "Precio Análisis (€)", hint: "Vista secundaria" },
+        { key: "precio_soporte", label: "Precio Soporte (€)", hint: "Vista secundaria" },
+      ],
+    },
+    {
+      title: "📐 Parámetros Analíticos Avanzados",
+      fields: [
+        { key: "rango_trabajo", label: "Rango de Trabajo", hint: "Vista secundaria" },
+        { key: "coeficiente_desorcion", label: "Coeficiente de Desorción", hint: "Vista secundaria" },
+        { key: "cv_analitico", label: "CV Analítico", hint: "Vista secundaria" },
+        { key: "cv_total", label: "CV Total", hint: "Vista secundaria" },
+        { key: "evaluacion_apendice_1", label: "Evaluación Apéndice 1", hint: "Vista secundaria", type: "select", options: ["Sí", "No", "N/A"] },
+        { key: "ie_limite_condiciones_ed", label: "IE Límite Condiciones VLA-ED", hint: "Vista secundaria" },
+        { key: "ie_limite_condiciones_twa", label: "IE Límite Condiciones TWA", hint: "Vista secundaria" },
+        { key: "ie_minimo_teorico_ed", label: "IE Mín. Teórico VLA-ED", hint: "Vista secundaria" },
+        { key: "ie_minimo_teorico_twa", label: "IE Mín. Teórico TWA", hint: "Vista secundaria" },
+      ],
+    },
+    {
+      title: "⚙️ Sistema y Otros",
+      fields: [
+        { key: "visible_en_app", label: "Visible en App", hint: "Sistema", type: "boolean" },
+        { key: "sin_metodo_disponible", label: "Sin Método Disponible", hint: "Sistema", type: "boolean" },
+        { key: "tabla", label: "Tabla de Compatibilidad", hint: "Vista secundaria" },
+        { key: "observaciones_concepto", label: "Observaciones / Comentarios", hint: "Vista secundaria", wide: true },
+      ],
+    },
   ];
 
   return (
@@ -578,38 +667,52 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
           </button>
         </div>
         <div className="admin-modal-body">
-          {fields.map(({ key, label, type, options, wide }) => (
-            <div key={key} className={`admin-modal-field ${wide ? "wide" : ""}`}>
-              <label>{label}</label>
-              {type === "boolean" ? (
-                <select 
-                  value={form[key] === true ? "true" : form[key] === false ? "false" : ""}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    update(key, val === "true" ? true : val === "false" ? false : "");
-                  }}
-                  className="admin-select"
-                >
-                  <option value="">Seleccionar...</option>
-                  <option value="true">Sí (True)</option>
-                  <option value="false">No (False)</option>
-                </select>
-              ) : type === "select" ? (
-                <select
-                  value={form[key] || ""}
-                  onChange={(e) => update(key, e.target.value)}
-                  className="admin-select"
-                >
-                  <option value="">Seleccionar...</option>
-                  {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                </select>
-              ) : (
-                <input
-                  type="text"
-                  value={form[key] || ""}
-                  onChange={(e) => update(key, e.target.value)}
-                />
-              )}
+          {sections.map((section) => (
+            <div key={section.title} className="admin-modal-section">
+              <h4 className="admin-modal-section-title">{section.title}</h4>
+              <div className="admin-modal-section-fields">
+                {section.fields.map(({ key, label, type, options, wide, hint }) => (
+                  <div key={key} className={`admin-modal-field ${wide ? "wide" : ""}`}>
+                    <label>
+                      {label}
+                      {hint && <span className="admin-field-hint">{hint}</span>}
+                    </label>
+                    {type === "boolean" ? (
+                      <select
+                        value={form[key] === true ? "true" : form[key] === false ? "false" : ""}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          update(key, val === "true" ? true : val === "false" ? false : "");
+                        }}
+                        className="admin-select"
+                      >
+                        <option value="">Seleccionar...</option>
+                        <option value="true">Sí ✅</option>
+                        <option value="false">No ❌</option>
+                      </select>
+                    ) : type === "select" ? (
+                      <select
+                        value={form[key] || ""}
+                        onChange={(e) => update(key, e.target.value)}
+                        className="admin-select"
+                      >
+                        <option value="">Seleccionar...</option>
+                        {options.map((opt) => (
+                          <option key={opt} value={opt}>
+                            {opt}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        value={form[key] ?? ""}
+                        onChange={(e) => update(key, e.target.value)}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -622,10 +725,11 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
             onClick={() => onSave(form)}
             disabled={saving}
           >
-            {saving ? "Guardando..." : isNew ? "Crear Producto" : "Guardar Cambios"}
+            {saving ? "⏳ Guardando..." : isNew ? "➕ Crear Producto" : "💾 Guardar Cambios"}
           </button>
         </div>
       </div>
     </div>
   );
 }
+
