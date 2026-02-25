@@ -170,16 +170,16 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
       (c) => c.screening_perfil === selected.screening_perfil
     );
 
-    // Filter out duplicates and format as "Display Name (Code)"
+    // Filter out duplicates and format as "Display Name (CAS)"
     // We prefer contaminante_display if available, fallback to contaminante
     const uniqueMap = new Map();
     related.forEach((c) => {
-      if (c.codigo_prueba) {
+      const key = c.cas || c.codigo_prueba || c.contaminante;
+      if (key) {
         const name = c.contaminante_display || c.contaminante;
-        // Clean up the name if it has " - aire" etc to make the comma list cleaner, or keep as is.
-        // We will keep as is but focus on the main part before " - " if we want it concise, let's keep full for accuracy
         const cleanName = name.split(" - ")[0];
-        uniqueMap.set(c.codigo_prueba, `${cleanName} (${c.codigo_prueba})`);
+        const casLabel = c.cas ? c.cas : "";
+        uniqueMap.set(key, casLabel ? `${cleanName} (${casLabel})` : cleanName);
       }
     });
     
