@@ -35,3 +35,4 @@
 [2026-02-25 06:51:39] Editado Carbono Orgánico y Elemental - aire (INS) - Humos diesel
 [2026-02-25 06:53:13] Editado Carbono Orgánico y Elemental - aire (INS)
 [2026-02-25 07:46:46] Desactivada visibilidad de Furfural - aire
+[2026-02-25 07:47:21] Editado Furfural - aire (prueba)
