@@ -2250,7 +2250,7 @@ h1, h2, h3, h4 {
   border-radius: 16px;
   max-width: 1000px;
   width: 90vw;
-  max-height: 85vh;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
@@ -2290,6 +2290,8 @@ h1, h2, h3, h4 {
 .admin-modal-body {
   padding: 12px 24px 20px;
   overflow-y: auto;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -2298,7 +2300,7 @@ h1, h2, h3, h4 {
 .admin-modal-section {
   border: 1px solid #e8ecf1;
   border-radius: 10px;
-  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .admin-modal-section-title {
@@ -2309,9 +2311,6 @@ h1, h2, h3, h4 {
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   border-bottom: 1px solid #e8ecf1;
   margin: 0;
-  position: sticky;
-  top: 0;
-  z-index: 1;
 }
 
 .admin-modal-section-fields {
