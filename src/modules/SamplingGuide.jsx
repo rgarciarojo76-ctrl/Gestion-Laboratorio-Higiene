@@ -657,11 +657,11 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               </div>
             </div>
 
-            {/* Card 2: Descripción Técnica + Códigos Lab */}
+            {/* Card 2: DESCRIPCIÓN TÉCNICA ANALÍTICA + Códigos Lab */}
             <div className="info-card" style={{ flex: "1 1 100%" }}>
               <div className="info-card-icon icon-blue">🔬</div>
               <div className="info-card-content">
-                <span className="info-card-label">Descripción Técnica</span>
+                <span className="info-card-label">DESCRIPCIÓN TÉCNICA ANALÍTICA</span>
                 <span
                   className="info-card-value"
                   style={{ fontWeight: 600, whiteSpace: "pre-wrap" }}
@@ -1030,7 +1030,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               )}
               {selected.descripcion_tecnica && (
                 <div className="detail-item full-width">
-                  <div className="detail-item-label">Descripción Técnica</div>
+                  <div className="detail-item-label">DESCRIPCIÓN TÉCNICA ANALÍTICA</div>
                   <div className="detail-item-value" style={{ whiteSpace: "pre-wrap" }}>{selected.descripcion_tecnica}</div>
                 </div>
               )}

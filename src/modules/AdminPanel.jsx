@@ -507,7 +507,7 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
     { key: "contaminante_display", label: "Nombre para Mostrar (Display)", wide: true },
     { key: "cas", label: "Nº CAS" },
     { key: "sinonimo", label: "Sinónimos", wide: true },
-    { key: "descripcion_tecnica", label: "Descripción Técnica", wide: true },
+    { key: "descripcion_tecnica", label: "DESCRIPCIÓN TÉCNICA ANALÍTICA", wide: true },
     { key: "codigo_prueba", label: "Código Prueba (General)" },
     { key: "codigo_8d", label: "Código Urgente (8 días)" },
     { key: "codigo_15d", label: "Código Estándar (15 días)" },
