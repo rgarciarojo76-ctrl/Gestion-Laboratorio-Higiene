@@ -150,10 +150,10 @@ export default function ChainOfCustody({ contaminants, memory, updateMemory }) {
           const ratio = conc_loq / vla_ed
           if (ratio <= 0.1) {
             sensitivityStatus = 'pass'
-            sensitivityMsg = `Sensibilidad OK (LOQ/V = ${conc_loq.toFixed(4)} mg/m³ ≤ 10% VLA-ED)`
+            sensitivityMsg = `Sensibilidad OK (Lím. Cuantif./V = ${conc_loq.toFixed(4)} mg/m³ ≤ 10% VLA-ED)`
           } else {
             sensitivityStatus = 'fail'
-            sensitivityMsg = `❌ Sensibilidad insuficiente: LOQ/V = ${conc_loq.toFixed(4)} mg/m³ > 10% de VLA-ED (${vla_ed} mg/m³)`
+            sensitivityMsg = `❌ Sensibilidad insuficiente: Lím. Cuantif./V = ${conc_loq.toFixed(4)} mg/m³ > 10% de VLA-ED (${vla_ed} mg/m³)`
           }
         }
       }
