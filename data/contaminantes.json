@@ -78,7 +78,8 @@
     "caudal_metodo_min": 0.03,
     "caudal_metodo_max": 1.5,
     "screening_compuestos_formatted": "Acetaldehído (75-07-0), Acroleína (107-02-8), Benzaldehído (100-52-7), Formaldehído (50-00-0), Furfural (98-01-1), Glutaraldehído (111-30-8)",
-    "visible_en_app": true
+    "visible_en_app": true,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 aldehído (rutina)",
@@ -157,7 +158,8 @@
     "codigo_8d": "MA173",
     "codigo_15d": "MA051",
     "caudal_metodo_min": 0.03,
-    "caudal_metodo_max": 1.5
+    "caudal_metodo_max": 1.5,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 aldehído (rutina)",
@@ -316,7 +318,8 @@
     "codigo_8d": "MA173",
     "codigo_15d": "MA051",
     "caudal_metodo_min": 0.03,
-    "caudal_metodo_max": 1.5
+    "caudal_metodo_max": 1.5,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 aldehído (rutina)",
@@ -396,7 +399,8 @@
     "caudal_metodo_min": 0.03,
     "caudal_metodo_max": 1.5,
     "codigo_15d": "MA051",
-    "visible_en_app": true
+    "visible_en_app": true,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 aldehído urgente 8 días",
@@ -475,7 +479,8 @@
     "codigo_8d": "MA173",
     "codigo_15d": "MA051",
     "caudal_metodo_min": 0.03,
-    "caudal_metodo_max": 0.5
+    "caudal_metodo_max": 0.5,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "5-Cloro-2-metil-4-isotiazolin-",
@@ -784,7 +789,8 @@
     "screening_comentarios": "Aunque NIOSH 1403 sugiere un caudal máximo, al estar el interés sobre el perfil analítico es preferible superarlo hasta un máximo de 0,2L/min en caso de esperar cantidades bajas de VOC´s para mejorar las concentraciones límite asociadas. Así, de manera general, se propone: 0,2L/min y 120min; aunque igualmente se podría plantear muestreo asignando caudal entre 0,01-0,2L/min, según histórico disponible.",
     "sin_metodo_disponible": false,
     "codigo_8d": "MA206",
-    "codigo_15d": "MA205"
+    "codigo_15d": "MA205",
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 ácido inorgánico (rutina)",
@@ -864,7 +870,8 @@
     "codigo_15d": "MA178",
     "caudal_metodo_min": 0.2,
     "caudal_metodo_max": 0.5,
-    "visible_en_app": false
+    "visible_en_app": false,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Ácido inorgánico fracción inhalable",
@@ -1100,7 +1107,8 @@
     "codigo_8d": "MA179",
     "codigo_15d": "MA178",
     "caudal_metodo_min": 0.2,
-    "caudal_metodo_max": 0.5
+    "caudal_metodo_max": 0.5,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "urgente 8 días",
@@ -2741,7 +2749,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "8 días",
@@ -3289,7 +3298,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -3368,7 +3378,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.05,
-    "caudal_metodo_max": 0.05
+    "caudal_metodo_max": 0.05,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -3526,7 +3537,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -3605,7 +3617,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -3684,7 +3697,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -3763,7 +3777,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -3842,7 +3857,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -3921,7 +3937,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -4000,7 +4017,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -4079,7 +4097,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo urgente 8 días",
@@ -4158,7 +4177,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -4237,7 +4257,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -4316,7 +4337,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -4395,7 +4417,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -4474,7 +4497,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -4553,7 +4577,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -4632,7 +4657,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -4711,7 +4737,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "rutina 15 días",
@@ -4869,7 +4896,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "VOC especial (rutina)",
@@ -5106,7 +5134,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -5186,7 +5215,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -5265,7 +5295,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -5344,7 +5375,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.02,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -5423,7 +5455,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -5502,7 +5535,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -5581,7 +5615,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -5660,7 +5695,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -5739,7 +5775,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -5818,7 +5855,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo urgente 8 días",
@@ -5897,7 +5935,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -5976,7 +6015,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -6055,7 +6095,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -6134,7 +6175,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -6213,7 +6255,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -6292,7 +6335,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -6371,7 +6415,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -6450,7 +6495,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -6529,7 +6575,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -6608,7 +6655,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo urgente 8 días",
@@ -6687,7 +6735,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -6766,7 +6815,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -6845,7 +6895,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -6924,7 +6975,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -7003,7 +7055,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -7082,7 +7135,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -7161,7 +7215,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -7240,7 +7295,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.05,
-    "caudal_metodo_max": 0.05
+    "caudal_metodo_max": 0.05,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -7319,7 +7375,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -7398,7 +7455,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -7477,7 +7535,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.05,
-    "caudal_metodo_max": 0.05
+    "caudal_metodo_max": 0.05,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -7634,7 +7693,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.05,
-    "caudal_metodo_max": 0.05
+    "caudal_metodo_max": 0.05,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC o Compuesto Orgánico Volátil (rutina)",
@@ -7713,7 +7773,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 1.0
+    "caudal_metodo_max": 1.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -7792,7 +7853,8 @@
     "codigo_8d": "MA163",
     "codigo_15d": "MA052",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC urgente 8 días",
@@ -7949,7 +8011,8 @@
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 0.01,
     "caudal_metodo_max": 0.2,
-    "codigo_15d": "MA274"
+    "codigo_15d": "MA274",
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Acetato/deriv.glicol (rutina)",
@@ -8028,7 +8091,8 @@
     "codigo_8d": "MA206",
     "codigo_15d": "MA205",
     "caudal_metodo_min": 0.05,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Acetato/deriv.glicol (rutina)",
@@ -8107,7 +8171,8 @@
     "codigo_8d": "MA206",
     "codigo_15d": "MA205",
     "caudal_metodo_min": 0.1,
-    "caudal_metodo_max": 0.1
+    "caudal_metodo_max": 0.1,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Acetato/deriv.glicol (rutina)",
@@ -8186,7 +8251,8 @@
     "codigo_8d": "MA206",
     "codigo_15d": "MA205",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.05
+    "caudal_metodo_max": 0.05,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Acetato/deriv.glicol (rutina)",
@@ -8265,7 +8331,8 @@
     "codigo_8d": "MA206",
     "codigo_15d": "MA205",
     "caudal_metodo_min": 0.1,
-    "caudal_metodo_max": 0.1
+    "caudal_metodo_max": 0.1,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Acetato/deriv.glicol (rutina)",
@@ -8344,7 +8411,8 @@
     "codigo_8d": "MA206",
     "codigo_15d": "MA205",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.05
+    "caudal_metodo_max": 0.05,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Acetato/deriv.glicol urgente 8 días",
@@ -8423,7 +8491,8 @@
     "codigo_8d": "MA206",
     "codigo_15d": "MA205",
     "caudal_metodo_min": 0.1,
-    "caudal_metodo_max": 0.1
+    "caudal_metodo_max": 0.1,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Acetato/deriv.glicol urgente 8 días",
@@ -8502,7 +8571,8 @@
     "codigo_8d": "MA206",
     "codigo_15d": "MA205",
     "caudal_metodo_min": 0.1,
-    "caudal_metodo_max": 0.1
+    "caudal_metodo_max": 0.1,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Acetato/deriv.glicol urgente 8 días",
@@ -8581,7 +8651,8 @@
     "codigo_8d": "MA206",
     "codigo_15d": "MA205",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.05
+    "caudal_metodo_max": 0.05,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo (rutina)",
@@ -8660,7 +8731,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo urgente 8 días",
@@ -8739,7 +8811,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo (rutina)",
@@ -8818,7 +8891,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo (rutina)",
@@ -8897,7 +8971,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo (rutina)",
@@ -8976,7 +9051,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo (rutina)",
@@ -9055,7 +9131,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo (rutina)",
@@ -9134,7 +9211,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo (rutina)",
@@ -9213,7 +9291,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo urgente 8 días",
@@ -9292,7 +9371,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo (rutina)",
@@ -9371,7 +9451,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 hidrocarburo (rutina)",
@@ -9450,7 +9531,8 @@
     "codigo_8d": "MA166",
     "codigo_15d": "MA165",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "",
@@ -9995,7 +10077,8 @@
     "codigo_8d": "MA227",
     "codigo_15d": "MA062",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Dicloropropano",
@@ -14173,7 +14256,8 @@
     "codigo_8d": "MA227",
     "codigo_15d": "MA062",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "VOC especial (rutina)",
@@ -15593,7 +15677,8 @@
     "codigo_8d": "MA232",
     "codigo_15d": "MA231",
     "caudal_metodo_min": 0.5,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Glicol (rutina)",
@@ -15672,7 +15757,8 @@
     "codigo_8d": "MA232",
     "codigo_15d": "MA231",
     "caudal_metodo_min": 0.5,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Catecol - aire",
@@ -15907,7 +15993,8 @@
     "codigo_8d": "MA232",
     "codigo_15d": "MA231",
     "caudal_metodo_min": 0.5,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Ftalato (rutina)",
@@ -15986,7 +16073,8 @@
     "codigo_8d": "MA234",
     "codigo_15d": "MA233",
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 1.0
+    "caudal_metodo_max": 1.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Ftalato (rutina)",
@@ -16065,7 +16153,8 @@
     "codigo_8d": "MA234",
     "codigo_15d": "MA233",
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 1.0
+    "caudal_metodo_max": 1.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Ftalato (rutina)",
@@ -16144,7 +16233,8 @@
     "codigo_8d": "MA234",
     "codigo_15d": "MA233",
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 1.0
+    "caudal_metodo_max": 1.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Ftalato 8 días",
@@ -16223,7 +16313,8 @@
     "codigo_8d": "MA234",
     "codigo_15d": "MA233",
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 1.0
+    "caudal_metodo_max": 1.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Ftalato (rutina)",
@@ -16302,7 +16393,8 @@
     "codigo_8d": "MA234",
     "codigo_15d": "MA233",
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 1.0
+    "caudal_metodo_max": 1.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "VOC especial urgente 8 días",
@@ -16460,7 +16552,8 @@
     "codigo_8d": "MA236",
     "codigo_15d": "MA235",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Acrilato urgente 8 días",
@@ -16539,7 +16632,8 @@
     "codigo_8d": "MA236",
     "codigo_15d": "MA235",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Acrilato urgente 8 días",
@@ -16618,7 +16712,8 @@
     "codigo_8d": "MA236",
     "codigo_15d": "MA235",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Etanolamina (rutina)",
@@ -16694,7 +16789,8 @@
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
-    "codigo_15d": "MA237"
+    "codigo_15d": "MA237",
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Etanolamina (rutina)",
@@ -16770,7 +16866,8 @@
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
-    "codigo_15d": "MA237"
+    "codigo_15d": "MA237",
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Etanolamina (rutina)",
@@ -16846,7 +16943,8 @@
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
-    "codigo_15d": "MA237"
+    "codigo_15d": "MA237",
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "",
@@ -16997,7 +17095,8 @@
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
-    "codigo_15d": "MA237"
+    "codigo_15d": "MA237",
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Hidrocarb halogenado 8 días",
@@ -17076,7 +17175,8 @@
     "codigo_8d": "MA209",
     "codigo_15d": "MA208",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Hidrocarb halogenado 8 días",
@@ -17155,7 +17255,8 @@
     "codigo_8d": "MA209",
     "codigo_15d": "MA208",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Hidrocarb halogenado (rutina)",
@@ -17234,7 +17335,8 @@
     "codigo_8d": "MA209",
     "codigo_15d": "MA208",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -17312,7 +17414,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Hidrocarb halogenado 8 días",
@@ -17391,7 +17494,8 @@
     "codigo_8d": "MA209",
     "codigo_15d": "MA208",
     "caudal_metodo_min": 0.2,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Hidrocarb halogenado 8 días",
@@ -17470,7 +17574,8 @@
     "codigo_8d": "MA209",
     "codigo_15d": "MA208",
     "caudal_metodo_min": 0.2,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -17548,7 +17653,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Hidrocarb halogenado 8 días",
@@ -17627,7 +17733,8 @@
     "codigo_8d": "MA209",
     "codigo_15d": "MA208",
     "caudal_metodo_min": 0.2,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Suma de dicloros",
@@ -17782,7 +17889,8 @@
     "codigo_8d": "MA209",
     "codigo_15d": "MA208",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Hidrocarb halogenado 8 días",
@@ -17861,7 +17969,8 @@
     "codigo_8d": "MA209",
     "codigo_15d": "MA208",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Hidrocarb halogenado (rutina)",
@@ -17940,7 +18049,8 @@
     "codigo_8d": "MA209",
     "codigo_15d": "MA208",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -18018,7 +18128,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -18096,7 +18207,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Hidrocarb halogenado 8 días",
@@ -18175,7 +18287,8 @@
     "codigo_8d": "MA209",
     "codigo_15d": "MA208",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -18253,7 +18366,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -18331,7 +18445,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Consultar precio con Gerencia Industria",
@@ -18409,7 +18524,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PCG",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 VOC extra especial (rutina)",
@@ -19576,7 +19692,8 @@
     "codigo_8d": "MA185",
     "codigo_15d": "MA079",
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 1.0
+    "caudal_metodo_max": 1.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 diisocianato urgente 8 días",
@@ -19655,7 +19772,8 @@
     "codigo_8d": "MA185",
     "codigo_15d": "MA079",
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 1.0
+    "caudal_metodo_max": 1.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 Isocianato (rutina)",
@@ -19734,7 +19852,8 @@
     "codigo_8d": "MA185",
     "codigo_15d": "MA079",
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 1.0
+    "caudal_metodo_max": 1.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 diisocianato urgente 8 días",
@@ -19813,7 +19932,8 @@
     "codigo_8d": "MA185",
     "codigo_15d": "MA079",
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 1.0
+    "caudal_metodo_max": 1.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 diisocianato urgente 8 días",
@@ -19892,7 +20012,8 @@
     "codigo_8d": "MA185",
     "codigo_15d": "MA079",
     "caudal_metodo_min": 1.0,
-    "caudal_metodo_max": 1.0
+    "caudal_metodo_max": 1.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Diisocianato polimerico",
@@ -20047,7 +20168,8 @@
     "screening_comentarios": "De manera general, las condiciones planteadas (0,05L/min y 120min, 6L) pueden considerarse adecuadas al encontrarse dentro de rango de método (12L). En cualquier caso, el tiempo de muestreo suele ir condicionado al tipo de intervención programada y se recomienda considerarlo completo (si este tiempo de exposición fuese muy largo utilizando muestras consecutivas para cubrir la totalidad del tiempo de intervención de interés; o si fuese muy corto, valorar agrupar en la misma muestra varias intervenciones cortas). De los agentes considerados en este perfil analítico es el isoflurane el más limitante en cuanto a condiciones de muestreo (condiciones particulares disponibles para cada agente particular).",
     "sin_metodo_disponible": false,
     "codigo_8d": "MA212",
-    "codigo_15d": "MA063"
+    "codigo_15d": "MA063",
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 gas anestésico (rutina)",
@@ -20123,7 +20245,8 @@
     "screening_condiciones_ec": "De manera general, las condiciones de muestreo planteadas: 0,05L/min y 15min pueden ser consideradas adecuadas para los agentes con VLA-EC vigente o STEL.",
     "screening_comentarios": "De manera general, las condiciones planteadas (0,05L/min y 120min, 6L) pueden considerarse adecuadas al encontrarse dentro de rango de método (12L). En cualquier caso, el tiempo de muestreo suele ir condicionado al tipo de intervención programada y se recomienda considerarlo completo (si este tiempo de exposición fuese muy largo utilizando muestras consecutivas para cubrir la totalidad del tiempo de intervención de interés; o si fuese muy corto, valorar agrupar en la misma muestra varias intervenciones cortas). De los agentes considerados en este perfil analítico es el isoflurane el más limitante en cuanto a condiciones de muestreo (condiciones particulares disponibles para cada agente particular).",
     "sin_metodo_disponible": false,
-    "codigo_15d": "MA063"
+    "codigo_15d": "MA063",
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 gas anestésico (rutina)",
@@ -20200,7 +20323,8 @@
     "screening_comentarios": "De manera general, las condiciones planteadas (0,05L/min y 120min, 6L) pueden considerarse adecuadas al encontrarse dentro de rango de método (12L). En cualquier caso, el tiempo de muestreo suele ir condicionado al tipo de intervención programada y se recomienda considerarlo completo (si este tiempo de exposición fuese muy largo utilizando muestras consecutivas para cubrir la totalidad del tiempo de intervención de interés; o si fuese muy corto, valorar agrupar en la misma muestra varias intervenciones cortas). De los agentes considerados en este perfil analítico es el isoflurane el más limitante en cuanto a condiciones de muestreo (condiciones particulares disponibles para cada agente particular).",
     "sin_metodo_disponible": false,
     "codigo_8d": "MA212",
-    "codigo_15d": "MA063"
+    "codigo_15d": "MA063",
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 gas anestésico (rutina)",
@@ -20275,7 +20399,8 @@
     "screening_condiciones_ed": "De manera general, las condiciones planteadas (0,05L/min y 120min, 6L) pueden considerarse adecuadas al encontrarse dentro de rango de método (12L). En cualquier caso, el tiempo de muestreo suele ir condicionado al tipo de intervención programada y se recomienda considerarlo completo (si este tiempo de exposición fuese muy largo utilizando muestras consecutivas para cubrir la totalidad del tiempo de intervención de interés; o si fuese muy corto, valorar agrupar en la misma muestra varias intervenciones cortas). De los agentes considerados en este perfil analítico es el isoflurane el más limitante en cuanto a condiciones de muestreo (condiciones particulares disponibles para cada agente particular).",
     "screening_condiciones_ec": "De manera general, las condiciones de muestreo planteadas: 0,05L/min y 15min pueden ser consideradas adecuadas para los agentes con VLA-EC vigente o STEL.",
     "screening_comentarios": "De manera general, las condiciones planteadas (0,05L/min y 120min, 6L) pueden considerarse adecuadas al encontrarse dentro de rango de método (12L). En cualquier caso, el tiempo de muestreo suele ir condicionado al tipo de intervención programada y se recomienda considerarlo completo (si este tiempo de exposición fuese muy largo utilizando muestras consecutivas para cubrir la totalidad del tiempo de intervención de interés; o si fuese muy corto, valorar agrupar en la misma muestra varias intervenciones cortas). De los agentes considerados en este perfil analítico es el isoflurane el más limitante en cuanto a condiciones de muestreo (condiciones particulares disponibles para cada agente particular).",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 gas anestésico (rutina)",
@@ -20352,7 +20477,8 @@
     "screening_comentarios": "De manera general, las condiciones planteadas (0,05L/min y 120min, 6L) pueden considerarse adecuadas al encontrarse dentro de rango de método (12L). En cualquier caso, el tiempo de muestreo suele ir condicionado al tipo de intervención programada y se recomienda considerarlo completo (si este tiempo de exposición fuese muy largo utilizando muestras consecutivas para cubrir la totalidad del tiempo de intervención de interés; o si fuese muy corto, valorar agrupar en la misma muestra varias intervenciones cortas). De los agentes considerados en este perfil analítico es el isoflurane el más limitante en cuanto a condiciones de muestreo (condiciones particulares disponibles para cada agente particular).",
     "sin_metodo_disponible": false,
     "codigo_8d": "MA212",
-    "codigo_15d": "MA063"
+    "codigo_15d": "MA063",
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 gas anestésico (rutina)",
@@ -20428,7 +20554,8 @@
     "screening_condiciones_ec": "De manera general, las condiciones de muestreo planteadas: 0,05L/min y 15min pueden ser consideradas adecuadas para los agentes con VLA-EC vigente o STEL.",
     "screening_comentarios": "De manera general, las condiciones planteadas (0,05L/min y 120min, 6L) pueden considerarse adecuadas al encontrarse dentro de rango de método (12L). En cualquier caso, el tiempo de muestreo suele ir condicionado al tipo de intervención programada y se recomienda considerarlo completo (si este tiempo de exposición fuese muy largo utilizando muestras consecutivas para cubrir la totalidad del tiempo de intervención de interés; o si fuese muy corto, valorar agrupar en la misma muestra varias intervenciones cortas). De los agentes considerados en este perfil analítico es el isoflurane el más limitante en cuanto a condiciones de muestreo (condiciones particulares disponibles para cada agente particular).",
     "sin_metodo_disponible": false,
-    "codigo_15d": "MA063"
+    "codigo_15d": "MA063",
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "1 gas anestésico (rutina)",
@@ -20503,7 +20630,8 @@
     "screening_condiciones_ed": "De manera general, las condiciones planteadas (0,05L/min y 120min, 6L) pueden considerarse adecuadas al encontrarse dentro de rango de método (12L). En cualquier caso, el tiempo de muestreo suele ir condicionado al tipo de intervención programada y se recomienda considerarlo completo (si este tiempo de exposición fuese muy largo utilizando muestras consecutivas para cubrir la totalidad del tiempo de intervención de interés; o si fuese muy corto, valorar agrupar en la misma muestra varias intervenciones cortas). De los agentes considerados en este perfil analítico es el isoflurane el más limitante en cuanto a condiciones de muestreo (condiciones particulares disponibles para cada agente particular).",
     "screening_condiciones_ec": "De manera general, las condiciones de muestreo planteadas: 0,05L/min y 15min pueden ser consideradas adecuadas para los agentes con VLA-EC vigente o STEL.",
     "screening_comentarios": "De manera general, las condiciones planteadas (0,05L/min y 120min, 6L) pueden considerarse adecuadas al encontrarse dentro de rango de método (12L). En cualquier caso, el tiempo de muestreo suele ir condicionado al tipo de intervención programada y se recomienda considerarlo completo (si este tiempo de exposición fuese muy largo utilizando muestras consecutivas para cubrir la totalidad del tiempo de intervención de interés; o si fuese muy corto, valorar agrupar en la misma muestra varias intervenciones cortas). De los agentes considerados en este perfil analítico es el isoflurane el más limitante en cuanto a condiciones de muestreo (condiciones particulares disponibles para cada agente particular).",
-    "sin_metodo_disponible": false
+    "sin_metodo_disponible": false,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -20581,7 +20709,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -20659,7 +20788,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -20737,7 +20867,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -20815,7 +20946,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -20893,7 +21025,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -20971,7 +21104,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -21049,7 +21183,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -21127,7 +21262,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -21205,7 +21341,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -21283,7 +21420,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -21361,7 +21499,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -21439,7 +21578,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -21517,7 +21657,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -21595,7 +21736,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -21673,7 +21815,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -21751,7 +21894,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "8 días",
@@ -29785,7 +29929,8 @@
     "codigo_8d": "MA191",
     "codigo_15d": "MA008",
     "caudal_metodo_min": 3.0,
-    "caudal_metodo_max": 3.0
+    "caudal_metodo_max": 3.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "urgente 8 días",
@@ -29864,7 +30009,8 @@
     "codigo_8d": "MA191",
     "codigo_15d": "MA008",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Metal",
@@ -31036,7 +31182,8 @@
     "codigo_8d": "MA191",
     "codigo_15d": "MA008",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "urgente 8 días",
@@ -32055,7 +32202,8 @@
     "codigo_8d": "MA191",
     "codigo_15d": "MA008",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Metal",
@@ -32134,7 +32282,8 @@
     "codigo_8d": "MA191",
     "codigo_15d": "MA008",
     "caudal_metodo_min": 2.0,
-    "caudal_metodo_max": 2.0
+    "caudal_metodo_max": 2.0,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "urgente 8 días",
@@ -35089,7 +35238,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -35167,7 +35317,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -35245,7 +35396,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -35323,7 +35475,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -35401,7 +35554,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -35479,7 +35633,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Prueba de perfil",
@@ -35635,7 +35790,8 @@
     "sin_metodo_disponible": false,
     "codigo_15d": "PP",
     "caudal_metodo_min": 0.01,
-    "caudal_metodo_max": 0.2
+    "caudal_metodo_max": 0.2,
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "Espironolactona - aire",
@@ -35943,7 +36099,8 @@
     "sin_metodo_disponible": false,
     "caudal_metodo_min": 0.05,
     "caudal_metodo_max": 0.05,
-    "codigo_15d": "2307Q"
+    "codigo_15d": "2307Q",
+    "analisis_simultaneo": true
   },
   {
     "contaminante": "3-Etoxipropionato de etilo",

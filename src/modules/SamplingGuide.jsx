@@ -550,16 +550,29 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             <div style={{ padding: "24px 28px 0", marginBottom: -4 }}>
               <div
                 className="summary-stat-card"
-                style={{ background: "#f0f9ff", borderColor: "#bae6fd", flex: "none" }}
+                style={{ background: "#f0f9ff", borderColor: "#bae6fd", flex: "none", position: "relative" }}
               >
+                {/* Badges container */}
+                <div style={{ position: "absolute", top: "12px", right: "12px", display: "flex", gap: "6px", alignItems: "center" }}>
+                  <span style={{ backgroundColor: "#f1f5f9", border: "1px solid #cbd5e1", color: "#0f172a", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.5px" }}>
+                    {String(selected.screening_perfil).padStart(4, '0')}
+                  </span>
+                  {(selected.analisis_simultaneo !== undefined ? selected.analisis_simultaneo : screeningCompounds.length > 1) ? (
+                    <span style={{ backgroundColor: "#22c55e", color: "white", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.2px" }}>
+                      análisis simultáneo
+                    </span>
+                  ) : (
+                    <span style={{ backgroundColor: "#ef4444", color: "white", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.2px" }}>
+                      análisis no simultáneo
+                    </span>
+                  )}
+                </div>
+
                 <div className="detail-item-label" style={{ color: "#0369a1" }}>
                   Perfil Analítico / Screening
                 </div>
-                <div className="detail-item-value" style={{ fontWeight: 600, color: "#0284c7" }}>
-                  {selected.screening_desc} (Código {selected.screening_perfil}),{" "}
-                  {screeningCompounds.length > 1
-                    ? "análisis simultáneo"
-                    : "análisis no simultáneo"}
+                <div className="detail-item-value" style={{ fontWeight: 600, color: "#0284c7", paddingRight: "180px" }}>
+                  {selected.screening_desc}
                 </div>
                 {(selected.screening_compuestos_formatted || screeningCompounds.length > 0) && (
                   <div
@@ -567,7 +580,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       fontSize: "11px",
                       color: "#475569",
                       fontWeight: 400,
-                      marginTop: 4,
+                      marginTop: 6,
                       lineHeight: 1.4,
                     }}
                   >
@@ -937,16 +950,32 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               {selected.screening_perfil && (
                 <div
                   className="detail-item full-width"
-                  style={{ background: "#f0f9ff", borderColor: "#bae6fd" }}
+                  style={{ background: "#f0f9ff", borderColor: "#bae6fd", position: "relative" }}
                 >
+                  {/* Badges container */}
+                  <div style={{ position: "absolute", top: "12px", right: "12px", display: "flex", gap: "6px", alignItems: "center" }}>
+                    <span style={{ backgroundColor: "#f1f5f9", border: "1px solid #cbd5e1", color: "#0f172a", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.5px" }}>
+                      {String(selected.screening_perfil).padStart(4, '0')}
+                    </span>
+                    {(selected.analisis_simultaneo !== undefined ? selected.analisis_simultaneo : screeningCompounds.length > 1) ? (
+                      <span style={{ backgroundColor: "#22c55e", color: "white", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.2px" }}>
+                        análisis simultáneo
+                      </span>
+                    ) : (
+                      <span style={{ backgroundColor: "#ef4444", color: "white", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.2px" }}>
+                        análisis no simultáneo
+                      </span>
+                    )}
+                  </div>
+
                   <div className="detail-item-label" style={{ color: "#0369a1" }}>
                     Perfil Analítico / Screening
                   </div>
                   <div
                     className="detail-item-value"
-                    style={{ fontWeight: 600, color: "#0284c7" }}
+                    style={{ fontWeight: 600, color: "#0284c7", paddingRight: "180px" }}
                   >
-                    Código {selected.screening_perfil} — {selected.screening_desc}
+                    {selected.screening_desc}
                   </div>
                   {/* List of compounds fallback for expanded view */}
                   {(selected.screening_compuestos_formatted || screeningCompounds.length > 0) && (
