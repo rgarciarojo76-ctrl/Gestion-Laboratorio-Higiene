@@ -61,3 +61,4 @@
 [2026-02-26 11:43:29] Desactivada visibilidad de Furfural - aire
 [2026-02-26 11:44:06] Editado Furfural - aire
 [2026-02-26 11:44:38] Desactivada visibilidad de Furfural - aire
+[2026-02-26 11:44:57] Activada visibilidad de Formaldehído - aire
