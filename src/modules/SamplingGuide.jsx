@@ -620,10 +620,27 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
           {/* 2x2 Info Cards Grid */}
           <div className="info-cards-grid">
             {/* Card 1: Soporte */}
-            <div className="info-card" style={{ position: "relative" }}>
+            <div className="info-card">
               <div className="info-card-icon icon-green">🧪</div>
-              <div className="info-card-content">
-                <span className="info-card-label">Soporte de Muestreo</span>
+              <div className="info-card-content" style={{ flex: 1, minWidth: 0 }}>
+                {/* Header row: label + transport badge */}
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px", flexWrap: "wrap", marginBottom: "4px" }}>
+                  <span className="info-card-label" style={{ marginBottom: 0 }}>Soporte de Muestreo</span>
+                  {(() => {
+                    const raw = selected.transporte || "Temperatura ambiente";
+                    const lower = raw.toLowerCase();
+                    const isCold = /refriger|congelad|frío|frio|\d+\s*°\s*[cC]|<\s*0/.test(lower);
+                    const badgeClass = isCold
+                      ? "transport-badge transport-badge--cold"
+                      : "transport-badge transport-badge--ambient";
+                    const icon = isCold ? "❄️" : "🌡️";
+                    return (
+                      <span className={badgeClass} title={raw} style={{ position: "static", maxWidth: "200px", flexShrink: 0 }}>
+                        {icon} {raw}
+                      </span>
+                    );
+                  })()}
+                </div>
                 <span
                   className="info-card-value"
                   title={
@@ -655,22 +672,6 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   )}
                 </div>
               </div>
-              {/* Transport/Conservation Badge */}
-              {(() => {
-                const raw = selected.transporte || "Temperatura ambiente";
-                const lower = raw.toLowerCase();
-                const isCold = /refriger|congelad|frío|frio|\d+\s*°\s*[cC]|<\s*0/.test(lower);
-                const isLight = /luz|light/.test(lower) && !isCold;
-                const badgeClass = isCold
-                  ? "transport-badge transport-badge--cold"
-                  : "transport-badge transport-badge--ambient";
-                const icon = isCold ? "❄️" : "🌡️";
-                return (
-                  <span className={badgeClass} title={raw}>
-                    {icon} {raw}
-                  </span>
-                );
-              })()}
             </div>
 
 
