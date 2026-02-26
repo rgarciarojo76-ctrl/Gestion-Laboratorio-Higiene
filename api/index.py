@@ -104,23 +104,33 @@ def update_file_in_github(filepath, content, commit_message, sha):
 
 
 def save_contaminants_to_github(contaminants_data, commit_message="Panel Admin: Actualizar base de datos"):
-    """Saves the JSON to both data/ and public/ directories via GitHub API."""
+    """Saves the JSON to both data/ and public/ directories via GitHub API.
+    Fetches both SHAs BEFORE writing to avoid SHA race conditions."""
     if not GITHUB_TOKEN:
         print("ERROR: GITHUB_TOKEN no configurado en Vercel.")
         return False
         
     json_str = json.dumps(contaminants_data, indent=2, ensure_ascii=False)
-    success = True
     
-    for path in ["data/contaminantes.json", "public/contaminantes.json"]:
+    paths = ["data/contaminantes.json", "public/contaminantes.json"]
+    
+    # Fetch ALL SHAs first, before any write
+    shas = {}
+    for path in paths:
         _, sha = get_file_from_github(path)
         if sha:
-            if not update_file_in_github(path, json_str, commit_message, sha):
-                print(f"Failed to update {path} in GitHub.")
-                success = False
+            shas[path] = sha
         else:
-            print(f"Could not find existing file {path} to update.")
+            print(f"Could not retrieve SHA for {path}.")
+            return False
+    
+    # Now write both files using the pre-fetched SHAs
+    success = True
+    for path in paths:
+        if not update_file_in_github(path, json_str, commit_message, shas[path]):
+            print(f"Failed to update {path} in GitHub.")
             success = False
+            break
             
     return success
 
@@ -449,19 +459,56 @@ def admin_list_products():
     return jsonify(contaminants)
 
 
-@app.route("/api/admin/products/<path:product_id>", methods=["PUT"])
-def admin_update_product(product_id):
+@app.route("/api/admin/products/<int:product_id>/visibility", methods=["PUT"])
+def admin_toggle_visibility(product_id):
+    """Toggle the visible_en_app field for a product by its numeric ID."""
     if not check_admin_password(): return jsonify({"error": "No autorizado"}), 401
-    updated_data = request.json
     
-    content, sha = get_file_from_github("data/contaminantes.json")
+    # Read fresh data from GitHub (Vercel local is read-only)
+    content, _ = get_file_from_github("data/contaminantes.json")
     if not content:
-        return jsonify({"error": "No se pudo leer GitHub"}), 500
+        return jsonify({"error": "No se pudo leer el archivo desde GitHub"}), 500
+        
+    contaminants = json.loads(content)
+    
+    for c in contaminants:
+        if int(c.get("id", -1)) == int(product_id):
+            new_val = not bool(c.get("visible_en_app", False))
+            c["visible_en_app"] = new_val
+            
+            # Save back to GitHub (get fresh SHAs inside save_contaminants_to_github)
+            commit_msg = f"Panel Admin: {'Visible' if new_val else 'Oculto'} {c.get('contaminante', str(product_id))}"
+            success = save_contaminants_to_github(contaminants, commit_msg)
+            if success:
+                log_admin_action(f"{'Activada' if new_val else 'Desactivada'} visibilidad de {c.get('contaminante_display') or c.get('contaminante')}")
+                return jsonify({"ok": True, "visible": new_val, "id": product_id})
+            else:
+                return jsonify({"error": "Error al guardar en GitHub. Puede que el token sea inválido o haya un conflicto de SHA."}), 500
+                
+    return jsonify({"error": f"Producto {product_id} no encontrado"}), 404
+
+
+@app.route("/api/admin/products/<int:product_id>", methods=["PUT"])
+def admin_update_product(product_id):
+    """Update all editable fields of a product by its numeric ID."""
+    if not check_admin_password(): return jsonify({"error": "No autorizado"}), 401
+    
+    if not request.is_json:
+        return jsonify({"error": "Se esperaba JSON en el cuerpo de la petición"}), 400
+    
+    updated_data = request.json
+    if updated_data is None:
+        return jsonify({"error": "Cuerpo JSON vacío o inválido"}), 400
+    
+    content, _ = get_file_from_github("data/contaminantes.json")
+    if not content:
+        return jsonify({"error": "No se pudo leer el archivo desde GitHub"}), 500
         
     contaminants = json.loads(content)
     found = False
+    product_name = ""
     
-    # Store old values to check for Excel update
+    # Store old support codes to check if Excel update is needed
     cas_to_update = None
     old_soporte = ""
     old_soporte_alt = ""
@@ -469,62 +516,41 @@ def admin_update_product(product_id):
     new_soporte_alt = updated_data.get("codigo_soporte_alt", "")
     
     for c in contaminants:
-        if str(c.get("id")) == str(product_id):
+        if int(c.get("id", -1)) == int(product_id):
             cas_to_update = c.get("cas")
             old_soporte = c.get("codigo_soporte", "")
             old_soporte_alt = c.get("codigo_soporte_alt", "")
+            product_name = c.get("contaminante_display") or c.get("contaminante", str(product_id))
             
+            # Merge updated fields into the existing product
             c.update(updated_data)
             found = True
             break
             
     if not found:
-        return jsonify({"error": "Producto no encontrado"}), 404
+        return jsonify({"error": f"Producto {product_id} no encontrado"}), 404
         
-    # Save the JSON changes
-    msg = f"Panel Admin: Editado {updated_data.get('contaminante')}"
-    success = save_contaminants_to_github(contaminants, msg)
+    # Save JSON changes to GitHub
+    commit_msg = f"Panel Admin: Editado {product_name}"
+    success = save_contaminants_to_github(contaminants, commit_msg)
     
     if success:
-        # Check if we need to update the Excel file
+        # Optionally update support codes in Excel if they changed
         if cas_to_update and (old_soporte != new_soporte or old_soporte_alt != new_soporte_alt):
-            update_excel_in_github(
-                cas=cas_to_update, 
-                codigo_soporte=new_soporte, 
-                codigo_soporte_alt=new_soporte_alt,
-                commit_message=f"Panel Admin: Actualizados soportes en Excel para {cas_to_update}"
-            )
+            try:
+                update_excel_in_github(
+                    cas=cas_to_update, 
+                    codigo_soporte=new_soporte, 
+                    codigo_soporte_alt=new_soporte_alt,
+                    commit_message=f"Panel Admin: Soportes Excel para {cas_to_update}"
+                )
+            except Exception as e:
+                print(f"Excel update failed (non-critical): {e}")
         
-        log_admin_action(f"Editado {updated_data.get('contaminante_display') or updated_data.get('contaminante')}")
+        log_admin_action(f"Editado {product_name}")
         return jsonify({"ok": True})
-    return jsonify({"error": "Error guardando en GitHub"}), 500
-
-
-@app.route("/api/admin/products/<path:product_id>/visibility", methods=["PUT"])
-def admin_toggle_visibility(product_id):
-    if not check_admin_password(): return jsonify({"error": "No autorizado"}), 401
     
-    # 1. We must read the fresh data from GitHub because Vercel local is read-only and stale until next deploy
-    content, sha = get_file_from_github("data/contaminantes.json")
-    if not content:
-        return jsonify({"error": "No se pudo leer GitHub"}), 500
-        
-    contaminants = json.loads(content)
-    
-    for c in contaminants:
-        if str(c.get("id")) == str(product_id):
-            new_val = not c.get("visible_en_app", False)
-            c["visible_en_app"] = new_val
-            
-            # Save back to GitHub
-            success = save_contaminants_to_github(contaminants, f"Panel Admin: {'Visible' if new_val else 'Oculto'} {c.get('contaminante')}")
-            if success:
-                log_admin_action(f"{'Activada' if new_val else 'Desactivada'} visibilidad de {c.get('contaminante_display') or c.get('contaminante')}")
-                return jsonify({"ok": True, "product": c})
-            else:
-                return jsonify({"error": "Error guardando en GitHub"}), 500
-                
-    return jsonify({"error": "Producto no encontrado"}), 404
+    return jsonify({"error": "Error al guardar en GitHub. Verifica el token o inténtalo de nuevo."}), 500
 
 
 @app.route("/api/admin/products", methods=["POST"])
