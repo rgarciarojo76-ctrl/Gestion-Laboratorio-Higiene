@@ -1703,6 +1703,55 @@ h1, h2, h3, h4 {
   letter-spacing: -0.01em;
 }
 
+/* ─── Transport / Conservation Badge ─────────────────────────────────────── */
+
+.transport-badge {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  letter-spacing: 0.1px;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: default;
+  user-select: none;
+  pointer-events: auto;
+  transition: opacity 0.2s;
+}
+
+.transport-badge--cold {
+  background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.4), 0 0 0 1px rgba(37, 99, 235, 0.2);
+}
+
+.transport-badge--cold:hover {
+  max-width: 360px;
+  opacity: 1;
+}
+
+.transport-badge--ambient {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.transport-badge--ambient:hover {
+  max-width: 360px;
+  opacity: 1;
+}
+
+
 /* === Header Layout === */
 
 .detail-header-top {

@@ -560,6 +560,7 @@ function ProductModal({ product, title, onSave, onClose, saving, isNew }) {
         { key: "codigo_soporte", label: "Código Soporte Principal (Ref)", hint: "Vista principal" },
         { key: "codigo_soporte_alt", label: "Código Soporte Alternativo (Ref)", hint: "Vista principal", wide: true },
         { key: "ref_soporte", label: "Referencia Soporte", hint: "Vista principal" },
+        { key: "transporte", label: "🚛 Transporte / Conservación", hint: "Vista principal — Badge Soporte", wide: true },
       ],
     },
     {

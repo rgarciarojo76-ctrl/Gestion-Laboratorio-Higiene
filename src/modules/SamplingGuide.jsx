@@ -620,7 +620,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
           {/* 2x2 Info Cards Grid */}
           <div className="info-cards-grid">
             {/* Card 1: Soporte */}
-            <div className="info-card">
+            <div className="info-card" style={{ position: "relative" }}>
               <div className="info-card-icon icon-green">🧪</div>
               <div className="info-card-content">
                 <span className="info-card-label">Soporte de Muestreo</span>
@@ -655,7 +655,24 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   )}
                 </div>
               </div>
+              {/* Transport/Conservation Badge */}
+              {(() => {
+                const raw = selected.transporte || "Temperatura ambiente";
+                const lower = raw.toLowerCase();
+                const isCold = /refriger|congelad|frío|frio|\d+\s*°\s*[cC]|<\s*0/.test(lower);
+                const isLight = /luz|light/.test(lower) && !isCold;
+                const badgeClass = isCold
+                  ? "transport-badge transport-badge--cold"
+                  : "transport-badge transport-badge--ambient";
+                const icon = isCold ? "❄️" : "🌡️";
+                return (
+                  <span className={badgeClass} title={raw}>
+                    {icon} {raw}
+                  </span>
+                );
+              })()}
             </div>
+
 
             {/* Card 2: DESCRIPCIÓN TÉCNICA ANALÍTICA + Códigos Lab */}
             <div className="info-card" style={{ flex: "1 1 100%" }}>
