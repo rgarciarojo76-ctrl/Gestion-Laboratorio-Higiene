@@ -641,6 +641,8 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                     );
                   })()}
                 </div>
+
+                {/* Soporte name */}
                 <span
                   className="info-card-value"
                   title={
@@ -654,25 +656,53 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       "—",
                   )}
                 </span>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginTop: "6px" }}>
-                  {selected.codigo_soporte && (
-                    <span style={{ fontSize: "11px", color: "#64748b" }}>
-                      Soporte Principal — Ref: <span style={{ fontFamily: "monospace", fontWeight: 600 }}>{selected.codigo_soporte}</span>
-                    </span>
-                  )}
-                  {selected.codigo_soporte_alt && (
-                    <span style={{ fontSize: "11px", color: "#64748b" }}>
-                      Soporte Alternativo — Ref: <span style={{ fontFamily: "monospace", fontWeight: 600 }}>{selected.codigo_soporte_alt}</span>
-                    </span>
-                  )}
-                  {!selected.codigo_soporte && selected.ref_soporte && (
-                    <span style={{ fontSize: "11px", color: "#64748b" }}>
-                      Ref: <span style={{ fontFamily: "monospace", fontWeight: 600 }}>{selected.ref_soporte}</span>
-                    </span>
-                  )}
-                </div>
+
+                {/* Support code chips */}
+                {(selected.codigo_soporte || selected.codigo_soporte_alt || selected.ref_soporte) && (
+                  <div className="soporte-chips">
+                    {/* Principal chip */}
+                    {selected.codigo_soporte && (
+                      <div className="soporte-chip soporte-chip--principal">
+                        <span className="soporte-chip-role">Principal</span>
+                        <span className="soporte-chip-code">{selected.codigo_soporte}</span>
+                      </div>
+                    )}
+
+                    {/* Alt chips — parse semicolon-separated values */}
+                    {selected.codigo_soporte_alt && (() => {
+                      // Split on semicolons, filter empty
+                      const parts = selected.codigo_soporte_alt
+                        .split(/;\s*/)
+                        .map(s => s.trim())
+                        .filter(Boolean);
+
+                      return parts.map((part, i) => {
+                        // Extract code (MAE39, MT111, etc.) and optional note in parens
+                        const match = part.match(/^([A-Z]{1,4}\d+[A-Z0-9]*)([\s\S]*)$/);
+                        const code = match ? match[1] : part;
+                        const note = match ? match[2].trim().replace(/^\(|\)$/g, "").trim() : "";
+                        return (
+                          <div key={i} className="soporte-chip soporte-chip--alt">
+                            <span className="soporte-chip-role">Alternativo</span>
+                            <span className="soporte-chip-code">{code}</span>
+                            {note && <span className="soporte-chip-note">{note}</span>}
+                          </div>
+                        );
+                      });
+                    })()}
+
+                    {/* Fallback: ref_soporte if no codigo_soporte */}
+                    {!selected.codigo_soporte && selected.ref_soporte && (
+                      <div className="soporte-chip soporte-chip--ref">
+                        <span className="soporte-chip-role">Ref.</span>
+                        <span className="soporte-chip-code">{selected.ref_soporte}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
+
 
 
             {/* Card 2: DESCRIPCIÓN TÉCNICA ANALÍTICA + Códigos Lab */}

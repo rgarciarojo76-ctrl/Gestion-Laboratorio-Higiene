@@ -1751,6 +1751,106 @@ h1, h2, h3, h4 {
 }
 
 
+/* ─── Soporte Code Chips ──────────────────────────────────────────────────── */
+
+.soporte-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.soporte-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px 4px 4px;
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.3;
+  border: 1px solid transparent;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+/* Role label (Principal / Alternativo / Ref.) */
+.soporte-chip-role {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Code value (MAE10, MAE39, etc.) */
+.soporte-chip-code {
+  font-family: 'Menlo', 'Consolas', 'Monaco', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+/* Optional note text */
+.soporte-chip-note {
+  font-size: 10px;
+  font-weight: 400;
+  color: #64748b;
+  flex-basis: 100%;
+  padding-left: 4px;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ── Variant: Principal ── */
+.soporte-chip--principal {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.soporte-chip--principal .soporte-chip-role {
+  background: #16a34a;
+  color: #fff;
+}
+
+.soporte-chip--principal .soporte-chip-code {
+  color: #15803d;
+}
+
+/* ── Variant: Alternativo ── */
+.soporte-chip--alt {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.soporte-chip--alt .soporte-chip-role {
+  background: #64748b;
+  color: #fff;
+}
+
+.soporte-chip--alt .soporte-chip-code {
+  color: #1e40af;
+}
+
+/* ── Variant: Ref ── */
+.soporte-chip--ref {
+  background: #fafafa;
+  border-color: #e5e7eb;
+}
+
+.soporte-chip--ref .soporte-chip-role {
+  background: #9ca3af;
+  color: #fff;
+}
+
+.soporte-chip--ref .soporte-chip-code {
+  color: #374151;
+}
+
+
 /* === Header Layout === */
 
 .detail-header-top {
