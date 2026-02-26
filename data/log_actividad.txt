@@ -69,3 +69,4 @@
 [2026-02-26 11:52:38] Desactivada visibilidad de Furfural - aire
 [2026-02-26 11:52:42] Desactivada visibilidad de Furfural - aire
 [2026-02-26 11:52:47] Desactivada visibilidad de Furfural - aire
+[2026-02-26 11:52:52] Desactivada visibilidad de Furfural - aire
