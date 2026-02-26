@@ -125,7 +125,7 @@ export default function AdminPanel({ onDataChanged }) {
     setProducts((prev) => prev.map((p) => p.id === id ? { ...p, visible_en_app: !p.visible_en_app } : p));
     try {
       const res = await fetch(`${API_BASE}/api/admin/products/${encodeURIComponent(id)}/visibility`, {
-        method: "PUT",
+        method: "POST",
         headers: { "X-Admin-Password": password },
       });
       if (!res.ok) {
