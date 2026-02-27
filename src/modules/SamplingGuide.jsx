@@ -624,26 +624,28 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               <div className="info-card-icon icon-green">🧪</div>
               <div className="info-card-content" style={{ flex: 1, minWidth: 0 }}>
 
-                {/* Label */}
+                {/* Field Label */}
                 <span className="info-card-label">Soporte de Muestreo</span>
 
-                {/* Transport badge — own line, full width, wraps freely */}
-                {(() => {
-                  const raw = selected.transporte || "Temperatura ambiente";
-                  const lower = raw.toLowerCase();
-                  const isCold = /refriger|congelad|frío|frio|\d+\s*°\s*[cC]|<\s*0/.test(lower);
-                  return (
-                    <span className={`transport-badge ${isCold ? "transport-badge--cold" : "transport-badge--ambient"}`}>
-                      {isCold ? "❄️" : "🌡️"} {raw}
-                    </span>
-                  );
-                })()}
+                {/* Transport badge row (forced new line) */}
+                <div className="soporte-badge-row">
+                  {(() => {
+                    const raw = selected.transporte || "Temperatura ambiente";
+                    const lower = raw.toLowerCase();
+                    const isCold = /refriger|congelad|frío|frio|\d+\s*°\s*[cC]|<\s*0/.test(lower);
+                    return (
+                      <span className={`transport-badge ${isCold ? "transport-badge--cold" : "transport-badge--ambient"}`}>
+                        {isCold ? "❄️" : "🌡️"} {raw}
+                      </span>
+                    );
+                  })()}
+                </div>
 
-                {/* Soporte name — strip trailing "→ MAEXX" code suffix if present */}
+                {/* Soporte name — strip trailing code suffix (e.g. " → MAE10" or " -> MAE10") */}
                 <p className="soporte-name">
                   {renderWithAnexoLink(
                     (selected.soporte_captacion_display || selected.soporte_captacion || "—")
-                      .replace(/\s*→\s*[A-Z]{1,4}\d+[A-Z0-9]*\s*$/i, "")
+                      .replace(/\s*(\u2192|->|→)\s*[A-Z]{1,4}\d+[A-Z0-9]*\s*$/i, "")
                       .trim()
                   )}
                 </p>
