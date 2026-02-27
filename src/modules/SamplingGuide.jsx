@@ -620,82 +620,71 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
           {/* 2x2 Info Cards Grid */}
           <div className="info-cards-grid">
             {/* Card 1: Soporte */}
-            <div className="info-card">
+            <div className="info-card soporte-card">
               <div className="info-card-icon icon-green">🧪</div>
               <div className="info-card-content" style={{ flex: 1, minWidth: 0 }}>
-                {/* Header row: label + transport badge */}
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px", flexWrap: "wrap", marginBottom: "4px" }}>
-                  <span className="info-card-label" style={{ marginBottom: 0 }}>Soporte de Muestreo</span>
+
+                {/* Header: label + transport badge on same row, badge wraps freely */}
+                <div className="soporte-header-row">
+                  <span className="info-card-label">Soporte de Muestreo</span>
                   {(() => {
                     const raw = selected.transporte || "Temperatura ambiente";
                     const lower = raw.toLowerCase();
                     const isCold = /refriger|congelad|frío|frio|\d+\s*°\s*[cC]|<\s*0/.test(lower);
-                    const badgeClass = isCold
-                      ? "transport-badge transport-badge--cold"
-                      : "transport-badge transport-badge--ambient";
-                    const icon = isCold ? "❄️" : "🌡️";
                     return (
-                      <span className={badgeClass} title={raw} style={{ position: "static", maxWidth: "200px", flexShrink: 0 }}>
-                        {icon} {raw}
+                      <span className={`transport-badge ${isCold ? "transport-badge--cold" : "transport-badge--ambient"}`}>
+                        {isCold ? "❄️" : "🌡️"} {raw}
                       </span>
                     );
                   })()}
                 </div>
 
-                {/* Soporte name */}
-                <span
-                  className="info-card-value"
-                  title={
-                    selected.soporte_captacion_display ||
-                    selected.soporte_captacion
-                  }
-                >
+                {/* Soporte name — full text, no truncation */}
+                <p className="soporte-name">
                   {renderWithAnexoLink(
                     selected.soporte_captacion_display ||
                       selected.soporte_captacion ||
                       "—",
                   )}
-                </span>
+                </p>
 
-                {/* Support code chips */}
+                {/* Full-width support code rows */}
                 {(selected.codigo_soporte || selected.codigo_soporte_alt || selected.ref_soporte) && (
-                  <div className="soporte-chips">
-                    {/* Principal chip */}
+                  <div className="soporte-rows">
+
+                    {/* Principal row */}
                     {selected.codigo_soporte && (
-                      <div className="soporte-chip soporte-chip--principal">
-                        <span className="soporte-chip-role">Principal</span>
-                        <span className="soporte-chip-code">{selected.codigo_soporte}</span>
+                      <div className="soporte-row soporte-row--principal">
+                        <span className="soporte-row-role">Principal</span>
+                        <span className="soporte-row-code">{selected.codigo_soporte}</span>
                       </div>
                     )}
 
-                    {/* Alt chips — parse semicolon-separated values */}
+                    {/* Alt rows — one per code from semicolon list */}
                     {selected.codigo_soporte_alt && (() => {
-                      // Split on semicolons, filter empty
                       const parts = selected.codigo_soporte_alt
                         .split(/;\s*/)
                         .map(s => s.trim())
                         .filter(Boolean);
-
                       return parts.map((part, i) => {
-                        // Extract code (MAE39, MT111, etc.) and optional note in parens
                         const match = part.match(/^([A-Z]{1,4}\d+[A-Z0-9]*)([\s\S]*)$/);
                         const code = match ? match[1] : part;
                         const note = match ? match[2].trim().replace(/^\(|\)$/g, "").trim() : "";
                         return (
-                          <div key={i} className="soporte-chip soporte-chip--alt">
-                            <span className="soporte-chip-role">Alternativo</span>
-                            <span className="soporte-chip-code">{code}</span>
-                            {note && <span className="soporte-chip-note">{note}</span>}
+                          <div key={i} className="soporte-row soporte-row--alt">
+                            <span className="soporte-row-role">Alternativo</span>
+                            <span className="soporte-row-code">{code}</span>
+                            {note && <span className="soporte-row-note">{note}</span>}
                           </div>
                         );
                       });
                     })()}
 
-                    {/* Fallback: ref_soporte if no codigo_soporte */}
+                    {/* Ref fallback */}
                     {!selected.codigo_soporte && selected.ref_soporte && (
-                      <div className="soporte-chip soporte-chip--ref">
-                        <span className="soporte-chip-role">Ref.</span>
-                        <span className="soporte-chip-code">{selected.ref_soporte}</span>
+                      <div className="soporte-row soporte-row--ref">
+                        <span className="soporte-row-role">Ref.</span>
+                        <span className="soporte-row-code">{selected.ref_soporte}</span>
                       </div>
                     )}
                   </div>
