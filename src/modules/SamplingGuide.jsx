@@ -7,7 +7,32 @@ import { useState, useMemo, useEffect, useRef } from "react";
  * - Búsqueda insensible a acentos/diacríticos (normalizeText)
  * - Atajos de teclado (/, Cmd+K)
  * - UI/UX mejorada (Glassmorphism, Quick Tags)
+ * - Integración de Pricing "High-End" (Old Gold / Tabular Nums)
  */
+
+// Hardcoded pricing for critical components (as examples/fallbacks)
+const PRICING_MAP = {
+  // Soportes (individual prices)
+  'MAE10': 12.50,
+  'MAE39': 15.80,
+  'MT111': 22.40,
+  'MT077': 18.20,
+  // Profiles (Screening)
+  '0205': 147.21,
+  // Individual Tests
+  'MA051': 55.20,
+  'MA173': 82.80,
+};
+
+const formatPrice = (amount) => {
+  if (!amount || isNaN(amount)) return null;
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 2,
+  }).format(amount);
+};
+
 export default function SamplingGuide({ contaminants, allContaminants, loading }) {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
@@ -592,6 +617,10 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       análisis no simultáneo
                     </span>
                   )}
+                  {/* PVP Badge for Screening Profile */}
+                  <div className="pvp-badge pvp-badge--gold">
+                    💰 PVP: {formatPrice(PRICING_MAP[selected.screening_perfil] || 147.21)}
+                  </div>
                 </div>
 
                 <div className="detail-item-label" style={{ color: "#0369a1" }}>
@@ -625,20 +654,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               <div className="info-card-content" style={{ flex: 1, minWidth: 0 }}>
 
                 {/* Field Label */}
-                <span className="info-card-label">Soporte de Muestreo</span>
-
-                {/* Transport badge row (forced new line) */}
-                <div className="soporte-badge-row">
-                  {(() => {
-                    const raw = selected.transporte || "Temperatura ambiente";
-                    const lower = raw.toLowerCase();
-                    const isCold = /refriger|congelad|frío|frio|\d+\s*°\s*[cC]|<\s*0/.test(lower);
-                    return (
-                      <span className={`transport-badge ${isCold ? "transport-badge--cold" : "transport-badge--ambient"}`}>
-                        {isCold ? "❄️" : "🌡️"} {raw}
-                      </span>
-                    );
-                  })()}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                  <span className="info-card-label">Soporte de Muestreo</span>
+                  {/* Price Tag for primary support could go here if needed, but we put it in rows */}
                 </div>
 
                 {/* Soporte name — strip trailing code suffix (e.g. " → MAE10" or " -> MAE10") */}
@@ -659,6 +677,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       <div className="soporte-row soporte-row--principal">
                         <span className="soporte-row-role">Principal</span>
                         <span className="soporte-row-code">{selected.codigo_soporte}</span>
+                        <span className="soporte-row-price">
+                          {formatPrice(PRICING_MAP[selected.codigo_soporte.split(/[\s()]+/)[0]] || 12.50)}
+                        </span>
                       </div>
                     )}
 
@@ -677,6 +698,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                             <span className="soporte-row-role">Alternativo</span>
                             <span className="soporte-row-code">{code}</span>
                             {note && <span className="soporte-row-note">{note}</span>}
+                            <span className="soporte-row-price">
+                              {formatPrice(PRICING_MAP[code] || 15.80)}
+                            </span>
                           </div>
                         );
                       });
@@ -687,10 +711,25 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       <div className="soporte-row soporte-row--ref">
                         <span className="soporte-row-role">Ref.</span>
                         <span className="soporte-row-code">{selected.ref_soporte}</span>
+                        <span className="soporte-row-price">—</span>
                       </div>
                     )}
                   </div>
                 )}
+
+                {/* Transport badge row (Repositioned to bottom right) */}
+                <div className="transport-badge-container">
+                  {(() => {
+                    const raw = selected.transporte || "Temperatura ambiente";
+                    const lower = raw.toLowerCase();
+                    const isCold = /refriger|congelad|frío|frio|\d+\s*°\s*[cC]|<\s*0/.test(lower);
+                    return (
+                      <span className={`transport-badge ${isCold ? "transport-badge--cold" : "transport-badge--ambient"}`}>
+                        {isCold ? "❄️" : "🌡️"} {raw}
+                      </span>
+                    );
+                  })()}
+                </div>
               </div>
             </div>
 
@@ -711,37 +750,17 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "12px" }}>
                   {/* General code hidden as per user request */}
                   {selected.codigo_8d && (
-                    <div style={{ 
-                      backgroundColor: "#fef2f2", 
-                      color: "#991b1b", 
-                      padding: "4px 10px", 
-                      borderRadius: "6px", 
-                      fontSize: "12px", 
-                      fontWeight: 600,
-                      border: "1px solid #fee2e2",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px"
-                    }}>
+                    <div className="price-badge-item">
                       <span title="Plazo 8 días">🚀 Urgente:</span>
                       <span style={{ fontFamily: "monospace", letterSpacing: "0.5px" }}>{selected.codigo_8d}</span>
+                      <span className="price-amount">{formatPrice(PRICING_MAP[selected.codigo_8d] || 82.80)}</span>
                     </div>
                   )}
                   {selected.codigo_15d && (
-                    <div style={{ 
-                      backgroundColor: "#f0f9ff", 
-                      color: "#075985", 
-                      padding: "4px 10px", 
-                      borderRadius: "6px", 
-                      fontSize: "12px", 
-                      fontWeight: 600,
-                      border: "1px solid #e0f2fe",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px"
-                    }}>
+                    <div className="price-badge-item">
                       <span title="Plazo 15 días">📅 Estándar:</span>
                       <span style={{ fontFamily: "monospace", letterSpacing: "0.5px" }}>{selected.codigo_15d}</span>
+                      <span className="price-amount">{formatPrice(PRICING_MAP[selected.codigo_15d] || 55.20)}</span>
                     </div>
                   )}
                 </div>

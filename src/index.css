@@ -1712,22 +1712,30 @@ h1, h2, h3, h4 {
 }
 
 
-/* Transport badge — now on its own row, no truncation, wraps text freely */
+/* Transport badge — now positioned at the bottom right as a footer */
+.transport-badge-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 8px;
+}
+
 .transport-badge {
   display: inline-flex;
-  align-items: flex-start;
-  gap: 4px;
-  padding: 3px 10px;
-  border-radius: 20px;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 6px;
   font-size: 11px;
   font-weight: 600;
   white-space: normal;
   word-break: break-word;
   line-height: 1.4;
   width: fit-content;
-  margin: 6px 0 8px 0;
   cursor: default;
-  transition: transform 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  animation: pricingFadeIn 0.8s ease-out backwards;
 }
 
 .transport-badge--cold {
@@ -1798,10 +1806,96 @@ h1, h2, h3, h4 {
 /* Code — center, monospace, bold */
 .soporte-row-code {
   font-family: 'Menlo', 'Consolas', 'Monaco', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e293b;
+  flex-shrink: 0;
+}
+
+/* Price column — right side, premium style */
+.soporte-row-price {
+  margin-left: auto;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
   font-size: 13px;
   font-weight: 700;
-  flex-shrink: 0;
-  letter-spacing: -0.2px;
+  color: #1e293b;
+  letter-spacing: -0.01em;
+  padding-left: 12px;
+  animation: pricingFadeIn 0.5s ease-out backwards;
+}
+
+/* Specific Row Highlights */
+.soporte-row--principal {
+  background: linear-gradient(to right, rgba(16, 185, 129, 0.05), transparent);
+}
+
+.soporte-row--principal .soporte-row-price {
+  color: #059669;
+}
+
+/* ─── Premium Pricing Components ─────────────────────────────────────────── */
+
+.pvp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: #1e293b; /* Deep Dark Blue */
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: pricingFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  white-space: nowrap;
+}
+
+/* Old Gold variant */
+.pvp-badge--gold {
+  background: linear-gradient(135deg, #c5a059 0%, #b38e4d 100%);
+  border-color: #d4b475;
+}
+
+.price-badge-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+  transition: all 0.2s ease;
+}
+
+.price-badge-item:hover {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+}
+
+.price-badge-item .price-amount {
+  color: #1e293b;
+  font-weight: 700;
+  border-left: 1px solid #e2e8f0;
+  padding-left: 8px;
+  margin-left: 2px;
+}
+
+@keyframes pricingFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Note — right side, muted italic, wraps if long */
@@ -1812,11 +1906,6 @@ h1, h2, h3, h4 {
   line-height: 1.4;
   flex: 1;
   text-align: right;
-}
-
-/* ── Principal variant ── */
-.soporte-row--principal {
-  background: #f0fdf4;
 }
 
 .soporte-row--principal .soporte-row-role {
