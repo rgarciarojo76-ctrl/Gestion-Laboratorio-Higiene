@@ -624,27 +624,27 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               <div className="info-card-icon icon-green">🧪</div>
               <div className="info-card-content" style={{ flex: 1, minWidth: 0 }}>
 
-                {/* Header: label + transport badge on same row, badge wraps freely */}
-                <div className="soporte-header-row">
-                  <span className="info-card-label">Soporte de Muestreo</span>
-                  {(() => {
-                    const raw = selected.transporte || "Temperatura ambiente";
-                    const lower = raw.toLowerCase();
-                    const isCold = /refriger|congelad|frío|frio|\d+\s*°\s*[cC]|<\s*0/.test(lower);
-                    return (
-                      <span className={`transport-badge ${isCold ? "transport-badge--cold" : "transport-badge--ambient"}`}>
-                        {isCold ? "❄️" : "🌡️"} {raw}
-                      </span>
-                    );
-                  })()}
-                </div>
+                {/* Label */}
+                <span className="info-card-label">Soporte de Muestreo</span>
 
-                {/* Soporte name — full text, no truncation */}
+                {/* Transport badge — own line, full width, wraps freely */}
+                {(() => {
+                  const raw = selected.transporte || "Temperatura ambiente";
+                  const lower = raw.toLowerCase();
+                  const isCold = /refriger|congelad|frío|frio|\d+\s*°\s*[cC]|<\s*0/.test(lower);
+                  return (
+                    <span className={`transport-badge ${isCold ? "transport-badge--cold" : "transport-badge--ambient"}`}>
+                      {isCold ? "❄️" : "🌡️"} {raw}
+                    </span>
+                  );
+                })()}
+
+                {/* Soporte name — strip trailing "→ MAEXX" code suffix if present */}
                 <p className="soporte-name">
                   {renderWithAnexoLink(
-                    selected.soporte_captacion_display ||
-                      selected.soporte_captacion ||
-                      "—",
+                    (selected.soporte_captacion_display || selected.soporte_captacion || "—")
+                      .replace(/\s*→\s*[A-Z]{1,4}\d+[A-Z0-9]*\s*$/i, "")
+                      .trim()
                   )}
                 </p>
 
