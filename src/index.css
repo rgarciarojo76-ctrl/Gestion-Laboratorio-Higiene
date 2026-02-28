@@ -2653,3 +2653,136 @@ h1, h2, h3, h4 {
   font-family: "SF Mono", "Menlo", monospace;
   line-height: 1.5;
 }
+
+/* ─── UNE 482 Master Card (Redesign) ─────────────────────────────────────── */
+.une-master-card {
+  margin: 16px 28px 24px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.une-master-header {
+  background: #f8fafc;
+  padding: 16px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a; /* Corporate dark blue */
+  border-bottom: 1px solid #e2e8f0;
+  letter-spacing: -0.01em;
+}
+
+.une-master-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 24px;
+}
+
+.une-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.une-block-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.une-icon-subtle {
+  font-size: 18px;
+  opacity: 0.5;
+}
+
+.une-icon-softer {
+  font-size: 14px;
+  opacity: 0.4;
+  filter: grayscale(100%);
+}
+
+.une-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+}
+
+.une-input-wrapper:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background: #ffffff;
+}
+
+.une-input {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  width: 100%;
+  outline: none;
+  font-variant-numeric: tabular-nums;
+  padding: 0;
+}
+
+.une-input::placeholder {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.une-block-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.une-block-value .warning-icon {
+  font-size: 18px;
+  cursor: help;
+}
+
+.une-block.warning .une-block-label,
+.une-block.warning .une-block-value {
+  color: #b45309;
+}
+
+.une-block-input.warning .une-input-wrapper {
+  border-color: #fca5a5;
+  background: #fef2f2;
+}
+
+.une-block-input.warning .une-input {
+  color: #b45309;
+}
+
+.une-warning-text {
+  font-size: 11px;
+  color: #ef4444;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+  .une-master-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+

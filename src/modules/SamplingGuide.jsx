@@ -956,60 +956,64 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                 </div>
 
                 <div id="expanded-info" className="expanded-info-section" style={{ display: "none" }}>
-                  {/* Section UNE 482 at the TOP of expanded details as requested */}
-                  <div className="section-title" style={{ padding: "16px 28px 8px", fontSize: "14px", fontWeight: "600", color: "#1e293b" }}>
-                    Control Operativo (UNE 482)
-                  </div>
-                  
-                  <div className="info-cards-grid-4" style={{ padding: "0 28px", marginBottom: "20px" }}>
-                    <div className={`info-card ${isCaudalOutOfRangeGlobal ? "warning" : ""}`} style={{ display: "flex", flexDirection: "column" }}>
-                      <div className="info-card-icon icon-teal">💨</div>
-                      <div className="info-card-content" style={{ width: "100%" }}>
-                        <span className="info-card-label" style={{ marginBottom: "6px" }}>Caudal Asignado (L/min)</span>
-                        <input 
-                          type="text" 
-                          className="caudal-input-premium"
-                          value={editableCaudal}
-                          onChange={(e) => {
-                            const val = e.target.value.replace(/[^0-9.,]/g, '');
-                            setEditableCaudal(val);
-                          }}
-                          placeholder="Ej: 1,5"
-                          style={{ width: "100px", padding: "6px 12px" }}
-                        />
+                  {/* --- NUEVO CAJETÍN MAESTRO UNE 482 --- */}
+                  <div className="une-master-card">
+                    <div className="une-master-header">
+                      Tiempo mínimo de muestreo para cumplir la norma UNE 482, en exposiciones diarias &lt; 10 % al VLA
+                    </div>
+                    
+                    <div className="une-master-grid">
+                      {/* Bloque 1: Entrada de Datos */}
+                      <div className={`une-block une-block-input ${isCaudalOutOfRangeGlobal ? "warning" : ""}`}>
+                        <span className="une-block-label">Caudal Valorado (L/min)</span>
+                        <div className="une-input-wrapper">
+                          <span className="une-icon-subtle">💨</span>
+                          <input 
+                            type="text" 
+                            className="une-input"
+                            value={editableCaudal}
+                            onChange={(e) => {
+                              const val = e.target.value.replace(/[^0-9.,]/g, '');
+                              setEditableCaudal(val);
+                            }}
+                            placeholder="Ej: 1,5"
+                          />
+                        </div>
                         {isCaudalOutOfRangeGlobal && (
-                            <div style={{ marginTop: "8px", fontSize: "11px", color: "#ef4444", fontWeight: "500" }}>
-                              ⚠️ Valor fuera de rango oficial
-                            </div>
+                          <div className="une-warning-text">
+                            ⚠️ Valor fuera de rango oficial
+                          </div>
                         )}
                       </div>
-                    </div>
-                    <div className={`info-card ${(timeMinED_UNE > 480) ? "warning" : ""}`}>
-                      <div className="info-card-icon icon-teal">⏳</div>
-                      <div className="info-card-content">
-                        <span className="info-card-label">Tiempo Mín. ED (UNE 482)</span>
-                        <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+
+                      {/* Bloque 2: Tiempo ED */}
+                      <div className={`une-block une-block-result ${(timeMinED_UNE > 480) ? "warning" : ""}`}>
+                        <span className="une-block-label">
+                          <span className="une-icon-softer">⏳</span> Tiempo mínimo ED VLA (UNE 482)
+                        </span>
+                        <div className="une-block-value">
                           {formatTime(timeMinED_UNE)}
                           {showWarningED && (
-                            <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinED_UNE)} a ${methodCaudal} L/min) equivale a ${volMinED_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
+                            <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinED_UNE)} a ${methodCaudal} L/min) equivale a ${volMinED_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`}>
                               ⚠️
                             </span>
                           )}
-                        </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className={`info-card ${showWarningEC ? "warning" : ""}`}>
-                      <div className="info-card-icon icon-teal">⏳</div>
-                      <div className="info-card-content">
-                        <span className="info-card-label">Tiempo Mín. EC (UNE 482)</span>
-                        <span className="info-card-value" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+
+                      {/* Bloque 3: Tiempo EC */}
+                      <div className={`une-block une-block-result ${showWarningEC ? "warning" : ""}`}>
+                        <span className="une-block-label">
+                          <span className="une-icon-softer">⏳</span> Tiempo mínimo ED TWA (UNE 482)
+                        </span>
+                        <div className="une-block-value">
                           {formatTime(timeMinEC_UNE)}
                           {showWarningEC && (
-                            <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinEC_UNE)} a ${methodCaudal} L/min) equivale a ${volMinEC_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`} style={{ fontSize: "15px" }}>
+                            <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinEC_UNE)} a ${methodCaudal} L/min) equivale a ${volMinEC_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`}>
                               ⚠️
                             </span>
                           )}
-                        </span>
+                        </div>
                       </div>
                     </div>
                   </div>
