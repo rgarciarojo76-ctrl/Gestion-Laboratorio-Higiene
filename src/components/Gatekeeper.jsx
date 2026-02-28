@@ -46,8 +46,13 @@ export default function Gatekeeper({ children }) {
         const t = urlParams.get("t");
         const h = urlParams.get("h");
         
-        // Si no hay parámetros, redirigir inmediatamente
+        // Si no hay parámetros, verificar si es dev local
         if (!t || !h) {
+          if (import.meta.env.DEV) {
+            setIsAuthenticated(true);
+            setIsVerifying(false);
+            return;
+          }
           window.location.href = "https://direccion-tecnica-ia-lab.vercel.app/";
           return;
         }

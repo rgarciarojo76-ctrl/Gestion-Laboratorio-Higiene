@@ -39,6 +39,11 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
   const [editableCaudal, setEditableCaudal] = useState("");
   const searchInputRef = useRef(null);
 
+  // Módulo Validación UNE 689 State
+  const [exposicionTipo, setExposicionTipo] = useState("Constante");
+  const [duracionTarea, setDuracionTarea] = useState(120);
+  const [jornadaLaboral, setJornadaLaboral] = useState(8);
+
   // Modal state for Anexo I
   const [showAnexo, setShowAnexo] = useState(false);
   const [activeAnexoRef, setActiveAnexoRef] = useState("");
@@ -880,6 +885,38 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             }
             const showWarningTotal = showWarningED || showWarningED_TWA;
 
+            // --- NUEVO: CÁLCULOS UNE-EN 689 ---
+            let t_muestreo_689 = 0;
+            if (exposicionTipo === "Constante") {
+              t_muestreo_689 = duracionTarea < 120 ? Number(duracionTarea) : 120;
+            } else {
+              t_muestreo_689 = Number(jornadaLaboral) * 0.8 * 60; // 80% de la jornada en min
+            }
+
+            const lqFor689 = parseNum(selected.lq) || parseNum(selected.loq) || parseNum(selected.ld) || parseNum(selected.lod);
+            const vlaEdValue = parseNum(selected.vla_ed) || parseNum(selected.vla_ed_mg_m3);
+            const gestisTwaValue = parseNum(selected.gestis_twa);
+
+            let indiceVLA = null;
+            if (lqFor689 && methodCaudal && vlaEdValue) {
+               indiceVLA = (lqFor689 / (methodCaudal * t_muestreo_689)) / vlaEdValue;
+            }
+
+            let indiceTWA = null;
+            if (lqFor689 && methodCaudal && gestisTwaValue) {
+               indiceTWA = (lqFor689 / (methodCaudal * t_muestreo_689)) / gestisTwaValue;
+            }
+
+            const getValidationStatus = (indice) => {
+              if (indice === null) return "unknown";
+              if (indice <= 0.1) return "success";
+              if (indice <= 0.5) return "warn";
+              return "error";
+            };
+            const statusVLA = getValidationStatus(indiceVLA);
+            const statusTWA = getValidationStatus(indiceTWA);
+            // ----------------------------------------
+
             return (
               <>
                 <div style={{ paddingBottom: "24px" }}>
@@ -1029,6 +1066,84 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       ⚠️ <b>Atención:</b> El muestreo excede la jornada laboral estándar (8 horas).
                     </div>
                   )}
+
+                  {/* --- NUEVO MÓDULO UNE-EN 689 --- */}
+                  <div className="une-master-card une689-card">
+                    <div className="une-master-header" style={{ borderBottom: "none", paddingBottom: "12px" }}>
+                      Índice de Exposición Límite Teórico para condiciones de muestreo asignadas
+                    </div>
+                    
+                    <div className="une689-inputs-row">
+                      <div className="une689-input-group">
+                        <label>Tipo Exposición</label>
+                        <select 
+                          value={exposicionTipo} 
+                          onChange={(e) => setExposicionTipo(e.target.value)}
+                          className="une689-select"
+                        >
+                          <option value="Constante">Constante</option>
+                          <option value="Variable">Variable</option>
+                        </select>
+                      </div>
+                      
+                      <div className={`une689-input-group ${exposicionTipo === "Variable" ? "disabled" : ""}`}>
+                        <label>Duración Tarea (min)</label>
+                        <input 
+                          type="number" 
+                          value={duracionTarea}
+                          onChange={(e) => setDuracionTarea(e.target.value)}
+                          disabled={exposicionTipo === "Variable"}
+                          className="une689-input-small"
+                          min="1"
+                        />
+                      </div>
+
+                      <div className="une689-input-group">
+                        <label>Jornada Laboral (h)</label>
+                        <input 
+                          type="number" 
+                          value={jornadaLaboral}
+                          onChange={(e) => setJornadaLaboral(e.target.value)}
+                          className="une689-input-small"
+                          min="1"
+                          max="24"
+                        />
+                      </div>
+                      
+                      <div className="une689-t-summary">
+                        <span>Tiempo (t):</span>
+                        <strong>{Math.round(t_muestreo_689)} min</strong>
+                      </div>
+                    </div>
+
+                    <div className="une689-results-row">
+                      <div className={`une689-result-card validation-${statusVLA}`}>
+                        <div className="une689-result-label">Índice VLA</div>
+                        <div className="une689-result-value">
+                          {indiceVLA !== null ? indiceVLA.toFixed(3) : "N/A"}
+                        </div>
+                        <div className="une689-result-status">
+                          {statusVLA === "success" && "🟢 Excelente (≤ 0.1)"}
+                          {statusVLA === "warn" && "🟡 Aceptable (≤ 0.5)"}
+                          {statusVLA === "error" && "🔴 Crítico (> 0.5) - Aumentar tiempo o caudal"}
+                          {statusVLA === "unknown" && "Faltan datos de VLA o LQ"}
+                        </div>
+                      </div>
+
+                      <div className={`une689-result-card validation-${statusTWA}`}>
+                        <div className="une689-result-label">Índice TWA (Gestis)</div>
+                        <div className="une689-result-value">
+                          {indiceTWA !== null ? indiceTWA.toFixed(3) : "N/A"}
+                        </div>
+                        <div className="une689-result-status">
+                          {statusTWA === "success" && "🟢 Excelente (≤ 0.1)"}
+                          {statusTWA === "warn" && "🟡 Aceptable (≤ 0.5)"}
+                          {statusTWA === "error" && "🔴 Crítico (> 0.5) - Aumentar tiempo o caudal"}
+                          {statusTWA === "unknown" && "Faltan datos de TWA o LQ"}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
                   <div className="detail-grid" style={{ borderTop: "none", paddingTop: 8, marginTop: 8 }}>
                     {/* REST OF DETAIL GRID STARTS HERE */}
