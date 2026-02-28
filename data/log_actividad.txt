@@ -74,3 +74,4 @@
 [2026-02-26 11:53:08] Desactivada visibilidad de Furfural - aire
 [2026-02-26 12:29:48] Activada visibilidad de Furfural - aire
 [2026-02-26 12:30:11] Editado Furfural - aire
+[2026-02-28 18:49:32] Activada visibilidad de Silice cristalina INS (Sub) - aire
