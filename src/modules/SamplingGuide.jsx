@@ -846,68 +846,38 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
           {/* --- CAPA 1: Cálculos UNE-EN 482 --- */}
           {(() => {
             // All calculations performed once for the entire detail section
-            const volMinED_UNE = calcVolMinUNE482(
-              selected.lq || selected.loq,
-              selected.vla_ed || selected.vla_ed_mg_m3,
-              0.1
-            );
-            const volMinED_TWA_UNE = calcVolMinUNE482(
-              selected.lq || selected.loq,
-              selected.gestis_twa,
-              0.1
-            );
-
-            const maxVolMethod =
-              parseNum(selected.v_maximo_muestreo) ||
-              parseNum(selected.volumen_recomendado_l) ||
-              parseNum(selected.volumen_minimo);
-
             const methodCaudal = parseFloat(editableCaudal.replace(',', '.')) || parseNum(selected.caudal) || parseNum(selected.caudal_l_min);
 
-            const timeMinED_UNE = (volMinED_UNE !== null && methodCaudal) 
-              ? parseFloat((volMinED_UNE / methodCaudal).toFixed(1)) 
-              : null;
-              
-            const timeMinED_TWA_UNE = (volMinED_TWA_UNE !== null && methodCaudal) 
-              ? parseFloat((volMinED_TWA_UNE / methodCaudal).toFixed(1)) 
-              : null;
-              
-            const formatTime = (minutes) => {
-              if (minutes === null || isNaN(minutes)) return "N/A";
-              if (minutes < 60) return `${minutes} min`;
-              const hrs = Math.floor(minutes / 60);
-              const mins = Math.round(minutes % 60);
-              return mins > 0 ? `${hrs}h ${mins}min` : `${hrs}h`;
-            };
-
-            let showWarningED = false;
-            let showWarningED_TWA = false;
-            if (maxVolMethod) {
-              if (volMinED_UNE !== null && volMinED_UNE > maxVolMethod) showWarningED = true;
-              if (volMinED_TWA_UNE !== null && volMinED_TWA_UNE > maxVolMethod) showWarningED_TWA = true;
-            }
-            const showWarningTotal = showWarningED || showWarningED_TWA;
-
-            // --- NUEVO: CÁLCULOS UNE-EN 689 ---
-            let t_muestreo_689 = 0;
-            if (exposicionTipo === "Constante") {
-              t_muestreo_689 = duracionTarea < 120 ? Number(duracionTarea) : 120;
-            } else {
-              t_muestreo_689 = Number(jornadaLaboral) * 0.8 * 60; // 80% de la jornada en min
-            }
-
-            const lqFor689 = parseNum(selected.lq) || parseNum(selected.loq) || parseNum(selected.ld) || parseNum(selected.lod);
+            // --- MOTOR DE DECISIÓN UNIFICADO (UNE 482 & UNE 689) ---
+            const lqForUnified = parseNum(selected.lq) || parseNum(selected.loq) || parseNum(selected.ld) || parseNum(selected.lod);
             const vlaEdValue = parseNum(selected.vla_ed) || parseNum(selected.vla_ed_mg_m3);
             const gestisTwaValue = parseNum(selected.gestis_twa);
 
-            let indiceVLA = null;
-            if (lqFor689 && methodCaudal && vlaEdValue) {
-               indiceVLA = (lqFor689 / (methodCaudal * t_muestreo_689)) / vlaEdValue;
+            // 1. Cálculo t_482
+            const t_482_vla = (lqForUnified && methodCaudal && vlaEdValue) ? (lqForUnified / (0.1 * vlaEdValue * methodCaudal)) : 0;
+            const t_482_twa = (lqForUnified && methodCaudal && gestisTwaValue) ? (lqForUnified / (0.1 * gestisTwaValue * methodCaudal)) : 0;
+            const t_482_max = Math.max(t_482_vla, t_482_twa);
+
+            // 2. Cálculo t_689
+            let t_689 = 0;
+            const durTarea = Number(duracionTarea) || 0;
+            if (exposicionTipo === "Constante") {
+              t_689 = durTarea < 120 ? durTarea : 120;
+            } else {
+              t_689 = (Number(jornadaLaboral) || 8) * 0.8 * 60; // 80% de la jornada
             }
 
+            // 3. Tiempo Mínimo Unificado
+            const t_unified = Math.max(t_482_max, t_689);
+
+            // 4. Índices usando t_unified
+            let indiceVLA = null;
+            if (lqForUnified && methodCaudal && vlaEdValue && t_unified > 0) {
+               indiceVLA = (lqForUnified / (methodCaudal * t_unified)) / vlaEdValue;
+            }
             let indiceTWA = null;
-            if (lqFor689 && methodCaudal && gestisTwaValue) {
-               indiceTWA = (lqFor689 / (methodCaudal * t_muestreo_689)) / gestisTwaValue;
+            if (lqForUnified && methodCaudal && gestisTwaValue && t_unified > 0) {
+               indiceTWA = (lqForUnified / (methodCaudal * t_unified)) / gestisTwaValue;
             }
 
             const getValidationStatus = (indice) => {
@@ -918,6 +888,16 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             };
             const statusVLA = getValidationStatus(indiceVLA);
             const statusTWA = getValidationStatus(indiceTWA);
+
+            // 5. Lógica de Sugerencia Inteligente
+            let showSuggestion = false;
+            let suggestedCaudal = 0;
+            if (exposicionTipo === "Constante" && durTarea > 0 && durTarea < (t_482_max - 0.01)) {
+              showSuggestion = true;
+              const c_req_vla = (lqForUnified && vlaEdValue) ? (lqForUnified / (0.1 * vlaEdValue * durTarea)) : 0;
+              const c_req_twa = (lqForUnified && gestisTwaValue) ? (lqForUnified / (0.1 * gestisTwaValue * durTarea)) : 0;
+              suggestedCaudal = (Math.max(c_req_vla, c_req_twa)).toFixed(2);
+            }
             // ----------------------------------------
 
             return (
@@ -996,157 +976,121 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
 
                   {isEstrategiaOpen && (
                     <div className="accordion-content">
-                  {/* --- NUEVO CAJETÍN MAESTRO UNE 482 --- */}
-                  <div className="une-master-card">
-                    <div className="une-master-header">
-                      Tiempo mínimo de muestreo para cumplir la norma UNE 482, en exposiciones diarias &lt; 10 % al VLA
-                    </div>
-                    
-                    <div className="une-master-grid">
-                      {/* Bloque 1: Entrada de Datos */}
-                      <div className={`une-block une-block-input ${isCaudalOutOfRangeGlobal ? "warning" : ""}`}>
-                        <span className="une-block-label">Caudal Valorado (L/min)</span>
-                        <div className="une-input-wrapper">
-                          <span className="une-icon-subtle">💨</span>
-                          <input 
-                            type="text" 
-                            className="une-input"
-                            value={editableCaudal}
-                            onChange={(e) => {
-                              const val = e.target.value.replace(/[^0-9.,]/g, '');
-                              setEditableCaudal(val);
-                            }}
-                            placeholder="Ej: 1,5"
-                          />
+                      <div className="unified-engine-card">
+                        
+                        {/* Fila superior por Bloques */}
+                        <div className="unified-inputs-row">
+                          {/* Bloque A: Parámetros de la Tarea */}
+                          <div className="unified-block block-a">
+                            <div className="unified-block-title">Parámetros de la Tarea (Exposición)</div>
+                            <div className="unified-block-inputs">
+                              <div className="unified-input-group">
+                                <label>Tipo Exposición</label>
+                                <select 
+                                  value={exposicionTipo} 
+                                  onChange={(e) => setExposicionTipo(e.target.value)}
+                                  className="unified-select"
+                                >
+                                  <option value="Constante">Constante</option>
+                                  <option value="Variable">Variable</option>
+                                </select>
+                              </div>
+                              <div className={`unified-input-group ${exposicionTipo === "Variable" ? "disabled" : ""}`}>
+                                <label>Duración (min)</label>
+                                <input 
+                                  type="number" 
+                                  value={duracionTarea}
+                                  onChange={(e) => setDuracionTarea(e.target.value)}
+                                  disabled={exposicionTipo === "Variable"}
+                                  className="unified-input-small"
+                                  min="1"
+                                />
+                              </div>
+                              <div className="unified-input-group">
+                                <label>Jornada (h)</label>
+                                <input 
+                                  type="number" 
+                                  value={jornadaLaboral}
+                                  onChange={(e) => setJornadaLaboral(e.target.value)}
+                                  className="unified-input-small"
+                                  min="1"
+                                  max="24"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Bloque B: Parámetro de Muestreo */}
+                          <div className="unified-block block-b">
+                            <div className="unified-block-title">Parámetro de Muestreo</div>
+                            <div className="unified-block-inputs centered">
+                              <div className="unified-input-group">
+                                <label>Caudal Valorado (L/min)</label>
+                                <div className="unified-input-wrapper-large">
+                                  <span className="une-icon-subtle">💨</span>
+                                  <input 
+                                    type="text" 
+                                    className="unified-input-large"
+                                    value={editableCaudal}
+                                    onChange={(e) => {
+                                      const val = e.target.value.replace(/[^0-9.,]/g, '');
+                                      setEditableCaudal(val);
+                                    }}
+                                    placeholder="Ej: 1,5"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        {isCaudalOutOfRangeGlobal && (
-                          <div className="une-warning-text">
-                            ⚠️ Valor fuera de rango oficial
+
+                        {/* Panel de Sugerencia Inteligente */}
+                        {showSuggestion && (
+                          <div className="gold-suggestion-banner">
+                            <div className="suggestion-icon">⚠️</div>
+                            <div className="suggestion-text">
+                              <strong>Atención:</strong> La duración de la tarea ({duracionTarea} min) es insuficiente para el caudal actual ({methodCaudal} L/min).<br/>
+                              Sugerencia: Incremente el Caudal Valorado a <span className="suggested-flow-btn" onClick={() => setEditableCaudal(suggestedCaudal.toString().replace('.', ','))}>{suggestedCaudal} L/min</span> para validar el muestreo en el tiempo disponible.
+                            </div>
                           </div>
                         )}
-                      </div>
 
-                      {/* Bloque 2: Tiempo ED */}
-                      <div className={`une-block une-block-result ${(timeMinED_UNE > 480) ? "warning" : ""}`}>
-                        <span className="une-block-label">
-                          <span className="une-icon-softer">⏳</span> Tiempo mínimo ED VLA (UNE 482)
-                        </span>
-                        <div className="une-block-value">
-                          {formatTime(timeMinED_UNE)}
-                          {showWarningED && (
-                            <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinED_UNE)} a ${methodCaudal} L/min) equivale a ${volMinED_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`}>
-                              ⚠️
-                            </span>
-                          )}
+                        {/* Visualización de Resultados y Sensibilidad */}
+                        <div className="unified-results-section">
+                          <div className="unified-time-header">
+                            Tiempo Mínimo de Medición Requerido: <strong>{Math.round(t_unified)} min</strong>
+                          </div>
+                          
+                          <div className="unified-results-row">
+                            <div className={`unified-result-card validation-${statusVLA}`}>
+                              <div className="unified-result-label">Índice VLA</div>
+                              <div className="unified-result-value">
+                                {indiceVLA !== null ? indiceVLA.toFixed(3) : "N/A"}
+                              </div>
+                              <div className="unified-result-status">
+                                {statusVLA === "success" && "🟢 Excelente (≤ 0.1)"}
+                                {statusVLA === "warn" && "🟡 Aceptable (≤ 0.5)"}
+                                {statusVLA === "error" && "🔴 Crítico (> 0.5)"}
+                                {statusVLA === "unknown" && "Faltan datos (VLA o LQ)"}
+                              </div>
+                            </div>
+
+                            <div className={`unified-result-card validation-${statusTWA}`}>
+                              <div className="unified-result-label">Índice TWA (Gestis)</div>
+                              <div className="unified-result-value">
+                                {indiceTWA !== null ? indiceTWA.toFixed(3) : "N/A"}
+                              </div>
+                              <div className="unified-result-status">
+                                {statusTWA === "success" && "🟢 Excelente (≤ 0.1)"}
+                                {statusTWA === "warn" && "🟡 Aceptable (≤ 0.5)"}
+                                {statusTWA === "error" && "🔴 Crítico (> 0.5)"}
+                                {statusTWA === "unknown" && "Faltan datos (TWA o LQ)"}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Bloque 3: Tiempo ED TWA */}
-                      <div className={`une-block une-block-result ${showWarningED_TWA ? "warning" : ""}`}>
-                        <span className="une-block-label">
-                          <span className="une-icon-softer">⏳</span> Tiempo mínimo ED TWA (UNE 482)
-                        </span>
-                        <div className="une-block-value">
-                          {formatTime(timeMinED_TWA_UNE)}
-                          {showWarningED_TWA && (
-                            <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinED_TWA_UNE)} a ${methodCaudal} L/min) equivale a ${volMinED_TWA_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`}>
-                              ⚠️
-                            </span>
-                          )}
-                        </div>
                       </div>
-                    </div>
-                  </div>
-
-                  {showWarningTotal && (
-                    <div className="capa1-warning-banner" style={{ margin: "0 28px 20px" }}>
-                      ⚠️ <b>Atención (Saturación Soporte):</b> El volumen requerido por la norma UNE-EN 482:2021 supera 
-                      el volumen recomendado o máximo del método analítico ({maxVolMethod} L). 
-                    </div>
-                  )}
-                  {timeMinED_UNE > 480 && (
-                    <div className="capa1-warning-banner banner-orange" style={{ margin: "0 28px 20px", backgroundColor: "#fff7ed", color: "#9a3412", borderLeft: "4px solid #ea580c" }}>
-                      ⚠️ <b>Atención:</b> El muestreo excede la jornada laboral estándar (8 horas).
-                    </div>
-                  )}
-
-                  {/* --- NUEVO MÓDULO UNE-EN 689 --- */}
-                  <div className="une-master-card une689-card">
-                    <div className="une-master-header" style={{ borderBottom: "none", paddingBottom: "12px" }}>
-                      Índice de Exposición Límite Teórico para condiciones de muestreo asignadas
-                    </div>
-                    
-                    <div className="une689-inputs-row">
-                      <div className="une689-input-group">
-                        <label>Tipo Exposición</label>
-                        <select 
-                          value={exposicionTipo} 
-                          onChange={(e) => setExposicionTipo(e.target.value)}
-                          className="une689-select"
-                        >
-                          <option value="Constante">Constante</option>
-                          <option value="Variable">Variable</option>
-                        </select>
-                      </div>
-                      
-                      <div className={`une689-input-group ${exposicionTipo === "Variable" ? "disabled" : ""}`}>
-                        <label>Duración Tarea (min)</label>
-                        <input 
-                          type="number" 
-                          value={duracionTarea}
-                          onChange={(e) => setDuracionTarea(e.target.value)}
-                          disabled={exposicionTipo === "Variable"}
-                          className="une689-input-small"
-                          min="1"
-                        />
-                      </div>
-
-                      <div className="une689-input-group">
-                        <label>Jornada Laboral (h)</label>
-                        <input 
-                          type="number" 
-                          value={jornadaLaboral}
-                          onChange={(e) => setJornadaLaboral(e.target.value)}
-                          className="une689-input-small"
-                          min="1"
-                          max="24"
-                        />
-                      </div>
-                      
-                      <div className="une689-t-summary">
-                        <span>Tiempo (t):</span>
-                        <strong>{Math.round(t_muestreo_689)} min</strong>
-                      </div>
-                    </div>
-
-                    <div className="une689-results-row">
-                      <div className={`une689-result-card validation-${statusVLA}`}>
-                        <div className="une689-result-label">Índice VLA</div>
-                        <div className="une689-result-value">
-                          {indiceVLA !== null ? indiceVLA.toFixed(3) : "N/A"}
-                        </div>
-                        <div className="une689-result-status">
-                          {statusVLA === "success" && "🟢 Excelente (≤ 0.1)"}
-                          {statusVLA === "warn" && "🟡 Aceptable (≤ 0.5)"}
-                          {statusVLA === "error" && "🔴 Crítico (> 0.5) - Aumentar tiempo o caudal"}
-                          {statusVLA === "unknown" && "Faltan datos de VLA o LQ"}
-                        </div>
-                      </div>
-
-                      <div className={`une689-result-card validation-${statusTWA}`}>
-                        <div className="une689-result-label">Índice TWA (Gestis)</div>
-                        <div className="une689-result-value">
-                          {indiceTWA !== null ? indiceTWA.toFixed(3) : "N/A"}
-                        </div>
-                        <div className="une689-result-status">
-                          {statusTWA === "success" && "🟢 Excelente (≤ 0.1)"}
-                          {statusTWA === "warn" && "🟡 Aceptable (≤ 0.5)"}
-                          {statusTWA === "error" && "🔴 Crítico (> 0.5) - Aumentar tiempo o caudal"}
-                          {statusTWA === "unknown" && "Faltan datos de TWA o LQ"}
-                        </div>
-                      </div>
-                    </div>
-                    </div>
                     </div>
                   )}
 
