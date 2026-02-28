@@ -44,6 +44,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
   const [duracionTarea, setDuracionTarea] = useState(120);
   const [jornadaLaboral, setJornadaLaboral] = useState(8);
 
+  const [isEstrategiaOpen, setIsEstrategiaOpen] = useState(true);
+  const [isAmpliadaOpen, setIsAmpliadaOpen] = useState(true);
+
   // Modal state for Anexo I
   const [showAnexo, setShowAnexo] = useState(false);
   const [activeAnexoRef, setActiveAnexoRef] = useState("");
@@ -975,24 +978,24 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   </div>
                 </div>
 
-                <div style={{ padding: "0 28px 24px" }}>
-                  <button
-                    className="btn-expand-info"
-                    onClick={() => {
-                      const panel = document.getElementById("expanded-info");
-                      if (panel.style.display === "none") {
-                        panel.style.display = "block";
-                      } else {
-                        panel.style.display = "none";
-                      }
-                    }}
+                <div style={{ padding: "0 28px 24px", display: "flex", flexDirection: "column", gap: "16px", marginTop: "16px" }}>
+                  
+                  {/* PESTAÑA 1: ESTRATEGIA DE MUESTREO */}
+                  <div 
+                    className="accordion-tab" 
+                    onClick={() => setIsEstrategiaOpen(!isEstrategiaOpen)}
                   >
-                    <span>Ampliar información</span>
-                    <span style={{ fontSize: 16, transition: "transform 0.3s" }}>⬇️</span>
-                  </button>
-                </div>
+                    <span>Apoyo a estrategia de muestreo</span>
+                    <span 
+                      className="accordion-icon"
+                      style={{ transform: isEstrategiaOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                    >
+                      ⏬
+                    </span>
+                  </div>
 
-                <div id="expanded-info" className="expanded-info-section" style={{ display: "none" }}>
+                  {isEstrategiaOpen && (
+                    <div className="accordion-content">
                   {/* --- NUEVO CAJETÍN MAESTRO UNE 482 --- */}
                   <div className="une-master-card">
                     <div className="une-master-header">
@@ -1143,11 +1146,29 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         </div>
                       </div>
                     </div>
+                    </div>
+                    </div>
+                  )}
+
+                  {/* PESTAÑA 2: AMPLIAR INFORMACIÓN */}
+                  <div 
+                    className="accordion-tab" 
+                    onClick={() => setIsAmpliadaOpen(!isAmpliadaOpen)}
+                  >
+                    <span>Ampliar información</span>
+                    <span 
+                      className="accordion-icon"
+                      style={{ transform: isAmpliadaOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                    >
+                      ⏬
+                    </span>
                   </div>
 
-                  <div className="detail-grid" style={{ borderTop: "none", paddingTop: 8, marginTop: 8 }}>
-                    {/* REST OF DETAIL GRID STARTS HERE */}
-              {/* === SCREENING / PERFIL ANALÍTICO === */}
+                  {isAmpliadaOpen && (
+                    <div className="accordion-content" style={{ marginTop: "-8px" }}>
+                      <div className="detail-grid" style={{ borderTop: "none", paddingTop: 8 }}>
+                        {/* REST OF DETAIL GRID STARTS HERE */}
+                  {/* === SCREENING / PERFIL ANALÍTICO === */}
               {selected.screening_perfil && (
                 <div
                   className="detail-item full-width"
@@ -1498,8 +1519,10 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               )}
             </div>
           </div>
-        </>
-            );
+        )}
+        </div>
+      </>
+           );
           })()}
         </div>
       )}

@@ -1990,39 +1990,51 @@ h1, h2, h3, h4 {
   border: 1px solid #fde68a;
 }
 
-/* Expand / Collapse Toggle */
-.btn-expand-info {
+/* Accordion Tabs */
+.accordion-tab {
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  padding: 16px 24px;
+  background: #f8fafc;
   border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #475569;
+  border-top: 2px solid #0f172a;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  letter-spacing: -0.01em;
+  gap: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-top: 8px;
 }
 
-.btn-expand-info:hover {
-  background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
-  border-color: var(--accent-primary);
-  color: var(--accent-secondary);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1);
+.accordion-tab:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
 }
 
-/* Expanded info section */
-.expanded-info-section {
-  border-top: 1px solid #f1f5f9;
+.accordion-icon {
+  font-size: 16px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+/* Expanded info section container */
+.accordion-content {
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   background: linear-gradient(180deg, #fafbfd, #ffffff);
   padding: 24px 28px 28px;
+  margin-bottom: 16px;
 }
+
 
 /* CAS / Sinónimo / VLA row */
 .summary-stats-row {

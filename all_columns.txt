@@ -1,0 +1,127 @@
+CAS
+CAS.1
+Caudal alternativo
+(L/min)
+Caudal asignado
+(L/min)
+Caudal muestreador
+(L/min)
+Caudal método
+(L/min)
+Caudal preferente
+(L/min)
+Caudal, rango método
+(L/min)
+Comentarios
+Comentarios Prueba
+Comentarios al muestreo según Apéndice 1
+Compatibilidades
+Compuestos
+Conc Fact
+Conc Fact
+Perfil
+Conc Fact 
+Prueba
+Conc Fact Prueba
+Concentración límite 
+para calculadora INSST, LOQ
+(mg/m3)
+(Como LOQ=LQ/V máx.)
+Concentración límite asociada 
+para caudal y tiempo asignados
+Condiciones de muestreo como screening para VLA-EC, comentarios
+Condiciones de muestreo como screening para VLA-ED, comentarios
+Consulta Pruebas Activas.Tab Pruebas Industria.Descripción
+Consulta Pruebas Activas.Tab Pruebas Industria.Descripción.1
+Contenedor
+CÓDIGO
+CÓDIGO 
+prueba
+CÓDIGO prueba
+Código
+soporte
+Código 
+Perfil analítico
+Código soporte
+Código soporte alternativo (si procede)
+DEPARTAMENTO
+De aplicación el RD 665/1997
+Descr Conc
+Familia
+Frases H en LEP 2025
+Gestis
+País
+Gestis STEL (mg/m3)
+Gestis TWA (mg/m3)
+IE límite teórico para condiciones muestreo asignadas
+(=(LQ/(q*t))/STEL)
+IE límite teórico para condiciones muestreo asignadas
+(=(LQ/(q*t))/TWA)
+IE límite teórico para condiciones muestreo asignadas
+(=(LQ/(q*t))/VLAEC)
+IE límite teórico para condiciones muestreo asignadas
+(=(LQ/(q*t))/VLAED)
+IE límite teórico para condiciones muestreo asignadas
+[Nota: IE=(LQ/(q*t))/VLAED)]
+IE mínimo teórico
+con TWA
+(=LOQ/TWA)
+IE mínimo teórico con VLA-ED
+(=LOQ/VLAED)
+LQ
+LQ 
+(µg)
+Laboratorio
+Muestreo 15min en condiciones más desfavorables (UNE 689), comentarios
+Muestreo EC, 15min en condiciones más desfavorables (UNE 689), comentarios
+Muestreo ED, general 2h mínimo (UNE 689), comentarios
+Muestreo mínimo de 2h (UNE 689), comentarios
+Método
+Método interno basado en
+NOTAS en LEP 2025
+Nombre
+Observaciones Concepto
+Precio
+análisis
+individual
+Precio
+soporte
+Rango Trabajo
+Screening, descripción
+Sinónimos
+Tabla
+Unnamed: 12
+Unnamed: 4
+V máx. muestreo en 8h
+(L)
+(V máx.= caudal*480min)
+V mínimo muestreo
+(L)
+(Vmin=LQ/0,1*TWA)
+V mínimo muestreo
+(L)
+(Vmin=LQ/0,1*VLAED)
+VLA-EC
+(mg/m3)
+VLA-ED 
+(mg/m3)
+descripción técnica
+plazo entrega
+tiempo asignado corta
+(min)
+tiempo mínimo asignado
+(min)
+tiempo mínimo muestreo (10%TWA)
+(min)
+(Nota: t=LQ/((0,1*TWA)*q))
+tiempo mínimo muestreo (10%VLA-ED)
+(min)
+(Nota: t=LQ/((0,1*VLAED)*q))
+tiempo mínimo muestreo (10%VLA-ED)
+(min)
+[Nota: t=LQ/((0,1*VLAED)*q)]
+transporte
+¿Cumple volumen máximo 
+de muestreo?
+¿Cumple ≤0,03*VLA-ED?
+¿Procede considerar posible contribución exterior con medición?
