@@ -843,10 +843,10 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               selected.vla_ed || selected.vla_ed_mg_m3,
               0.1
             );
-            const volMinEC_UNE = calcVolMinUNE482(
+            const volMinED_TWA_UNE = calcVolMinUNE482(
               selected.lq || selected.loq,
-              selected.vla_ec || selected.vla_ec_mg_m3,
-              0.5
+              selected.gestis_twa,
+              0.1
             );
 
             const maxVolMethod =
@@ -860,8 +860,8 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               ? parseFloat((volMinED_UNE / methodCaudal).toFixed(1)) 
               : null;
               
-            const timeMinEC_UNE = (volMinEC_UNE !== null && methodCaudal) 
-              ? parseFloat((volMinEC_UNE / methodCaudal).toFixed(1)) 
+            const timeMinED_TWA_UNE = (volMinED_TWA_UNE !== null && methodCaudal) 
+              ? parseFloat((volMinED_TWA_UNE / methodCaudal).toFixed(1)) 
               : null;
               
             const formatTime = (minutes) => {
@@ -873,12 +873,12 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             };
 
             let showWarningED = false;
-            let showWarningEC = false;
+            let showWarningED_TWA = false;
             if (maxVolMethod) {
               if (volMinED_UNE !== null && volMinED_UNE > maxVolMethod) showWarningED = true;
-              if (volMinEC_UNE !== null && volMinEC_UNE > maxVolMethod) showWarningEC = true;
+              if (volMinED_TWA_UNE !== null && volMinED_TWA_UNE > maxVolMethod) showWarningED_TWA = true;
             }
-            const showWarningTotal = showWarningED || showWarningEC;
+            const showWarningTotal = showWarningED || showWarningED_TWA;
 
             return (
               <>
@@ -1001,15 +1001,15 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         </div>
                       </div>
 
-                      {/* Bloque 3: Tiempo EC */}
-                      <div className={`une-block une-block-result ${showWarningEC ? "warning" : ""}`}>
+                      {/* Bloque 3: Tiempo ED TWA */}
+                      <div className={`une-block une-block-result ${showWarningED_TWA ? "warning" : ""}`}>
                         <span className="une-block-label">
                           <span className="une-icon-softer">⏳</span> Tiempo mínimo ED TWA (UNE 482)
                         </span>
                         <div className="une-block-value">
-                          {formatTime(timeMinEC_UNE)}
-                          {showWarningEC && (
-                            <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinEC_UNE)} a ${methodCaudal} L/min) equivale a ${volMinEC_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`}>
+                          {formatTime(timeMinED_TWA_UNE)}
+                          {showWarningED_TWA && (
+                            <span className="warning-icon" title={`Atención: El tiempo requerido (${formatTime(timeMinED_TWA_UNE)} a ${methodCaudal} L/min) equivale a ${volMinED_TWA_UNE} L, superando el máximo recomendado por el método analítico (${maxVolMethod} L).`}>
                               ⚠️
                             </span>
                           )}
