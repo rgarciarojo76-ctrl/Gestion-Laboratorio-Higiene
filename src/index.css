@@ -1839,14 +1839,15 @@ h1, h2, h3, h4 {
 .pvp-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
+  gap: 4px;
+  padding: 2px 8px;
   background: #1e293b; /* Deep Dark Blue */
   color: #ffffff;
-  border-radius: 6px;
-  font-size: 12px;
+  border-radius: 4px;
+  font-size: 11px;
   font-variant-numeric: tabular-nums;
   font-weight: 600;
+  letter-spacing: 0.2px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.1);
   animation: pricingFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
