@@ -965,7 +965,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                     className="accordion-tab" 
                     onClick={() => setIsEstrategiaOpen(!isEstrategiaOpen)}
                   >
-                    <span>Apoyo a estrategia de muestreo: Criterios UNE 689 y UNE 482</span>
+                    <span>Validación de Estrategia y Cumplimiento Normativo (Criterios UNE 689 y UNE 482)</span>
                     <span 
                       className="accordion-icon"
                       style={{ transform: isEstrategiaOpen ? "rotate(180deg)" : "rotate(0deg)" }}
@@ -1031,7 +1031,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                             <div className="unified-block-title">Parámetro de Muestreo</div>
                             <div className="unified-block-inputs centered">
                               <div className="unified-input-group">
-                                <label>Caudal Valorado (L/min)</label>
+                                <label>Caudal de Muestreo Establecido (L/min)</label>
                                 <div className={`unified-input-wrapper-large ${isCaudalOutOfRangeGlobal ? 'warning-border' : ''}`}>
                                   <span className="une-icon-subtle">💨</span>
                                   <input 
@@ -1077,7 +1077,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         {/* Visualización de Resultados y Sensibilidad */}
                         <div className="unified-results-section">
                           <div className="unified-time-header">
-                            Tiempo Mínimo de Medición Requerido: <strong>
+                            Duración mínima muestreo para la conformidad UNE 689 y UNE 482: <strong>
                               {Math.floor(Math.round(t_unified) / 60) > 0 
                                 ? `${Math.floor(Math.round(t_unified) / 60)} ${Math.floor(Math.round(t_unified) / 60) === 1 ? 'hora' : 'horas'} y ${Math.round(t_unified) % 60} min`
                                 : `${Math.round(t_unified)} min`
