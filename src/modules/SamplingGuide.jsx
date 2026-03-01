@@ -44,8 +44,8 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
   const [duracionTarea, setDuracionTarea] = useState(480);
   const [jornadaLaboral, setJornadaLaboral] = useState(8);
 
-  const [isEstrategiaOpen, setIsEstrategiaOpen] = useState(true);
-  const [isAmpliadaOpen, setIsAmpliadaOpen] = useState(true);
+  const [isEstrategiaOpen, setIsEstrategiaOpen] = useState(false);
+  const [isAmpliadaOpen, setIsAmpliadaOpen] = useState(false);
 
   // Modal state for Anexo I
   const [showAnexo, setShowAnexo] = useState(false);
@@ -1076,13 +1076,14 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
 
                         {/* Visualización de Resultados y Sensibilidad */}
                         <div className="unified-results-section">
-                          <div className="unified-time-header">
-                            Duración mínima muestreo para la conformidad UNE 689 y UNE 482: <strong>
+                          <div className="hero-stat-duration">
+                            <div className="hero-stat-label">Duración mínima muestreo para la conformidad UNE 689 y UNE 482</div>
+                            <div className="hero-stat-value">
                               {Math.floor(Math.round(t_unified) / 60) > 0 
                                 ? `${Math.floor(Math.round(t_unified) / 60)} ${Math.floor(Math.round(t_unified) / 60) === 1 ? 'hora' : 'horas'} y ${Math.round(t_unified) % 60} min`
                                 : `${Math.round(t_unified)} min`
                               }
-                            </strong>
+                            </div>
                           </div>
                           
                           <div className="unified-results-row">
