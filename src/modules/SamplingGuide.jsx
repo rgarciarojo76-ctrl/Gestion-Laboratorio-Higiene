@@ -41,7 +41,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
 
   // Módulo Validación UNE 689 State
   const [exposicionTipo, setExposicionTipo] = useState("Constante");
-  const [duracionTarea, setDuracionTarea] = useState(120);
+  const [duracionTarea, setDuracionTarea] = useState(480);
   const [jornadaLaboral, setJornadaLaboral] = useState(8);
 
   const [isEstrategiaOpen, setIsEstrategiaOpen] = useState(true);
@@ -988,7 +988,13 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                                 <label>Tipo Exposición</label>
                                 <select 
                                   value={exposicionTipo} 
-                                  onChange={(e) => setExposicionTipo(e.target.value)}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    setExposicionTipo(val);
+                                    if (val === "Constante") {
+                                      setDuracionTarea(480);
+                                    }
+                                  }}
                                   className="unified-select"
                                 >
                                   <option value="Constante">Constante</option>
