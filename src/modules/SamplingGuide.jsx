@@ -965,7 +965,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                     className="accordion-tab" 
                     onClick={() => setIsEstrategiaOpen(!isEstrategiaOpen)}
                   >
-                    <span>Apoyo a estrategia de muestreo: Criterios UNE 482 y UNE 689</span>
+                    <span>Apoyo a estrategia de muestreo: Criterios UNE 689 y UNE 482</span>
                     <span 
                       className="accordion-icon"
                       style={{ transform: isEstrategiaOpen ? "rotate(180deg)" : "rotate(0deg)" }}
