@@ -1371,21 +1371,21 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         </div>
                       )}
                       {selected.screening_condiciones_ed && (
-                        <div className="compact-detail-item">
-                          <span className="compact-label">Condiciones VLA-ED</span>
-                          <span className="compact-value">{selected.screening_condiciones_ed}</span>
+                        <div className="compact-detail-item" style={{ flexDirection: 'column' }}>
+                          <span className="compact-label" style={{ paddingBottom: 4 }}>Condiciones VLA-ED</span>
+                          <span className="compact-value" style={{ textAlign: 'left', width: '100%' }}>{selected.screening_condiciones_ed}</span>
                         </div>
                       )}
                       {selected.screening_condiciones_ec && (
-                        <div className="compact-detail-item">
-                          <span className="compact-label">Condiciones VLA-EC</span>
-                          <span className="compact-value">{selected.screening_condiciones_ec}</span>
+                        <div className="compact-detail-item" style={{ flexDirection: 'column' }}>
+                          <span className="compact-label" style={{ paddingBottom: 4 }}>Condiciones VLA-EC</span>
+                          <span className="compact-value" style={{ textAlign: 'left', width: '100%' }}>{selected.screening_condiciones_ec}</span>
                         </div>
                       )}
                       {selected.screening_comentarios && (
-                        <div className="compact-detail-item">
-                          <span className="compact-label">Comentarios Screening</span>
-                          <span className="compact-value">{selected.screening_comentarios}</span>
+                        <div className="compact-detail-item" style={{ flexDirection: 'column' }}>
+                          <span className="compact-label" style={{ paddingBottom: 4 }}>Comentarios Screening</span>
+                          <span className="compact-value" style={{ textAlign: 'left', width: '100%' }}>{selected.screening_comentarios}</span>
                         </div>
                       )}
                       {selected.compuestos && (
