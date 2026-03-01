@@ -883,7 +883,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             const getValidationStatus = (indice) => {
               if (indice === null) return "unknown";
               if (indice <= 0.1) return "success";
-              if (indice <= 0.5) return "warn";
+              if (indice <= 1.0) return "warn";
               return "error";
             };
             const statusVLA = getValidationStatus(indiceVLA);
@@ -1087,9 +1087,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                                 {indiceVLA !== null ? indiceVLA.toFixed(3) : "N/A"}
                               </div>
                               <div className="unified-result-status">
-                                {statusVLA === "success" && "🟢 Excelente (≤ 0.1)"}
-                                {statusVLA === "warn" && "🟡 Aceptable (≤ 0.5)"}
-                                {statusVLA === "error" && "🔴 Crítico (> 0.5)"}
+                                {statusVLA === "success" && "🟢 CONFORMIDAD CON EL VLA (≤ 0.1)"}
+                                {statusVLA === "warn" && "🟡 NO DECISIÓN (≤ 1)"}
+                                {statusVLA === "error" && "🔴 NO CONFORMIDAD CON EL VLA (> 1)"}
                                 {statusVLA === "unknown" && "Faltan datos (VLA o LQ)"}
                               </div>
                             </div>
@@ -1100,9 +1100,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                                 {indiceTWA !== null ? indiceTWA.toFixed(3) : "N/A"}
                               </div>
                               <div className="unified-result-status">
-                                {statusTWA === "success" && "🟢 Excelente (≤ 0.1)"}
-                                {statusTWA === "warn" && "🟡 Aceptable (≤ 0.5)"}
-                                {statusTWA === "error" && "🔴 Crítico (> 0.5)"}
+                                {statusTWA === "success" && "🟢 CONFORMIDAD CON EL VLA (≤ 0.1)"}
+                                {statusTWA === "warn" && "🟡 NO DECISIÓN (≤ 1)"}
+                                {statusTWA === "error" && "🔴 NO CONFORMIDAD CON EL VLA (> 1)"}
                                 {statusTWA === "unknown" && "Faltan datos (TWA o LQ)"}
                               </div>
                             </div>
