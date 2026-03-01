@@ -958,11 +958,11 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   </div>
                 </div>
 
-                <div style={{ padding: "0 28px 24px", display: "flex", flexDirection: "column", gap: "16px", marginTop: "16px" }}>
+                <div style={{ padding: "0 0 24px", display: "flex", flexDirection: "column", gap: "16px", marginTop: "16px" }}>
                   
                   {/* PESTAÑA 1: ESTRATEGIA DE MUESTREO */}
                   <div 
-                    className="accordion-tab" 
+                    className="accordion-tab tab-strategy" 
                     onClick={() => setIsEstrategiaOpen(!isEstrategiaOpen)}
                   >
                     <span>Validación de Estrategia y Cumplimiento Normativo (Criterios UNE 689 y UNE 482)</span>
@@ -1120,7 +1120,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
 
                   {/* PESTAÑA 2: AMPLIAR INFORMACIÓN */}
                   <div 
-                    className="accordion-tab" 
+                    className="accordion-tab tab-info" 
                     onClick={() => setIsAmpliadaOpen(!isAmpliadaOpen)}
                   >
                     <span>Ampliar información</span>

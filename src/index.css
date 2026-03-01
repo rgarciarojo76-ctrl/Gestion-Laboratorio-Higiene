@@ -1990,17 +1990,15 @@ h1, h2, h3, h4 {
   border: 1px solid #fde68a;
 }
 
-/* Accordion Tabs */
+/* Accordion Tabs - Refactored for Full-Width and Premium Aesthetic */
 .accordion-tab {
   width: 100%;
-  padding: 16px 24px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-top: 2px solid #0f172a;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 15px 24px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 700;
-  color: #0f172a;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
@@ -2010,12 +2008,35 @@ h1, h2, h3, h4 {
   letter-spacing: 0.02em;
   text-transform: uppercase;
   margin-top: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: 1px solid transparent;
+}
+
+/* Cajetín A: Estrategia y Cumplimiento */
+.accordion-tab.tab-strategy {
+  border: 1.5px solid #1e3a8a;
+  background: linear-gradient(180deg, #ffffff, #f1f5f9);
+  color: #1e3a8a;
+}
+
+/* Cajetín B: Ampliar Información */
+.accordion-tab.tab-info {
+  border: 1px solid #64748b;
+  background: #f8fafc;
+  color: #334155;
 }
 
 .accordion-tab:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.accordion-tab.tab-strategy:hover {
+  background: linear-gradient(180deg, #f8faff, #e2e8f0);
+}
+
+.accordion-tab.tab-info:hover {
   background: #f1f5f9;
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
 }
 
 .accordion-icon {
