@@ -1077,7 +1077,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         {/* Visualización de Resultados y Sensibilidad */}
                         <div className="unified-results-section">
                           <div className="hero-stat-duration">
-                            <div className="hero-stat-label">Duración Crítica para Conformidad Normativa (UNE):</div>
+                            <div className="hero-stat-label">Duración Mínima del muestreo para la Conformidad (Normas UNE 689 y UNE 482)</div>
                             <div className="hero-stat-value">
                               {(() => {
                                 const totalMin = Math.round(t_unified);
@@ -1094,7 +1094,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                           
                           <div className="unified-results-row">
                             <div className={`unified-result-card validation-${statusVLA}`}>
-                              <div className="unified-result-label">Índice de exposición límite teórico para condiciones muestreo establecidas (VLA)</div>
+                              <div className="unified-result-label">Índice de exposición mínimo teórico para condiciones muestreo establecidas (VLA)</div>
                               <div className="unified-result-value">
                                 {indiceVLA !== null ? indiceVLA.toFixed(3) : "N/A"}
                               </div>
@@ -1107,7 +1107,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                             </div>
 
                             <div className={`unified-result-card validation-${statusTWA}`}>
-                              <div className="unified-result-label">Índice de exposición límite teórico para condiciones muestreo establecidas (TWA | Gestis)</div>
+                              <div className="unified-result-label">Índice de exposición mínimo teórico para condiciones muestreo establecidas (TWA | Gestis)</div>
                               <div className="unified-result-value">
                                 {indiceTWA !== null ? indiceTWA.toFixed(3) : "N/A"}
                               </div>
