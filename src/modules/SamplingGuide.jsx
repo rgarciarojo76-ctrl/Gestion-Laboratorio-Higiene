@@ -1077,7 +1077,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         {/* Visualización de Resultados y Sensibilidad */}
                         <div className="unified-results-section">
                           <div className="hero-stat-duration">
-                            <div className="hero-stat-label">Duración mínima muestreo para la conformidad UNE 689 y UNE 482</div>
+                            <div className="hero-stat-label">Duración Crítica para Conformidad Normativa (UNE):</div>
                             <div className="hero-stat-value">
                               {(() => {
                                 const totalMin = Math.round(t_unified);
