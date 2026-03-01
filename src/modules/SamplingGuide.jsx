@@ -892,7 +892,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             // 5. Lógica de Sugerencia Inteligente
             let showSuggestion = false;
             let suggestedCaudal = 0;
-            if (exposicionTipo === "Constante" && durTarea > 0 && durTarea < (t_482_max - 0.01)) {
+            if (durTarea > 0 && durTarea < (t_482_max - 0.01)) {
               showSuggestion = true;
               const c_req_vla = (lqForUnified && vlaEdValue) ? (lqForUnified / (0.099 * vlaEdValue * durTarea)) : 0;
               const c_req_twa = (lqForUnified && gestisTwaValue) ? (lqForUnified / (0.099 * gestisTwaValue * durTarea)) : 0;
