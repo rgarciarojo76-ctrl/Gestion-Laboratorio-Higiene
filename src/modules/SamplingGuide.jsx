@@ -1077,7 +1077,12 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         {/* Visualización de Resultados y Sensibilidad */}
                         <div className="unified-results-section">
                           <div className="unified-time-header">
-                            Tiempo Mínimo de Medición Requerido: <strong>{Math.round(t_unified)} min</strong>
+                            Tiempo Mínimo de Medición Requerido: <strong>
+                              {Math.floor(Math.round(t_unified) / 60) > 0 
+                                ? `${Math.floor(Math.round(t_unified) / 60)} ${Math.floor(Math.round(t_unified) / 60) === 1 ? 'hora' : 'horas'} y ${Math.round(t_unified) % 60} min`
+                                : `${Math.round(t_unified)} min`
+                              }
+                            </strong>
                           </div>
                           
                           <div className="unified-results-row">
