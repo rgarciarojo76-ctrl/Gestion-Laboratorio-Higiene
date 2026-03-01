@@ -2025,16 +2025,20 @@ h1, h2, h3, h4 {
   gap: 12px;
   width: 100%;
   box-sizing: border-box;
+  align-items: flex-start !important; /* Force cards to their own height */
 }
 
 .unified-result-card {
-  flex: 1;
-  padding: 8px 12px !important;
+  width: calc(50% - 6px) !important;
+  flex: none !important;
+  padding: 8px 12px 10px 12px !important;
   border-radius: 8px !important;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   border-width: 1px !important;
+  height: fit-content !important;
+  min-height: 0 !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
