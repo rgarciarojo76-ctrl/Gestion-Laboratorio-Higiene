@@ -2761,29 +2761,36 @@ h1, h2, h3, h4 {
   pointer-events: none;
 }
 
-/* Caudal Valorado (Large) */
+/* Caudal Valorado (Large) - Now Symmetrical with others */
 .unified-input-wrapper-large {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   background: #ffffff;
-  border: 2px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 12px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 8px 12px;
   transition: all 0.2s ease;
-  max-width: 200px;
+  width: 144px; /* Matches .unified-input-small and select */
+  height: 38px; /* Standardize height */
+  box-sizing: border-box;
+}
+
+.unified-input-wrapper-large.warning-border {
+  border-color: #f59e0b;
+  background: #fffbeb;
 }
 
 .unified-input-wrapper-large:focus-within {
   border-color: #3b82f6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .unified-input-large {
   border: none;
   background: transparent;
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 700;
   color: #0f172a;
   width: 100%;
   outline: none;
@@ -2796,16 +2803,31 @@ h1, h2, h3, h4 {
   font-weight: 500;
 }
 
-/* Panel de Sugerencia Inteligente */
-.gold-suggestion-banner {
-  background: linear-gradient(135deg, #fef3c7, #fde68a);
-  padding: 16px 24px;
+/* Panel de Alertas y Sugerencias */
+.unified-alerts-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.gold-suggestion-banner,
+.range-warning-banner {
+  padding: 12px 24px;
   display: flex;
   gap: 16px;
   align-items: center;
   border-top: 1px solid #fcd34d;
-  border-bottom: 1px solid #fcd34d;
   animation: fadeIn 0.4s ease;
+}
+
+.gold-suggestion-banner {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-bottom: 1px solid #fcd34d;
+}
+
+.range-warning-banner {
+  background: #fffbeb;
+  color: #92400e;
+  border-bottom: 1px solid #fcd34d;
 }
 
 @keyframes fadeIn {
@@ -2814,11 +2836,11 @@ h1, h2, h3, h4 {
 }
 
 .suggestion-icon {
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .suggestion-text {
-  font-size: 14px;
+  font-size: 13.5px;
   color: #78350f;
   line-height: 1.5;
 }
@@ -2844,13 +2866,16 @@ h1, h2, h3, h4 {
 
 .unified-time-header {
   text-align: center;
-  font-size: 18px;
-  color: #334155;
+  font-size: 15px;
+  color: #64748b;
   margin-bottom: 24px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .unified-time-header strong {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 800;
   color: #0f172a;
   margin-left: 8px;
@@ -2866,7 +2891,7 @@ h1, h2, h3, h4 {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 20px;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2874,6 +2899,8 @@ h1, h2, h3, h4 {
   box-shadow: 0 4px 6px rgba(0,0,0,0.02);
   position: relative;
   overflow: hidden;
+  justify-content: flex-start;
+  min-height: 180px;
 }
 
 .unified-result-card::before {
@@ -2886,12 +2913,15 @@ h1, h2, h3, h4 {
 }
 
 .unified-result-label {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
-  color: #475569;
+  color: #64748b;
   text-transform: uppercase;
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  letter-spacing: 0.8px;
+  line-height: 1.6;
+  white-space: normal;
+  max-width: 100%;
 }
 
 .unified-result-value {

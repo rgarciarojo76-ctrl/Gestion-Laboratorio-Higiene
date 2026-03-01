@@ -965,7 +965,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                     className="accordion-tab" 
                     onClick={() => setIsEstrategiaOpen(!isEstrategiaOpen)}
                   >
-                    <span>Apoyo a estrategia de muestreo</span>
+                    <span>Apoyo a estrategia de muestreo: Criterios UNE 482 y UNE 689</span>
                     <span 
                       className="accordion-icon"
                       style={{ transform: isEstrategiaOpen ? "rotate(180deg)" : "rotate(0deg)" }}
@@ -1026,7 +1026,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                             <div className="unified-block-inputs centered">
                               <div className="unified-input-group">
                                 <label>Caudal Valorado (L/min)</label>
-                                <div className="unified-input-wrapper-large">
+                                <div className={`unified-input-wrapper-large ${isCaudalOutOfRangeGlobal ? 'warning-border' : ''}`}>
                                   <span className="une-icon-subtle">💨</span>
                                   <input 
                                     type="text" 
@@ -1044,16 +1044,29 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                           </div>
                         </div>
 
-                        {/* Panel de Sugerencia Inteligente */}
-                        {showSuggestion && (
-                          <div className="gold-suggestion-banner">
-                            <div className="suggestion-icon">⚠️</div>
-                            <div className="suggestion-text">
-                              <strong>Atención:</strong> La duración de la tarea ({duracionTarea} min) es insuficiente para el caudal actual ({methodCaudal} L/min).<br/>
-                              Sugerencia: Incremente el Caudal Valorado a <span className="suggested-flow-btn" onClick={() => setEditableCaudal(suggestedCaudal.toString().replace('.', ','))}>{suggestedCaudal} L/min</span> para validar el muestreo en el tiempo disponible.
+                        {/* Panel de Alertas y Sugerencias */}
+                        <div className="unified-alerts-stack">
+                          {/* 1. Alerta de Rango de Método (Lógica Restaurada) */}
+                          {isCaudalOutOfRangeGlobal && (
+                            <div className="range-warning-banner">
+                              <div className="suggestion-icon">⚠️</div>
+                              <div className="suggestion-text">
+                                <strong>Advertencia:</strong> El caudal asignado ({methodCaudalGlobal} L/min) está fuera del rango oficial del método para este compuesto ({selected.caudal_metodo_min} - {selected.caudal_metodo_max} L/min).
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
+
+                          {/* 2. Panel de Sugerencia Inteligente (UNE 482 Sensitivity) */}
+                          {showSuggestion && (
+                            <div className="gold-suggestion-banner">
+                              <div className="suggestion-icon">💡</div>
+                              <div className="suggestion-text">
+                                <strong>Optimización:</strong> La duración de la tarea ({duracionTarea} min) es insuficiente para el caudal actual ({methodCaudal} L/min).<br/>
+                                Sugerencia: Incremente el Caudal Valorado a <span className="suggested-flow-btn" onClick={() => setEditableCaudal(suggestedCaudal.toString().replace('.', ','))}>{suggestedCaudal} L/min</span> para validar la sensibilidad en el tiempo disponible.
+                              </div>
+                            </div>
+                          )}
+                        </div>
 
                         {/* Visualización de Resultados y Sensibilidad */}
                         <div className="unified-results-section">
@@ -1063,7 +1076,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                           
                           <div className="unified-results-row">
                             <div className={`unified-result-card validation-${statusVLA}`}>
-                              <div className="unified-result-label">Índice VLA</div>
+                              <div className="unified-result-label">Índice de exposición límite teórico para condiciones muestreo establecidas (VLA)</div>
                               <div className="unified-result-value">
                                 {indiceVLA !== null ? indiceVLA.toFixed(3) : "N/A"}
                               </div>
@@ -1076,7 +1089,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                             </div>
 
                             <div className={`unified-result-card validation-${statusTWA}`}>
-                              <div className="unified-result-label">Índice TWA (Gestis)</div>
+                              <div className="unified-result-label">Índice de exposición límite teórico para condiciones muestreo establecidas (TWA | Gestis)</div>
                               <div className="unified-result-value">
                                 {indiceTWA !== null ? indiceTWA.toFixed(3) : "N/A"}
                               </div>
