@@ -1143,355 +1143,370 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                     <div className="accordion-content" style={{ marginTop: "-8px" }}>
                       <div className="detail-grid" style={{ borderTop: "none", paddingTop: 8 }}>
                         {/* REST OF DETAIL GRID STARTS HERE */}
-                  {/* === SCREENING / PERFIL ANALÍTICO === */}
-              {selected.screening_perfil && (
-                <div
-                  className="detail-item full-width"
-                  style={{ background: "#f0f9ff", borderColor: "#bae6fd", position: "relative" }}
-                >
-                  {/* Badges container */}
-                  <div style={{ position: "absolute", top: "12px", right: "12px", display: "flex", gap: "6px", alignItems: "center" }}>
-                    <span style={{ backgroundColor: "#f1f5f9", border: "1px solid #cbd5e1", color: "#0f172a", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.5px" }}>
-                      {String(selected.screening_perfil).padStart(4, '0')}
-                    </span>
-                    {(selected.analisis_simultaneo !== undefined ? selected.analisis_simultaneo : screeningCompounds.length > 1) ? (
-                      <span style={{ backgroundColor: "#22c55e", color: "white", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.2px" }}>
-                        análisis simultáneo
-                      </span>
-                    ) : (
-                      <span style={{ backgroundColor: "#ef4444", color: "white", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.2px" }}>
-                        análisis no simultáneo
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="detail-item-label" style={{ color: "#0369a1" }}>
-                    Perfil Analítico / Screening
-                  </div>
-                  <div
-                    className="detail-item-value"
-                    style={{ fontWeight: 600, color: "#0284c7", paddingRight: "180px" }}
-                  >
-                    {selected.screening_desc}
-                  </div>
-                  {/* List of compounds fallback for expanded view */}
-                  {(selected.screening_compuestos_formatted || screeningCompounds.length > 0) && (
-                    <div
-                      style={{
-                        fontSize: "12px",
-                        color: "#475569",
-                        fontWeight: 400,
-                        marginTop: 6,
-                        lineHeight: 1.5,
-                        padding: "8px",
-                        background: "rgba(255,255,255,0.5)",
-                        borderRadius: "4px",
-                        border: "1px dashed #bae6fd"
-                      }}
-                    >
-                      <strong>Compuestos Incluidos:</strong><br/>
-                      {selected.screening_compuestos_formatted || screeningCompounds.join(", ")}
+                  {/* 1. IDENTIFICACIÓN DEL CONTAMINANTE */}
+                  {selected.sinonimo && (
+                    <div className="info-block">
+                      <div className="info-block-title">1. Identificación del Contaminante</div>
+                      <div className="compact-detail-item">
+                        <span className="compact-label">Sinónimo</span>
+                        <span className="compact-value">{selected.sinonimo}</span>
+                      </div>
                     </div>
                   )}
-                </div>
-              )}
-              {selected.screening_condiciones_ed && (
-                <div className="detail-item full-width" style={{ background: "#f0f9ff", borderColor: "#bae6fd" }}>
-                  <div className="detail-item-label" style={{ color: "#0369a1" }}>Condiciones Screening VLA-ED</div>
-                  <div className="detail-item-value">{selected.screening_condiciones_ed}</div>
-                </div>
-              )}
-              {selected.screening_condiciones_ec && (
-                <div className="detail-item full-width" style={{ background: "#f0f9ff", borderColor: "#bae6fd" }}>
-                  <div className="detail-item-label" style={{ color: "#0369a1" }}>Condiciones Screening VLA-EC</div>
-                  <div className="detail-item-value">{selected.screening_condiciones_ec}</div>
-                </div>
-              )}
 
-              {/* === MÉTODO Y ANÁLISIS === */}
-              <div className="detail-item">
-                <div className="detail-item-label">Método de Análisis Interno</div>
-                <div className="detail-item-value">
-                  {renderWithAnexoLink(selected.metodo_analisis || "—")}
-                </div>
-              </div>
-              {selected.metodo_interno_basado_en && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Método Interno Basado En</div>
-                  <div className="detail-item-value">{selected.metodo_interno_basado_en}</div>
-                </div>
-              )}
-              {selected.descripcion_tecnica && (
-                <div className="detail-item full-width">
-                  <div className="detail-item-label">DESCRIPCIÓN TÉCNICA ANALÍTICA</div>
-                  <div className="detail-item-value" style={{ whiteSpace: "pre-wrap" }}>{selected.descripcion_tecnica}</div>
-                </div>
-              )}
-              {selected.tabla && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Tabla de Compatibilidad</div>
-                  <div className="detail-item-value">Tabla {selected.tabla}</div>
-                </div>
-              )}
-              {selected.laboratorio && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Laboratorio</div>
-                  <div className="detail-item-value">{selected.laboratorio}</div>
-                </div>
-              )}
+                  {/* 2. DESCRIPCIÓN TÉCNICA ANALÍTICA */}
+                  {(selected.descripcion_tecnica || selected.metodo_interno_basado_en || selected.tabla || selected.tecnica_analitica) && (
+                    <div className="info-block">
+                      <div className="info-block-title">2. Descripción Técnica Analítica</div>
+                      {selected.metodo_interno_basado_en && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Método Basado En</span>
+                          <span className="compact-value">{selected.metodo_interno_basado_en}</span>
+                        </div>
+                      )}
+                      {selected.tecnica_analitica && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Técnica Analítica</span>
+                          <span className="compact-value">{selected.tecnica_analitica}</span>
+                        </div>
+                      )}
+                      {selected.tabla && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Tabla de Compatibilidad</span>
+                          <span className="compact-value">Tabla {selected.tabla}</span>
+                        </div>
+                      )}
+                      {selected.descripcion_tecnica && (
+                        <div className="compact-detail-item" style={{ flexDirection: 'column' }}>
+                          <span className="compact-label" style={{ paddingBottom: 4 }}>Descripción Detallada</span>
+                          <span className="compact-value" style={{ textAlign: 'left', whiteSpace: 'pre-wrap', width: '100%' }}>{selected.descripcion_tecnica}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-              {/* === CÓDIGOS Y REFERENCIAS === */}
-              {selected.conc_fact_prueba && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Conc. Fact. Prueba</div>
-                  <div className="detail-item-value mono">{selected.conc_fact_prueba}</div>
-                </div>
-              )}
-              {selected.codigo_perfil && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Código Perfil Analítico</div>
-                  <div className="detail-item-value mono">{selected.codigo_perfil}</div>
-                </div>
-              )}
-              {selected.conc_fact_perfil && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Conc. Fact. Perfil</div>
-                  <div className="detail-item-value mono">{selected.conc_fact_perfil}</div>
-                </div>
-              )}
-              {selected.codigo_soporte && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Código Soporte</div>
-                  <div className="detail-item-value mono">{selected.codigo_soporte}</div>
-                </div>
-              )}
-              {selected.codigo_soporte_alt && (
-                <div className="detail-item full-width">
-                  <div className="detail-item-label">Soporte Alternativo</div>
-                  <div className="detail-item-value">{selected.codigo_soporte_alt}</div>
-                </div>
-              )}
+                  {/* 3. SOPORTE DE MUESTREO */}
+                  {(selected.codigo_soporte || selected.codigo_soporte_alt) && (
+                    <div className="info-block">
+                      <div className="info-block-title">3. Soporte de Muestreo</div>
+                      {selected.codigo_soporte && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Código Soporte Principal</span>
+                          <span className="compact-value mono">{selected.codigo_soporte}</span>
+                        </div>
+                      )}
+                      {selected.codigo_soporte_alt && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Código Soporte Alternativo</span>
+                          <span className="compact-value mono">{selected.codigo_soporte_alt}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-              {/* === PARÁMETROS DE CAUDAL DETALLADOS === */}
-              {selected.caudal_metodo && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Caudal Método (L/min)</div>
-                  <div className="detail-item-value mono">{selected.caudal_metodo}</div>
-                </div>
-              )}
-              {selected.caudal_muestreador && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Caudal Muestreador (L/min)</div>
-                  <div className="detail-item-value mono">{selected.caudal_muestreador}</div>
-                </div>
-              )}
-              {selected.caudal_preferente && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Caudal Preferente (L/min)</div>
-                  <div className="detail-item-value mono">{selected.caudal_preferente}</div>
-                </div>
-              )}
-              {selected.caudal_alternativo && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Caudal Alternativo (L/min)</div>
-                  <div className="detail-item-value mono">{selected.caudal_alternativo}</div>
-                </div>
-              )}
-              {selected.rango_trabajo && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Rango de Trabajo</div>
-                  <div className="detail-item-value">{selected.rango_trabajo}</div>
-                </div>
-              )}
+                  {/* 4. CAUDAL MÉTODO */}
+                  {(selected.caudal_metodo || selected.caudal_muestreador || selected.caudal_preferente || selected.caudal_alternativo || selected.caudal_metodo_min || selected.caudal_metodo_max || selected.rango_trabajo) && (
+                    <div className="info-block">
+                      <div className="info-block-title">4. Caudal Método (L/min)</div>
+                      {selected.caudal_metodo && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Caudal Método</span>
+                          <span className="compact-value mono">{selected.caudal_metodo}</span>
+                        </div>
+                      )}
+                      {selected.caudal_metodo_min && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Caudal Mínimo Admitido</span>
+                          <span className="compact-value mono">{selected.caudal_metodo_min}</span>
+                        </div>
+                      )}
+                      {selected.caudal_metodo_max && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Caudal Máximo Admitido</span>
+                          <span className="compact-value mono">{selected.caudal_metodo_max}</span>
+                        </div>
+                      )}
+                      {selected.caudal_preferente && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Caudal Preferente</span>
+                          <span className="compact-value mono">{selected.caudal_preferente}</span>
+                        </div>
+                      )}
+                      {selected.caudal_alternativo && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Caudal Alternativo</span>
+                          <span className="compact-value mono">{selected.caudal_alternativo}</span>
+                        </div>
+                      )}
+                      {selected.caudal_muestreador && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Caudal Muestreador Recomendado</span>
+                          <span className="compact-value mono">{selected.caudal_muestreador}</span>
+                        </div>
+                      )}
+                      {selected.rango_trabajo && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Rango de Trabajo</span>
+                          <span className="compact-value">{selected.rango_trabajo}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-              {/* === TIEMPOS Y VOLÚMENES === */}
-              {selected.tiempo_minimo_asignado && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Tiempo Mín. Asignado (min)</div>
-                  <div className="detail-item-value mono">{selected.tiempo_minimo_asignado}</div>
-                </div>
-              )}
-              {selected.tiempo_minimo_muestreo_ed && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Tiempo Mín. Muestreo 10%VLA-ED (min)</div>
-                  <div className="detail-item-value mono">{selected.tiempo_minimo_muestreo_ed}</div>
-                </div>
-              )}
-              {selected.tiempo_minimo_muestreo_twa && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Tiempo Mín. Muestreo 10%TWA (min)</div>
-                  <div className="detail-item-value mono">{selected.tiempo_minimo_muestreo_twa}</div>
-                </div>
-              )}
-              {selected.v_minimo_muestreo_ed && (
-                <div className="detail-item">
-                  <div className="detail-item-label">V Mín. Muestreo VLA-ED (L)</div>
-                  <div className="detail-item-value mono">{selected.v_minimo_muestreo_ed}</div>
-                </div>
-              )}
-              {selected.v_minimo_muestreo_twa && (
-                <div className="detail-item">
-                  <div className="detail-item-label">V Mín. Muestreo TWA (L)</div>
-                  <div className="detail-item-value mono">{selected.v_minimo_muestreo_twa}</div>
-                </div>
-              )}
-              {selected.v_maximo_muestreo && (
-                <div className="detail-item">
-                  <div className="detail-item-label">V Máx. Muestreo 8h (L)</div>
-                  <div className="detail-item-value mono">{selected.v_maximo_muestreo}</div>
-                </div>
-              )}
-              {selected.loq_concentracion && (
-                <div className="detail-item">
-                  <div className="detail-item-label">LÍMITE CUANTIFICACIÓN (mg/m³)</div>
-                  <div className="detail-item-value mono">{selected.loq_concentracion}</div>
-                </div>
-              )}
+                  {/* 5. VOLUMEN Y TIEMPOS DE MUESTREO */}
+                  {(selected.tiempo_minimo_asignado || selected.tiempo_minimo_muestreo_ed || selected.tiempo_minimo_muestreo_twa || selected.v_minimo_muestreo_ed || selected.v_minimo_muestreo_twa || selected.v_maximo_muestreo) && (
+                    <div className="info-block">
+                      <div className="info-block-title">5. Volumen y Tiempos de Muestreo</div>
+                      {selected.tiempo_minimo_asignado && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Tiempo Mín. Asignado (min)</span>
+                          <span className="compact-value mono">{selected.tiempo_minimo_asignado}</span>
+                        </div>
+                      )}
+                      {selected.tiempo_minimo_muestreo_ed && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Tiempo Mín. 10% VLA-ED (min)</span>
+                          <span className="compact-value mono">{selected.tiempo_minimo_muestreo_ed}</span>
+                        </div>
+                      )}
+                      {selected.tiempo_minimo_muestreo_twa && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Tiempo Mín. 10% TWA (min)</span>
+                          <span className="compact-value mono">{selected.tiempo_minimo_muestreo_twa}</span>
+                        </div>
+                      )}
+                      {selected.v_minimo_muestreo_ed && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Volumen Mín. VLA-ED (L)</span>
+                          <span className="compact-value mono">{selected.v_minimo_muestreo_ed}</span>
+                        </div>
+                      )}
+                      {selected.v_minimo_muestreo_twa && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Volumen Mín. TWA (L)</span>
+                          <span className="compact-value mono">{selected.v_minimo_muestreo_twa}</span>
+                        </div>
+                      )}
+                      {selected.v_maximo_muestreo && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Volumen Máx. Muestreo 8h (L)</span>
+                          <span className="compact-value mono">{selected.v_maximo_muestreo}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-              {/* === IE MÍNIMOS TEÓRICOS === */}
-              {selected.ie_minimo_teorico_ed && (
-                <div className="detail-item">
-                  <div className="detail-item-label">IE Mín. Teórico VLA-ED</div>
-                  <div className="detail-item-value mono">{selected.ie_minimo_teorico_ed}</div>
-                </div>
-              )}
-              {selected.ie_minimo_teorico_twa && (
-                <div className="detail-item">
-                  <div className="detail-item-label">IE Mín. Teórico TWA</div>
-                  <div className="detail-item-value mono">{selected.ie_minimo_teorico_twa}</div>
-                </div>
-              )}
-              {selected.ie_limite_condiciones_ed && (
-                <div className="detail-item">
-                  <div className="detail-item-label">IE Límite Condiciones VLA-ED</div>
-                  <div className="detail-item-value mono">{selected.ie_limite_condiciones_ed}</div>
-                </div>
-              )}
-              {selected.ie_limite_condiciones_twa && (
-                <div className="detail-item">
-                  <div className="detail-item-label">IE Límite Condiciones TWA</div>
-                  <div className="detail-item-value mono">{selected.ie_limite_condiciones_twa}</div>
-                </div>
-              )}
+                  {/* 6. LÍMITES DE CUANTIFICACIÓN / DETECCIÓN */}
+                  {selected.loq_concentracion && (
+                    <div className="info-block">
+                      <div className="info-block-title">6. Límites de Cuantificación / Detección</div>
+                      <div className="compact-detail-item">
+                        <span className="compact-label">Límite de Cuantificación (mg/m³)</span>
+                        <span className="compact-value mono">{selected.loq_concentracion}</span>
+                      </div>
+                    </div>
+                  )}
 
-              {/* === REGULATORIO Y LEP === */}
-              {selected.frases_h && (
-                <div className="detail-item full-width" style={{ background: "transparent", borderColor: "#e2e8f0" }}>
-                  <div className="detail-item-label">Frases H (LEP 2025)</div>
-                  <div className="detail-item-value mono">{selected.frases_h}</div>
-                </div>
-              )}
-              {selected.notas_lep && (
-                <div className="detail-item full-width" style={{ background: "transparent", borderColor: "#e2e8f0" }}>
-                  <div className="detail-item-label">Notas LEP 2025</div>
-                  <div className="detail-item-value">{selected.notas_lep}</div>
-                </div>
-              )}
-              {selected.rd_665 && (
-                <div className="detail-item full-width">
-                  <div className="detail-item-label">Aplica RD 665/1997</div>
-                  <div className="detail-item-value">{selected.rd_665}</div>
-                </div>
-              )}
+                  {/* 7. CLASIFICACIÓN CMR / NORMATIVA */}
+                  {(selected.frases_h || selected.notas_lep || selected.rd_665 || selected.is_cmr) && (
+                    <div className="info-block">
+                      <div className="info-block-title">7. Clasificación CMR / Normativa</div>
+                      {selected.frases_h && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Frases H (LEP 2025)</span>
+                          <span className="compact-value mono">{selected.frases_h}</span>
+                        </div>
+                      )}
+                      {selected.notas_lep && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Notas LEP 2025</span>
+                          <span className="compact-value">{selected.notas_lep}</span>
+                        </div>
+                      )}
+                      {selected.rd_665 && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Aplica RD 665/1997</span>
+                          <span className="compact-value">{selected.rd_665}</span>
+                        </div>
+                      )}
+                      {selected.is_cmr && (
+                        <div className="compact-detail-item" style={{ background: "#fff1f2", borderRadius: 4, padding: "8px", marginTop: 8, border: "1px solid #fecdd3", flexDirection: 'column' }}>
+                          <span className="compact-label" style={{ color: "#be123c", fontWeight: 700, paddingBottom: 6 }}>⚠️ Sustancia CMR — Apéndice 1</span>
+                          <div className="compact-value" style={{ textAlign: "left", color: "#9f1239", fontSize: 11, width: "100%" }}>
+                            {selected.familia_cmr && <div><strong>Familia:</strong> {selected.familia_cmr}</div>}
+                            {selected.compatibilidades_cmr && <div><strong>Compatibilidad:</strong> {selected.compatibilidades_cmr}</div>}
+                            {selected.evaluacion_apendice_1 && <div><strong>Evaluación:</strong> {selected.evaluacion_apendice_1}</div>}
+                            {selected.concentracion_limite_cmr && <div><strong>Conc. Límite:</strong> {selected.concentracion_limite_cmr}</div>}
+                            {selected.cumple_003_vlaed && <div><strong>¿Cumple ≤0,03·VLA-ED?:</strong> {selected.cumple_003_vlaed}</div>}
+                            {selected.cumple_v_max && <div><strong>¿Cumple V máx?:</strong> {selected.cumple_v_max}</div>}
+                            {selected.contribucion_exterior && <div><strong>Contr. Exterior:</strong> {selected.contribucion_exterior}</div>}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-              {/* === CMR / APÉNDICE 1 === */}
-              {selected.is_cmr && (
-                <div
-                  className="detail-item full-width"
-                  style={{ background: "#fff1f2", borderColor: "#fecdd3" }}
-                >
-                  <div className="detail-item-label" style={{ color: "#be123c" }}>
-                    ⚠️ Sustancia CMR — Apéndice 1
-                  </div>
-                  <div className="detail-item-value" style={{ color: "#9f1239" }}>
-                    {selected.familia_cmr && <div><strong>Familia:</strong> {selected.familia_cmr}</div>}
-                    {selected.compatibilidades_cmr && <div><strong>Compatibilidades:</strong> {selected.compatibilidades_cmr}</div>}
-                    {selected.evaluacion_apendice_1 && <div><strong>Evaluación:</strong> {selected.evaluacion_apendice_1}</div>}
-                    {selected.concentracion_limite_cmr && <div><strong>Conc. Límite CMR:</strong> {selected.concentracion_limite_cmr}</div>}
-                    {selected.cumple_003_vlaed && <div><strong>¿Cumple ≤0,03·VLA-ED?:</strong> {selected.cumple_003_vlaed}</div>}
-                    {selected.cumple_v_max && <div><strong>¿Cumple V máx?:</strong> {selected.cumple_v_max}</div>}
-                    {selected.contribucion_exterior && <div><strong>Contribución exterior:</strong> {selected.contribucion_exterior}</div>}
-                  </div>
-                </div>
-              )}
+                  {/* 8. SCREENING / PERFIL ANALÍTICO */}
+                  {(selected.screening_perfil || selected.compuestos || selected.codigo_perfil || selected.conc_fact_prueba || selected.conc_fact_perfil) && (
+                    <div className="info-block">
+                      <div className="info-block-title">8. Perfil Analítico / Screening</div>
+                      {selected.screening_perfil && (
+                        <div className="compact-detail-item" style={{ background: "#f0f9ff", padding: 8, borderRadius: 4, border: "1px solid #bae6fd", flexDirection: "column" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", width: "100%", marginBottom: 6 }}>
+                            <span className="compact-label" style={{ color: "#0369a1", fontWeight: 700 }}>Perfil {String(selected.screening_perfil).padStart(4, '0')}</span>
+                            {selected.analisis_simultaneo !== undefined ? (
+                              <span style={{ fontSize: 10, background: selected.analisis_simultaneo ? "#22c55e" : "#ef4444", color: "white", padding: "2px 6px", borderRadius: 4, fontWeight: 600 }}>
+                                {selected.analisis_simultaneo ? "ANÁLISIS SIMULTÁNEO" : "NO SIMULTÁNEO"}
+                              </span>
+                            ) : screeningCompounds.length > 1 && (
+                              <span style={{ fontSize: 10, background: "#22c55e", color: "white", padding: "2px 6px", borderRadius: 4, fontWeight: 600 }}>ANÁLISIS SIMULTÁNEO</span>
+                            )}
+                          </div>
+                          <span className="compact-value" style={{ textAlign: "left", width: "100%", fontSize: 11, color: "#0284c7" }}>{selected.screening_desc}</span>
+                          {(selected.screening_compuestos_formatted || screeningCompounds.length > 0) && (
+                            <div style={{ marginTop: 6, fontSize: 10, color: "#475569", background: "white", padding: 6, borderRadius: 4, border: "1px dashed #bae6fd", width: "100%", boxSizing: "border-box" }}>
+                              <strong>Compuestos:</strong> {selected.screening_compuestos_formatted || screeningCompounds.join(", ")}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {selected.screening_condiciones_ed && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Condiciones VLA-ED</span>
+                          <span className="compact-value">{selected.screening_condiciones_ed}</span>
+                        </div>
+                      )}
+                      {selected.screening_condiciones_ec && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Condiciones VLA-EC</span>
+                          <span className="compact-value">{selected.screening_condiciones_ec}</span>
+                        </div>
+                      )}
+                      {selected.screening_comentarios && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Comentarios Screening</span>
+                          <span className="compact-value">{selected.screening_comentarios}</span>
+                        </div>
+                      )}
+                      {selected.compuestos && (
+                        <div className="compact-detail-item" style={{ flexDirection: 'column' }}>
+                          <span className="compact-label" style={{ paddingBottom: 4 }}>Otros Compuestos Asociados</span>
+                          <span className="compact-value" style={{ textAlign: 'left', width: '100%' }}>{selected.compuestos}</span>
+                        </div>
+                      )}
+                      {selected.codigo_perfil && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Código Perfil</span>
+                          <span className="compact-value mono">{selected.codigo_perfil}</span>
+                        </div>
+                      )}
+                      {selected.conc_fact_perfil && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Fact/Conc Perfil</span>
+                          <span className="compact-value mono">{selected.conc_fact_perfil}</span>
+                        </div>
+                      )}
+                      {selected.conc_fact_prueba && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Fact/Conc Prueba Individual</span>
+                          <span className="compact-value mono">{selected.conc_fact_prueba}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-              {/* === GESTIS (VALORES INTERNACIONALES) === */}
-              {(selected.gestis_twa || selected.gestis_stel) && (
-                <div className="detail-item full-width" style={{ background: "#fefce8", borderColor: "#fde68a" }}>
-                  <div className="detail-item-label" style={{ color: "#92400e" }}>
-                    🌍 Valores Gestis (Referencia Internacional)
-                  </div>
-                  <div className="detail-item-value mono">
-                    TWA: {selected.gestis_twa || "—"} mg/m³ | STEL: {selected.gestis_stel || "—"} mg/m³
-                    {selected.gestis_pais && <span> ({selected.gestis_pais})</span>}
-                  </div>
-                </div>
-              )}
+                  {/* 9. LABORATORIO Y LOGÍSTICA */}
+                  {(selected.laboratorio || selected.plazo_entrega || selected.contenedor) && (
+                    <div className="info-block">
+                      <div className="info-block-title">9. Laboratorio y Logística</div>
+                      {selected.laboratorio && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Laboratorio</span>
+                          <span className="compact-value">{selected.laboratorio}</span>
+                        </div>
+                      )}
+                      {selected.plazo_entrega && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Plazo Entrega</span>
+                          <span className="compact-value">{selected.plazo_entrega}</span>
+                        </div>
+                      )}
+                      {selected.contenedor && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Contenedor Recomendado</span>
+                          <span className="compact-value">{selected.contenedor}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-              {/* === LOGÍSTICA === */}
-              {selected.plazo_entrega && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Plazo Entrega Laboratorio</div>
-                  <div className="detail-item-value">{selected.plazo_entrega}</div>
-                </div>
-              )}
-              {selected.contenedor && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Contenedor</div>
-                  <div className="detail-item-value">{selected.contenedor}</div>
-                </div>
-              )}
-              {selected.transporte && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Condiciones de Transporte</div>
-                  <div className="detail-item-value">{selected.transporte}</div>
-                </div>
-              )}
-              {selected.precio_soporte && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Precio Soporte (€)</div>
-                  <div className="detail-item-value mono">{selected.precio_soporte}</div>
-                </div>
-              )}
-              {selected.precio_analisis && (
-                <div className="detail-item">
-                  <div className="detail-item-label">Precio Análisis (€)</div>
-                  <div className="detail-item-value mono">{selected.precio_analisis}</div>
-                </div>
-              )}
+                  {/* 10. PARÁMETROS ANALÍTICOS AVANZADOS */}
+                  {(selected.ie_minimo_teorico_ed || selected.ie_minimo_teorico_twa || selected.ie_limite_condiciones_ed || selected.ie_limite_condiciones_twa) && (
+                    <div className="info-block">
+                      <div className="info-block-title">10. Parámetros Analíticos Avanzados</div>
+                      {selected.ie_minimo_teorico_ed && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">IE Mínimo Teórico VLA-ED</span>
+                          <span className="compact-value mono">{selected.ie_minimo_teorico_ed}</span>
+                        </div>
+                      )}
+                      {selected.ie_minimo_teorico_twa && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">IE Mínimo Teórico TWA</span>
+                          <span className="compact-value mono">{selected.ie_minimo_teorico_twa}</span>
+                        </div>
+                      )}
+                      {selected.ie_limite_condiciones_ed && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">IE Límite Condiciones VLA-ED</span>
+                          <span className="compact-value mono">{selected.ie_limite_condiciones_ed}</span>
+                        </div>
+                      )}
+                      {selected.ie_limite_condiciones_twa && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">IE Límite Condiciones TWA</span>
+                          <span className="compact-value mono">{selected.ie_limite_condiciones_twa}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-              {/* === UNE 689 / COMENTARIOS === */}
-              {selected.comentarios_une_689 && (
-                <div className="detail-item full-width">
-                  <div className="detail-item-label">Comentarios UNE 689 (Muestreo 2h)</div>
-                  <div className="detail-item-value">{selected.comentarios_une_689}</div>
-                </div>
-              )}
-              {selected.comentarios_generales && (
-                <div className="detail-item full-width">
-                  <div className="detail-item-label">Comentarios Generales</div>
-                  <div className="detail-item-value">{selected.comentarios_generales}</div>
-                </div>
-              )}
-
-              {/* === OBSERVACIONES === */}
-              {(selected.observaciones_concepto || selected.comentarios_prueba) && (
-                <div className="detail-item full-width">
-                  <div className="detail-item-label">Observaciones Adicionales</div>
-                  <div className="detail-item-value" style={{ fontStyle: "italic" }}>
-                    {selected.observaciones_concepto && <div>{selected.observaciones_concepto}</div>}
-                    {selected.comentarios_prueba && <div>{selected.comentarios_prueba}</div>}
-                  </div>
-                </div>
-              )}
-
-              {/* === COMPUESTOS === */}
-              {selected.compuestos && (
-                <div className="detail-item full-width">
-                  <div className="detail-item-label">Compuestos Asociados</div>
-                  <div className="detail-item-value">{selected.compuestos}</div>
-                </div>
-              )}
+                  {/* 11. SISTEMA Y OTROS */}
+                  {(selected.comentarios_une_689 || selected.comentarios_generales || selected.observaciones_concepto || selected.comentarios_prueba || selected.codigo_prueba) && (
+                    <div className="info-block">
+                      <div className="info-block-title">11. Sistema y Notas Adicionales</div>
+                      {selected.codigo_prueba && (
+                        <div className="compact-detail-item">
+                          <span className="compact-label">Código Prueba BBDD</span>
+                          <span className="compact-value mono">{selected.codigo_prueba}</span>
+                        </div>
+                      )}
+                      {selected.comentarios_une_689 && (
+                        <div className="compact-detail-item" style={{ flexDirection: 'column' }}>
+                          <span className="compact-label" style={{ paddingBottom: 4 }}>Comentarios UNE 689 (Muestreo 2h)</span>
+                          <span className="compact-value" style={{ textAlign: 'left', width: '100%' }}>{selected.comentarios_une_689}</span>
+                        </div>
+                      )}
+                      {selected.comentarios_generales && (
+                        <div className="compact-detail-item" style={{ flexDirection: 'column' }}>
+                          <span className="compact-label" style={{ paddingBottom: 4 }}>Comentarios Generales</span>
+                          <span className="compact-value" style={{ textAlign: 'left', width: '100%' }}>{selected.comentarios_generales}</span>
+                        </div>
+                      )}
+                      {selected.observaciones_concepto && (
+                        <div className="compact-detail-item" style={{ flexDirection: 'column' }}>
+                          <span className="compact-label" style={{ paddingBottom: 4 }}>Observaciones Concepto</span>
+                          <span className="compact-value" style={{ textAlign: 'left', fontStyle: 'italic', width: '100%' }}>{selected.observaciones_concepto}</span>
+                        </div>
+                      )}
+                      {selected.comentarios_prueba && (
+                        <div className="compact-detail-item" style={{ flexDirection: 'column' }}>
+                          <span className="compact-label" style={{ paddingBottom: 4 }}>Comentarios Prueba</span>
+                          <span className="compact-value" style={{ textAlign: 'left', fontStyle: 'italic', width: '100%' }}>{selected.comentarios_prueba}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
             </div>
           </div>
         )}

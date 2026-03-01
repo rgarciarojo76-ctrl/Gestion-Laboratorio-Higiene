@@ -2059,6 +2059,60 @@ h1, h2, h3, h4 {
   font-weight: 700 !important;
 }
 
+/* Alta Densidad: Ampliar Información (11 Blocks) */
+.info-block {
+  margin-bottom: 24px;
+}
+
+.info-block:last-child {
+  margin-bottom: 0;
+}
+
+.info-block-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #0f172a;
+  border-bottom: 1px solid #cbd5e1;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  letter-spacing: 0.05em;
+}
+
+.compact-detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 6px 4px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.compact-detail-item:last-child {
+  border-bottom: none;
+}
+
+.compact-label {
+  color: #64748b;
+  font-weight: 600;
+  flex: 1;
+  padding-right: 16px;
+}
+
+.compact-value {
+  color: #1e293b;
+  font-weight: 500;
+  flex: 1.5;
+  text-align: right;
+  word-wrap: break-word;
+}
+
+.compact-value.mono {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 11px;
+}
+
 .badge-error {
   background: linear-gradient(135deg, #fef2f2, #fee2e2) !important;
   color: #b91c1c !important;
