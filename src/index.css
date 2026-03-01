@@ -2029,23 +2029,29 @@ h1, h2, h3, h4 {
 
 .unified-result-card {
   flex: 1;
-  padding: 10px 14px !important;
-  border-radius: 10px !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: 85px;
+  justify-content: flex-start;
   border-width: 1px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.unified-result-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .unified-result-label {
-  font-size: 10px !important;
-  font-weight: 600 !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
   color: #475569 !important;
-  line-height: 1.2 !important;
-  margin-bottom: 4px !important;
+  line-height: 1.1 !important;
+  margin-bottom: 6px !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.02em !important;
+  letter-spacing: 0.03em !important;
+  min-height: 22px;
 }
 
 .unified-result-value {

@@ -1095,10 +1095,10 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                           <div className="unified-results-row">
                             <div className={`unified-result-card validation-${statusVLA}`}>
                               <div className="unified-result-label">Índice de exposición mínimo teórico para condiciones muestreo establecidas (VLA)</div>
-                              <div className="unified-result-value">
+                              <div className="unified-result-value" style={{ margin: "2px 0 6px 0", lineHeight: 1 }}>
                                 {indiceVLA !== null ? indiceVLA.toFixed(3) : "N/A"}
                               </div>
-                              <div className="unified-result-status">
+                              <div className="unified-result-status" style={{ marginTop: "auto", fontSize: '10px' }}>
                                 {statusVLA === "success" && "🟢 CONFORMIDAD CON EL VLA (≤ 0.1)"}
                                 {statusVLA === "warn" && "🟡 NO DECISIÓN (≤ 1)"}
                                 {statusVLA === "error" && "🔴 NO CONFORMIDAD CON EL VLA (> 1)"}
@@ -1108,10 +1108,10 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
 
                             <div className={`unified-result-card validation-${statusTWA}`}>
                               <div className="unified-result-label">Índice de exposición mínimo teórico para condiciones muestreo establecidas (TWA | Gestis)</div>
-                              <div className="unified-result-value">
+                              <div className="unified-result-value" style={{ margin: "2px 0 6px 0", lineHeight: 1 }}>
                                 {indiceTWA !== null ? indiceTWA.toFixed(3) : "N/A"}
                               </div>
-                              <div className="unified-result-status">
+                              <div className="unified-result-status" style={{ marginTop: "auto", fontSize: '10px' }}>
                                 {statusTWA === "success" && "🟢 CONFORMIDAD CON EL VLA (≤ 0.1)"}
                                 {statusTWA === "warn" && "🟡 NO DECISIÓN (≤ 1)"}
                                 {statusTWA === "error" && "🔴 NO CONFORMIDAD CON EL VLA (> 1)"}
