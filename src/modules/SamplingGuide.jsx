@@ -1068,7 +1068,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                               <div className="suggestion-icon">💡</div>
                               <div className="suggestion-text">
                                 <strong>Optimización:</strong> La duración de la tarea ({duracionTarea} min) es insuficiente para el caudal actual ({methodCaudal} L/min).<br/>
-                                Sugerencia: Incremente el Caudal Valorado a <span className="suggested-flow-btn" onClick={() => setEditableCaudal(suggestedCaudal.toString().replace('.', ','))}>{suggestedCaudal} L/min</span> para validar la sensibilidad en el tiempo disponible.
+                                Sugerencia: Incremente el Caudal Valorado a <span className="suggested-flow-btn" onClick={() => setEditableCaudal(suggestedCaudal.toString().replace('.', ','))}>{suggestedCaudal} L/min</span> para conseguir la conformidad en el tiempo de la tarea y/o jornada.
                               </div>
                             </div>
                           )}
