@@ -816,7 +816,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             <div className="info-card">
               <div className="info-card-icon icon-yellow">🎯</div>
               <div className="info-card-content">
-                <span className="info-card-label">LÍMITE DE CUANTIFICACIÓN</span>
+                <span className="info-card-label">LÍMITE CUANTIFICACIÓN</span>
                 <span className="info-card-value">
                   {selected.lq
                     ? `${selected.lq} µg`
@@ -831,7 +831,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             <div className="info-card">
               <div className="info-card-icon icon-yellow">🔍</div>
               <div className="info-card-content">
-                <span className="info-card-label">LÍMITE DE DETECCIÓN</span>
+                <span className="info-card-label">LÍMITE DETECCIÓN</span>
                 <span className="info-card-value">
                   {selected.ld
                     ? `${selected.ld} µg`
@@ -1331,7 +1331,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
               )}
               {selected.loq_concentracion && (
                 <div className="detail-item">
-                  <div className="detail-item-label">LÍMITE DE CUANTIFICACIÓN (mg/m³)</div>
+                  <div className="detail-item-label">LÍMITE CUANTIFICACIÓN (mg/m³)</div>
                   <div className="detail-item-value mono">{selected.loq_concentracion}</div>
                 </div>
               )}
