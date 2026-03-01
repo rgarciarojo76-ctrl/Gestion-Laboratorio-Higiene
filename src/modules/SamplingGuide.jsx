@@ -854,8 +854,8 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             const gestisTwaValue = parseNum(selected.gestis_twa);
 
             // 1. Cálculo t_482
-            const t_482_vla = (lqForUnified && methodCaudal && vlaEdValue) ? (lqForUnified / (0.1 * vlaEdValue * methodCaudal)) : 0;
-            const t_482_twa = (lqForUnified && methodCaudal && gestisTwaValue) ? (lqForUnified / (0.1 * gestisTwaValue * methodCaudal)) : 0;
+            const t_482_vla = (lqForUnified && methodCaudal && vlaEdValue) ? (lqForUnified / (0.099 * vlaEdValue * methodCaudal)) : 0;
+            const t_482_twa = (lqForUnified && methodCaudal && gestisTwaValue) ? (lqForUnified / (0.099 * gestisTwaValue * methodCaudal)) : 0;
             const t_482_max = Math.max(t_482_vla, t_482_twa);
 
             // 2. Cálculo t_689
@@ -894,8 +894,8 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             let suggestedCaudal = 0;
             if (exposicionTipo === "Constante" && durTarea > 0 && durTarea < (t_482_max - 0.01)) {
               showSuggestion = true;
-              const c_req_vla = (lqForUnified && vlaEdValue) ? (lqForUnified / (0.1 * vlaEdValue * durTarea)) : 0;
-              const c_req_twa = (lqForUnified && gestisTwaValue) ? (lqForUnified / (0.1 * gestisTwaValue * durTarea)) : 0;
+              const c_req_vla = (lqForUnified && vlaEdValue) ? (lqForUnified / (0.099 * vlaEdValue * durTarea)) : 0;
+              const c_req_twa = (lqForUnified && gestisTwaValue) ? (lqForUnified / (0.099 * gestisTwaValue * durTarea)) : 0;
               suggestedCaudal = (Math.max(c_req_vla, c_req_twa)).toFixed(2);
             }
             // ----------------------------------------
