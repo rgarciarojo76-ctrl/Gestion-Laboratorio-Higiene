@@ -1079,10 +1079,16 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                           <div className="hero-stat-duration">
                             <div className="hero-stat-label">Duración mínima muestreo para la conformidad UNE 689 y UNE 482</div>
                             <div className="hero-stat-value">
-                              {Math.floor(Math.round(t_unified) / 60) > 0 
-                                ? `${Math.floor(Math.round(t_unified) / 60)} ${Math.floor(Math.round(t_unified) / 60) === 1 ? 'hora' : 'horas'} y ${Math.round(t_unified) % 60} min`
-                                : `${Math.round(t_unified)} min`
-                              }
+                              {(() => {
+                                const totalMin = Math.round(t_unified);
+                                const hrs = Math.floor(totalMin / 60);
+                                const mins = totalMin % 60;
+                                if (hrs > 0) {
+                                  const hrLabel = hrs === 1 ? 'hora' : 'horas';
+                                  return mins === 0 ? `${hrs} ${hrLabel}` : `${hrs} ${hrLabel} y ${mins} min`;
+                                }
+                                return `${totalMin} min`;
+                              })()}
                             </div>
                           </div>
                           
