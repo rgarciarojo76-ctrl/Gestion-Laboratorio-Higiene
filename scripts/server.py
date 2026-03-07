@@ -163,6 +163,30 @@ def api_search_contaminants():
 
 # --- Intelligent DOCX Filling Helpers ---
 
+W = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
+
+def _get_xml_tcs(row):
+    """Get actual <tc> elements from a row, bypassing python-docx merged cell virtualization."""
+    from docx.table import _Cell
+    return [_Cell(tc, row._tr) for tc in row._tr.findall(f'{W}tc')]
+
+
+def _set_cell_text_value(cell, text):
+    """Write a value into a cell's first run, preserving font formatting."""
+    if not cell.paragraphs:
+        return
+    first_para = cell.paragraphs[0]
+    if first_para.runs:
+        first_para.runs[0].text = str(text)
+        for extra_run in first_para.runs[1:]:
+            extra_run.text = ""
+    else:
+        first_para.text = str(text)
+    for para in cell.paragraphs[1:]:
+        for run in para.runs:
+            run.text = ""
+
+
 def _set_cell_text(cell, text, preserve_format=True):
     """Set text in a cell while preserving the original font formatting."""
     if not cell.paragraphs:
@@ -185,46 +209,48 @@ def _is_category_row(row):
 
 
 def _fill_header(doc, data):
-    """Fill Table 0 (header) with client data, date, and shipping type."""
+    """Fill Table 0 (header) with client data using XML <tc> elements directly."""
     t = doc.tables[0]
 
     codigo = data.get("codigo", "")
     nombre = data.get("nombre", "")
-    if codigo:
-        _set_cell_text(t.rows[1].cells[1], f"CÓDIGO (1)   {codigo}")
-    if nombre:
-        _set_cell_text(t.rows[1].cells[3], f"NOMBRE   {nombre}")
+    tcs1 = _get_xml_tcs(t.rows[1])
+    if codigo and len(tcs1) > 1:
+        _set_cell_text_value(tcs1[1], f"CÓDIGO (1)   {codigo}")
+    if nombre and len(tcs1) > 2:
+        _set_cell_text_value(tcs1[2], f"NOMBRE   {nombre}")
 
     ofic = data.get("oficina_venta", "")
     persona = data.get("persona_solicita", "")
-    if ofic:
-        original = t.rows[2].cells[0].text.strip()
-        _set_cell_text(t.rows[2].cells[0], f"{original}\n{ofic}")
-    if persona:
-        _set_cell_text(t.rows[2].cells[6], f"Persona solicita:\n{persona}")
+    tcs2 = _get_xml_tcs(t.rows[2])
+    if ofic and len(tcs2) > 1:
+        _set_cell_text_value(tcs2[1], ofic)
+    if persona and len(tcs2) > 3:
+        _set_cell_text_value(tcs2[3], f"Persona solicita:\n{persona}")
 
     cliente = data.get("cliente_cargo", "")
     email = data.get("email", "")
-    if cliente:
-        original = t.rows[3].cells[0].text.strip()
-        _set_cell_text(t.rows[3].cells[0], f"{original}\n{cliente}")
-    if email:
-        _set_cell_text(t.rows[3].cells[6], f"Correo electrónico:\n{email}")
+    tcs3 = _get_xml_tcs(t.rows[3])
+    if cliente and len(tcs3) > 1:
+        _set_cell_text_value(tcs3[1], cliente)
+    if email and len(tcs3) > 3:
+        _set_cell_text_value(tcs3[3], f"Correo electrónico:\n{email}")
 
     remitente = data.get("remitente", "")
     telefono = data.get("telefono", "")
-    if remitente:
-        original = t.rows[4].cells[0].text.strip()
-        _set_cell_text(t.rows[4].cells[0], f"{original}\n{remitente}")
-    if telefono:
-        _set_cell_text(t.rows[4].cells[6], f"Teléfono:\n{telefono}")
+    tcs4 = _get_xml_tcs(t.rows[4])
+    if remitente and len(tcs4) > 1:
+        _set_cell_text_value(tcs4[1], remitente)
+    if telefono and len(tcs4) > 3:
+        _set_cell_text_value(tcs4[3], f"Teléfono:\n{telefono}")
 
     compania = data.get("compania", "")
     ref_pres = data.get("ref_presupuesto", "")
-    if compania:
-        _set_cell_text(t.rows[5].cells[0], f"COMPAÑÍA:\n{compania}")
-    if ref_pres:
-        _set_cell_text(t.rows[5].cells[6], f"Ref. Presupuesto/ Nº pedido**:\n{ref_pres}")
+    tcs5 = _get_xml_tcs(t.rows[5])
+    if compania and len(tcs5) > 1:
+        _set_cell_text_value(tcs5[1], compania)
+    if ref_pres and len(tcs5) > 3:
+        _set_cell_text_value(tcs5[3], f"Ref. Presupuesto/ Nº pedido**:\n{ref_pres}")
 
     fecha_raw = data.get("fecha_solicitud", "")
     if fecha_raw:
@@ -233,35 +259,37 @@ def _fill_header(doc, data):
             fecha_formatted = f"{parts[2]} / {parts[1]} / {parts[0]}"
         except (IndexError, AttributeError):
             fecha_formatted = fecha_raw
-        _set_cell_text(t.rows[6].cells[2], fecha_formatted)
+        tcs6 = _get_xml_tcs(t.rows[6])
+        if len(tcs6) > 1:
+            _set_cell_text_value(tcs6[1], fecha_formatted)
 
     tipo = data.get("tipo_envio", "oficina")
-    cell_text = t.rows[7].cells[2].text
-    if tipo == "oficina":
-        new_text = cell_text.replace(
-            "Envío a la Oficina de Ventas Echevarne más próxima",
-            "x  Envío a la Oficina de Ventas Echevarne más próxima"
-        )
-        _set_cell_text(t.rows[7].cells[2], new_text, preserve_format=False)
-    elif tipo == "mrw":
-        new_text = cell_text.replace(
-            "Envío a través de MRW",
-            "x  Envío a través de MRW"
-        )
-        _set_cell_text(t.rows[7].cells[2], new_text, preserve_format=False)
-        cuenta_mrw = data.get("cuenta_mrw", "")
-        if cuenta_mrw:
-            new_text2 = t.rows[7].cells[2].text.replace(
-                "Nº de cuenta MRW:",
-                f"Nº de cuenta MRW: {cuenta_mrw}"
-            )
-            _set_cell_text(t.rows[7].cells[2], new_text2, preserve_format=False)
+    tcs7 = _get_xml_tcs(t.rows[7])
+    if len(tcs7) > 1:
+        target_cell = tcs7[1]
+        for para in target_cell.paragraphs:
+            for run in para.runs:
+                if tipo == "oficina" and "Envío a la Oficina" in run.text:
+                    run.text = "x  " + run.text
+                elif tipo == "mrw" and "Envío a través de MRW" in run.text:
+                    run.text = "x  " + run.text
+        if tipo == "mrw":
+            cuenta_mrw = data.get("cuenta_mrw", "")
+            if cuenta_mrw:
+                for para in target_cell.paragraphs:
+                    for run in para.runs:
+                        if "Nº de cuenta MRW:" in run.text:
+                            run.text = run.text.replace(
+                                "Nº de cuenta MRW:",
+                                f"Nº de cuenta MRW: {cuenta_mrw}"
+                            )
 
     if tipo == "mrw":
         direccion = data.get("direccion_envio", "")
         if direccion and len(t.rows) > 8:
-            original = t.rows[8].cells[0].text.strip()
-            _set_cell_text(t.rows[8].cells[0], f"{original}\n{direccion}")
+            tcs8 = _get_xml_tcs(t.rows[8])
+            if len(tcs8) > 1:
+                _set_cell_text_value(tcs8[1], direccion)
 
 
 def _process_material_table(table, requested_materials):

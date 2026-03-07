@@ -231,6 +231,32 @@ def update_excel_in_github(cas, codigo_soporte, codigo_soporte_alt, commit_messa
 
 # --- Document Generation ---
 
+W = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
+
+def _get_xml_tcs(row):
+    """Get actual <tc> elements from a row, bypassing python-docx merged cell virtualization."""
+    from docx.table import _Cell
+    return [_Cell(tc, row._tr) for tc in row._tr.findall(f'{W}tc')]
+
+
+def _set_cell_text_value(cell, text):
+    """Write a value into a cell's first run, preserving font formatting.
+    If the cell has placeholder en-spaces (\\u2002), clears them first."""
+    if not cell.paragraphs:
+        return
+    # Clear all paragraphs' runs first, then write to the first run
+    first_para = cell.paragraphs[0]
+    if first_para.runs:
+        first_para.runs[0].text = str(text)
+        for extra_run in first_para.runs[1:]:
+            extra_run.text = ""
+    else:
+        first_para.text = str(text)
+    # Clear additional paragraphs (en-space placeholders)
+    for para in cell.paragraphs[1:]:
+        for run in para.runs:
+            run.text = ""
+
 
 def _set_cell_text(cell, text, preserve_format=True):
     """Set text in a cell while preserving the original font formatting."""
@@ -256,96 +282,110 @@ def _is_category_row(row):
 
 
 def _fill_header(doc, data):
-    """Fill Table 0 (header) with client data, date, and shipping type."""
+    """Fill Table 0 (header) with client data, date, and shipping type.
+    
+    Table 0 XML structure per row (actual <tc> elements, NOT row.cells):
+      Row 1: TC0(blank) | TC1(CÓDIGO, gridSpan=2) | TC2(NOMBRE, gridSpan=4)
+      Row 2: TC0(OFIC.VENTA label) | TC1(value, gridSpan=2) | TC2(value, gridSpan=3) | TC3(Persona solicita)
+      Row 3: TC0(CLIENTE label) | TC1(value, gridSpan=2) | TC2(value, gridSpan=3) | TC3(Correo)
+      Row 4: TC0(REMITENTE label) | TC1(value, gridSpan=2) | TC2(value, gridSpan=3) | TC3(Teléfono)
+      Row 5: TC0(COMPAÑÍA label) | TC1(value, gridSpan=2) | TC2(value, gridSpan=3) | TC3(Ref.Presupuesto)
+      Row 6: TC0(Fecha label, gridSpan=2) | TC1(date value, gridSpan=3) | TC2(Firma, gridSpan=2)
+      Row 7: TC0(Tipo envío label, gridSpan=2) | TC1(checkboxes, gridSpan=3) | TC2(blank, gridSpan=2)
+      Row 8: TC0(Dirección label, gridSpan=4) | TC1(value, gridSpan=3)
+    """
     t = doc.tables[0]
 
-    # Row 1: CÓDIGO and NOMBRE
-    # Cells 1-2 are merged as CÓDIGO, Cells 3-6 are merged as NOMBRE
+    # Row 1: CÓDIGO and NOMBRE — TC1 and TC2
     codigo = data.get("codigo", "")
     nombre = data.get("nombre", "")
-    if codigo:
-        _set_cell_text(t.rows[1].cells[1], f"CÓDIGO (1)   {codigo}")
-    if nombre:
-        _set_cell_text(t.rows[1].cells[3], f"NOMBRE   {nombre}")
+    tcs1 = _get_xml_tcs(t.rows[1])
+    if codigo and len(tcs1) > 1:
+        _set_cell_text_value(tcs1[1], f"CÓDIGO (1)   {codigo}")
+    if nombre and len(tcs1) > 2:
+        _set_cell_text_value(tcs1[2], f"NOMBRE   {nombre}")
 
-    # Row 2: OFIC. VENTA (cells 0-4) + Persona solicita (cell 6)
+    # Row 2: OFIC. VENTA value → TC1, Persona solicita → TC3
     ofic = data.get("oficina_venta", "")
     persona = data.get("persona_solicita", "")
-    if ofic:
-        # Append value after the label in cell 0
-        original = t.rows[2].cells[0].text.strip()
-        _set_cell_text(t.rows[2].cells[0], f"{original}\n{ofic}")
-    if persona:
-        _set_cell_text(t.rows[2].cells[6], f"Persona solicita:\n{persona}")
+    tcs2 = _get_xml_tcs(t.rows[2])
+    if ofic and len(tcs2) > 1:
+        _set_cell_text_value(tcs2[1], ofic)
+    if persona and len(tcs2) > 3:
+        _set_cell_text_value(tcs2[3], f"Persona solicita:\n{persona}")
 
-    # Row 3: CLIENTE (Cargo) (cells 0-4) + Correo electrónico (cell 6)
+    # Row 3: CLIENTE value → TC1, Correo → TC3
     cliente = data.get("cliente_cargo", "")
     email = data.get("email", "")
-    if cliente:
-        original = t.rows[3].cells[0].text.strip()
-        _set_cell_text(t.rows[3].cells[0], f"{original}\n{cliente}")
-    if email:
-        _set_cell_text(t.rows[3].cells[6], f"Correo electrónico:\n{email}")
+    tcs3 = _get_xml_tcs(t.rows[3])
+    if cliente and len(tcs3) > 1:
+        _set_cell_text_value(tcs3[1], cliente)
+    if email and len(tcs3) > 3:
+        _set_cell_text_value(tcs3[3], f"Correo electrónico:\n{email}")
 
-    # Row 4: REMITENTE (cells 0-4) + Teléfono (cell 6)
+    # Row 4: REMITENTE value → TC1, Teléfono → TC3
     remitente = data.get("remitente", "")
     telefono = data.get("telefono", "")
-    if remitente:
-        original = t.rows[4].cells[0].text.strip()
-        _set_cell_text(t.rows[4].cells[0], f"{original}\n{remitente}")
-    if telefono:
-        _set_cell_text(t.rows[4].cells[6], f"Teléfono:\n{telefono}")
+    tcs4 = _get_xml_tcs(t.rows[4])
+    if remitente and len(tcs4) > 1:
+        _set_cell_text_value(tcs4[1], remitente)
+    if telefono and len(tcs4) > 3:
+        _set_cell_text_value(tcs4[3], f"Teléfono:\n{telefono}")
 
-    # Row 5: COMPAÑÍA (cells 0-4) + Ref. Presupuesto (cell 6)
+    # Row 5: COMPAÑÍA value → TC1, Ref. Presupuesto → TC3
     compania = data.get("compania", "")
     ref_pres = data.get("ref_presupuesto", "")
-    if compania:
-        _set_cell_text(t.rows[5].cells[0], f"COMPAÑÍA:\n{compania}")
-    if ref_pres:
-        _set_cell_text(t.rows[5].cells[6], f"Ref. Presupuesto/ Nº pedido**:\n{ref_pres}")
+    tcs5 = _get_xml_tcs(t.rows[5])
+    if compania and len(tcs5) > 1:
+        _set_cell_text_value(tcs5[1], compania)
+    if ref_pres and len(tcs5) > 3:
+        _set_cell_text_value(tcs5[3], f"Ref. Presupuesto/ Nº pedido**:\n{ref_pres}")
 
-    # Row 6: Fecha de solicitud — format DD / MM / AAAA
+    # Row 6: Fecha de solicitud → TC1 — format DD / MM / AAAA
     fecha_raw = data.get("fecha_solicitud", "")
     if fecha_raw:
         try:
-            # Input is YYYY-MM-DD from HTML date input
             parts = fecha_raw.split("-")
             fecha_formatted = f"{parts[2]} / {parts[1]} / {parts[0]}"
         except (IndexError, AttributeError):
             fecha_formatted = fecha_raw
-        _set_cell_text(t.rows[6].cells[2], fecha_formatted)
+        tcs6 = _get_xml_tcs(t.rows[6])
+        if len(tcs6) > 1:
+            _set_cell_text_value(tcs6[1], fecha_formatted)
 
-    # Row 7: Tipo de envío — mark with "x"
+    # Row 7: Tipo de envío — mark checkbox by inserting "x" in the right run
+    # TC1 has multiple runs: checkbox squares (7pt) and text runs (6pt)
+    # We find the run containing "Envío a la Oficina..." or "Envío a través de MRW"
+    # and prepend "x  " to mark it, preserving font sizes
     tipo = data.get("tipo_envio", "oficina")
-    cell_text = t.rows[7].cells[2].text
-    if tipo == "oficina":
-        # Replace the checkbox area for "Envío a la Oficina" with an x
-        new_text = cell_text.replace(
-            "Envío a la Oficina de Ventas Echevarne más próxima",
-            "x  Envío a la Oficina de Ventas Echevarne más próxima"
-        )
-        _set_cell_text(t.rows[7].cells[2], new_text, preserve_format=False)
-    elif tipo == "mrw":
-        new_text = cell_text.replace(
-            "Envío a través de MRW",
-            "x  Envío a través de MRW"
-        )
-        _set_cell_text(t.rows[7].cells[2], new_text, preserve_format=False)
-        # Also fill MRW account number if provided
-        cuenta_mrw = data.get("cuenta_mrw", "")
-        if cuenta_mrw:
-            new_text2 = t.rows[7].cells[2].text.replace(
-                "Nº de cuenta MRW:",
-                f"Nº de cuenta MRW: {cuenta_mrw}"
-            )
-            _set_cell_text(t.rows[7].cells[2], new_text2, preserve_format=False)
+    tcs7 = _get_xml_tcs(t.rows[7])
+    if len(tcs7) > 1:
+        target_cell = tcs7[1]
+        for para in target_cell.paragraphs:
+            for run in para.runs:
+                if tipo == "oficina" and "Envío a la Oficina" in run.text:
+                    run.text = "x  " + run.text
+                elif tipo == "mrw" and "Envío a través de MRW" in run.text:
+                    run.text = "x  " + run.text
+        # Fill MRW account number
+        if tipo == "mrw":
+            cuenta_mrw = data.get("cuenta_mrw", "")
+            if cuenta_mrw:
+                for para in target_cell.paragraphs:
+                    for run in para.runs:
+                        if "Nº de cuenta MRW:" in run.text:
+                            run.text = run.text.replace(
+                                "Nº de cuenta MRW:",
+                                f"Nº de cuenta MRW: {cuenta_mrw}"
+                            )
 
-    # Row 8: Dirección de envío (only for MRW)
+    # Row 8: Dirección de envío → TC1 (only for MRW)
     if tipo == "mrw":
         direccion = data.get("direccion_envio", "")
         if direccion and len(t.rows) > 8:
-            original = t.rows[8].cells[0].text.strip()
-            _set_cell_text(t.rows[8].cells[0], f"{original}\n{direccion}")
+            tcs8 = _get_xml_tcs(t.rows[8])
+            if len(tcs8) > 1:
+                _set_cell_text_value(tcs8[1], direccion)
 
 
 def _process_material_table(table, requested_materials):
