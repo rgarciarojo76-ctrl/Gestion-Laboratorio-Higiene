@@ -35160,7 +35160,8 @@
     "screening_condiciones_ec": "",
     "screening_comentarios": "",
     "sin_metodo_disponible": false,
-    "codigo_15d": "MA458"
+    "codigo_15d": "MA458",
+    "visible_en_app": true
   },
   {
     "contaminante": "Prueba de perfil",

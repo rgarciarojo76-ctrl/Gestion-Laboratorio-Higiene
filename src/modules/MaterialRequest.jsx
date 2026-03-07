@@ -1,4 +1,6 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
+import { useCart } from '../context/CartContext'
+import { useToast } from '../components/ToastNotification'
 
 /**
  * Módulo II: Solicitud de soportes de captación (F01655)
@@ -107,6 +109,39 @@ export default function MaterialRequest({ contaminants = [], memory, updateMemor
   const [materials, setMaterials] = useState([])
   const [generating, setGenerating] = useState(false)
   const [generated, setGenerated] = useState(false)
+  const [cartInjected, setCartInjected] = useState(false)
+
+  const { items: cartItems, clearCart } = useCart()
+  const { showToast } = useToast()
+
+  // Inject cart items into materials when entering the material step
+  useEffect(() => {
+    if (cartItems.length > 0 && !cartInjected) {
+      const cartMaterials = cartItems.map(item => ({
+        cef: item.code || 'S/R',
+        desc: item.name || 'Soporte de carrito',
+        category: 'PEDIDO PREVIO',
+        qty: item.quantity || 1,
+        fromCart: true,
+        price: item.price || 0,
+      }))
+
+      setMaterials(prev => {
+        // Merge, avoiding duplicates
+        const merged = [...prev]
+        cartMaterials.forEach(cm => {
+          const idx = merged.findIndex(m => m.cef === cm.cef)
+          if (idx >= 0) {
+            merged[idx] = { ...merged[idx], qty: merged[idx].qty + cm.qty, fromCart: true }
+          } else {
+            merged.push(cm)
+          }
+        })
+        return merged
+      })
+      setCartInjected(true)
+    }
+  }, [cartItems, cartInjected])
 
   const updateField = (key, value) => {
     setForm(prev => ({ ...prev, [key]: value }))
@@ -183,6 +218,8 @@ export default function MaterialRequest({ contaminants = [], memory, updateMemor
       window.URL.revokeObjectURL(url)
       
       setGenerated(true)
+      clearCart()
+      showToast('Pedido procesado: PDF generado correctamente', 'success')
     } catch (error) {
       console.error('Error generando F01655:', error)
       alert('Error de conexión con el servidor backend.')
@@ -297,7 +334,34 @@ export default function MaterialRequest({ contaminants = [], memory, updateMemor
             <div className="card" style={{ marginBottom: 16 }}>
               <h3 style={{ marginBottom: 16, fontSize: 18, fontWeight: 700 }}>📦 Selección de Material</h3>
 
-              {/* Contaminant Smart Search */}
+              {/* Alta Prioridad: Cart-injected items */}
+              {materials.some(m => m.fromCart) && (
+                <div className="cart-priority-section">
+                  <div className="cart-priority-header">
+                    <span className="cart-priority-badge">🛒 ALTA PRIORIDAD</span>
+                    <span className="cart-priority-subtitle">Artículos añadidos desde la Guía Técnica</span>
+                  </div>
+                  <div className="cart-priority-items">
+                    {materials.filter(m => m.fromCart).map(m => (
+                      <div key={m.cef} className="cart-priority-item">
+                        <code className="cart-priority-code">{m.cef}</code>
+                        <span className="cart-priority-name">{m.desc}</span>
+                        <div className="cart-priority-controls">
+                          <button className="btn btn-sm btn-secondary" onClick={() => updateQty(m.cef, m.qty - 1)}>−</button>
+                          <input
+                            style={{ width: 40, textAlign: 'center', background: 'var(--bg-input)', border: '1px solid var(--border-color)', borderRadius: 6, padding: '4px 0', color: 'var(--text-primary)', fontSize: 13 }}
+                            value={m.qty}
+                            onChange={e => updateQty(m.cef, e.target.value)}
+                          />
+                          <button className="btn btn-sm btn-secondary" onClick={() => updateQty(m.cef, m.qty + 1)}>+</button>
+                          <button className="btn btn-sm btn-danger" onClick={() => removeMaterial(m.cef)} style={{ marginLeft: 4 }}>✕</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div style={{ marginBottom: 24, position: 'relative' }}>
                 <label className="form-label">Añadir Medio de Captación por Contaminante</label>
                 <div className="search-input-container" style={{ margin: 0 }}>

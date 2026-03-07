@@ -3,11 +3,16 @@ import SamplingGuide from './modules/SamplingGuide'
 import MaterialRequest from './modules/MaterialRequest'
 import ChainOfCustody from './modules/ChainOfCustody'
 import AdminPanel from './modules/AdminPanel'
+import OrderDrawer from './components/OrderDrawer'
+import { useCart } from './context/CartContext'
 
 function App() {
   const [activeModule, setActiveModule] = useState('guide')
   const [contaminants, setContaminants] = useState([])
   const [loading, setLoading] = useState(true)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+
+  const { totalItems } = useCart()
 
   // Persistent memory for recurring data
   const [memory, setMemory] = useState(() => {
@@ -75,6 +80,22 @@ function App() {
         </div>
 
         <div className="header-actions">
+          {/* Mi Pedido Button with Badge */}
+          <button
+            className="btn-mi-pedido"
+            onClick={() => setDrawerOpen(true)}
+            title="Ver mi pedido"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            Mi Pedido
+            {totalItems > 0 && (
+              <span className="cart-badge" key={totalItems}>{totalItems}</span>
+            )}
+          </button>
+
           <div className="status-disclaimer">
             <span className="disclaimer-title">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -147,6 +168,13 @@ function App() {
           </>
         )}
       </main>
+
+      {/* Order Drawer (right-side sliding panel) */}
+      <OrderDrawer
+        isOpen={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        onNavigateToMaterial={() => setActiveModule('material')}
+      />
     </div>
   )
 }

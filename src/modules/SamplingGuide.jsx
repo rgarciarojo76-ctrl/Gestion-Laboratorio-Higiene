@@ -1,4 +1,5 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
+import AddToCartPopover from '../components/AddToCartPopover';
 
 /**
  * Módulo I: Guía técnica muestreo
@@ -38,6 +39,13 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
   const [selectedId, setSelectedId] = useState(null);
   const [editableCaudal, setEditableCaudal] = useState("");
   const searchInputRef = useRef(null);
+
+  // Cart popover state
+  const [popoverItem, setPopoverItem] = useState(null);
+
+  const openCartPopover = useCallback((item) => {
+    setPopoverItem(item);
+  }, []);
 
   // Módulo Validación UNE 689 State
   const [exposicionTipo, setExposicionTipo] = useState("Constante");
@@ -628,6 +636,22 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   {/* PVP Badge for Screening Profile */}
                   <div className="pvp-badge pvp-badge--gold">
                     💰 PVP: {formatPrice(PRICING_MAP[selected.screening_perfil] || 147.21)}
+                    <button
+                      className="cart-icon-btn"
+                      title="Añadir perfil al pedido"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openCartPopover({
+                          id: `screening-${selected.screening_perfil}`,
+                          code: String(selected.screening_perfil).padStart(4, '0'),
+                          name: selected.screening_desc || 'Perfil Analítico',
+                          price: PRICING_MAP[selected.screening_perfil] || 147.21,
+                          method: selected.metodo_analisis || ''
+                        });
+                      }}
+                    >
+                      🛒
+                    </button>
                   </div>
                 </div>
 
@@ -687,6 +711,23 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         <span className="soporte-row-code">{selected.codigo_soporte}</span>
                         <span className="soporte-row-price">
                           {formatPrice(PRICING_MAP[selected.codigo_soporte.split(/[\s()]+/)[0]] || 12.50)}
+                          <button
+                            className="cart-icon-btn"
+                            title="Añadir soporte al pedido"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const code = selected.codigo_soporte.split(/[\s()]+/)[0];
+                              openCartPopover({
+                                id: `soporte-${code}`,
+                                code: code,
+                                name: selected.soporte_captacion_display || selected.soporte_captacion || code,
+                                price: PRICING_MAP[code] || 12.50,
+                                method: selected.metodo_analisis || ''
+                              });
+                            }}
+                          >
+                            🛒
+                          </button>
                         </span>
                       </div>
                     )}
@@ -708,6 +749,22 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                             {note && <span className="soporte-row-note">{note}</span>}
                             <span className="soporte-row-price">
                               {formatPrice(PRICING_MAP[code] || 15.80)}
+                              <button
+                                className="cart-icon-btn"
+                                title="Añadir soporte al pedido"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openCartPopover({
+                                    id: `soporte-${code}`,
+                                    code: code,
+                                    name: `${selected.soporte_captacion_display || code} (Alt.)`,
+                                    price: PRICING_MAP[code] || 15.80,
+                                    method: selected.metodo_analisis || ''
+                                  });
+                                }}
+                              >
+                                🛒
+                              </button>
                             </span>
                           </div>
                         );
@@ -762,6 +819,22 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       <span title="Plazo 8 días">🚀 Urgente:</span>
                       <span style={{ fontFamily: "monospace", letterSpacing: "0.5px" }}>{selected.codigo_8d}</span>
                       <span className="price-amount">{formatPrice(PRICING_MAP[selected.codigo_8d] || 82.80)}</span>
+                      <button
+                        className="cart-icon-btn cart-icon-btn--inline"
+                        title="Añadir análisis urgente al pedido"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openCartPopover({
+                            id: `analisis-8d-${selected.codigo_8d}`,
+                            code: selected.codigo_8d,
+                            name: `${selected.descripcion_tecnica || selected.contaminante} (Urgente 8d)`,
+                            price: PRICING_MAP[selected.codigo_8d] || 82.80,
+                            method: selected.metodo_analisis || ''
+                          });
+                        }}
+                      >
+                        🛒
+                      </button>
                     </div>
                   )}
                   {selected.codigo_15d && (
@@ -769,6 +842,22 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       <span title="Plazo 15 días">📅 Estándar:</span>
                       <span style={{ fontFamily: "monospace", letterSpacing: "0.5px" }}>{selected.codigo_15d}</span>
                       <span className="price-amount">{formatPrice(PRICING_MAP[selected.codigo_15d] || 55.20)}</span>
+                      <button
+                        className="cart-icon-btn cart-icon-btn--inline"
+                        title="Añadir análisis estándar al pedido"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openCartPopover({
+                            id: `analisis-15d-${selected.codigo_15d}`,
+                            code: selected.codigo_15d,
+                            name: `${selected.descripcion_tecnica || selected.contaminante} (Estándar 15d)`,
+                            price: PRICING_MAP[selected.codigo_15d] || 55.20,
+                            method: selected.metodo_analisis || ''
+                          });
+                        }}
+                      >
+                        🛒
+                      </button>
                     </div>
                   )}
                 </div>
@@ -1597,6 +1686,14 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
             </div>
           </div>
         </div>
+      )}
+
+      {/* Cart Add-to-Cart Popover */}
+      {popoverItem && (
+        <AddToCartPopover
+          item={popoverItem}
+          onClose={() => setPopoverItem(null)}
+        />
       )}
     </div>
   );
