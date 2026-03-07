@@ -100,7 +100,8 @@ export default function MaterialRequest({ contaminants = [], memory, updateMemor
     compania: memory.compania || '',
     email: memory.email || '',
     telefono: memory.telefono || '',
-    ref_presupuesto: '',
+    contrato_odoo: '',
+    numero_pedido: '',
     fecha_solicitud: new Date().toISOString().slice(0, 10),
     tipo_envio: 'oficina',
     cuenta_mrw: '',
@@ -281,8 +282,12 @@ export default function MaterialRequest({ contaminants = [], memory, updateMemor
                 <input className="form-input" type="tel" value={form.telefono} onChange={e => updateField('telefono', e.target.value)} placeholder="+34 600 000 000" />
               </div>
               <div className="form-group">
-                <label className="form-label">Ref. Presupuesto / Nº Pedido</label>
-                <input className="form-input" value={form.ref_presupuesto} onChange={e => updateField('ref_presupuesto', e.target.value)} placeholder="Referencia" />
+                <label className="form-label">Contrato Odoo</label>
+                <input className="form-input" value={form.contrato_odoo} onChange={e => updateField('contrato_odoo', e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Número de Pedido</label>
+                <input className="form-input" value={form.numero_pedido} onChange={e => updateField('numero_pedido', e.target.value)} />
               </div>
               <div className="form-group">
                 <label className="form-label">Fecha de Solicitud</label>

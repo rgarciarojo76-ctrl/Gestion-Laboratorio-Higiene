@@ -334,12 +334,18 @@ def _fill_header(doc, data):
 
     # Row 5: COMPAÑÍA value → TC1, Ref. Presupuesto → TC3
     compania = data.get("compania", "")
-    ref_pres = data.get("ref_presupuesto", "")
+    contrato_odoo = data.get("contrato_odoo", "")
+    numero_pedido = data.get("numero_pedido", "")
     tcs5 = _get_xml_tcs(t.rows[5])
     if compania and len(tcs5) > 1:
         _set_cell_text_value(tcs5[1], compania)
-    if ref_pres and len(tcs5) > 3:
-        _set_cell_text_value(tcs5[3], f"Ref. Presupuesto/ Nº pedido**:\n{ref_pres}")
+    if (contrato_odoo or numero_pedido) and len(tcs5) > 3:
+        text = "Ref. Presupuesto/ Nº pedido**:"
+        if contrato_odoo:
+            text += f"\nNumero de Contrato Odoo: {contrato_odoo}"
+        if numero_pedido:
+            text += f"\nNumero de pedido: {numero_pedido}"
+        _set_cell_text_value(tcs5[3], text)
 
     # Row 6: Fecha de solicitud → TC1 — format DD / MM / AAAA
     fecha_raw = data.get("fecha_solicitud", "")

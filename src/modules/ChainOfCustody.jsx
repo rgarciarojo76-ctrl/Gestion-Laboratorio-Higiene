@@ -59,7 +59,8 @@ export default function ChainOfCustody({ contaminants, memory, updateMemory }) {
     persona_solicita: memory.persona_solicita || '',
     email: memory.email || '',
     telefono: memory.telefono || '',
-    ref_presupuesto: '',
+    contrato_odoo: '',
+    numero_pedido: '',
     recogida_por: 'solicitante',
     fecha_toma: '',
     hora_toma: '',
@@ -236,8 +237,12 @@ export default function ChainOfCustody({ contaminants, memory, updateMemory }) {
                 <input className="form-input" type="tel" value={form.telefono} onChange={e => updateField('telefono', e.target.value)} />
               </div>
               <div className="form-group">
-                <label className="form-label">Ref. Presupuesto / Nº Pedido</label>
-                <input className="form-input" value={form.ref_presupuesto} onChange={e => updateField('ref_presupuesto', e.target.value)} />
+                <label className="form-label">Contrato Odoo</label>
+                <input className="form-input" value={form.contrato_odoo} onChange={e => updateField('contrato_odoo', e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Número de Pedido</label>
+                <input className="form-input" value={form.numero_pedido} onChange={e => updateField('numero_pedido', e.target.value)} />
               </div>
             </div>
           </div>
