@@ -361,12 +361,19 @@ def _fill_header(doc, data):
     tcs7 = _get_xml_tcs(t.rows[7])
     if len(tcs7) > 1:
         target_cell = tcs7[1]
+        def _check_cb(p):
+            from lxml import etree
+            from docx.oxml.ns import qn
+            for cb in p._p.xpath('.//w:checkBox'):
+                if not cb.findall(qn('w:checked')):
+                    cb.append(etree.Element(qn('w:checked'), {qn('w:val'): '1'}))
+                    
         for para in target_cell.paragraphs:
-            for run in para.runs:
-                if tipo == "oficina" and "Envío a la Oficina" in run.text:
-                    run.text = "x  " + run.text
-                elif tipo == "mrw" and "Envío a través de MRW" in run.text:
-                    run.text = "x  " + run.text
+            text_str = "".join(r.text for r in para.runs)
+            if tipo == "oficina" and "Envío a la Oficina" in text_str:
+                _check_cb(para)
+            elif tipo == "mrw" and "Envío a través de MRW" in text_str:
+                _check_cb(para)
         # Fill MRW account number
         if tipo == "mrw":
             cuenta_mrw = data.get("cuenta_mrw", "")
