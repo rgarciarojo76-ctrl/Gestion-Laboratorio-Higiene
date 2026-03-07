@@ -361,6 +361,46 @@ def _delete_table_rows(table, row_indices):
         tbl.remove(row_element)
 
 
+def _compact_between_tables(doc):
+    """Remove page breaks and empty paragraphs between material tables."""
+    body = doc.element.body
+    
+    table1_elem = doc.tables[1]._tbl if len(doc.tables) > 1 else None
+    table2_elem = doc.tables[2]._tbl if len(doc.tables) > 2 else None
+    table3_elem = doc.tables[3]._tbl if len(doc.tables) > 3 else None
+    
+    if not table1_elem or not table2_elem:
+        return
+    
+    elements_to_remove = []
+    found_table1 = False
+    
+    for elem in list(body):
+        if elem is table1_elem:
+            found_table1 = True
+            continue
+        if elem is table2_elem:
+            break
+        if found_table1 and elem.tag.endswith('}p'):
+            elements_to_remove.append(elem)
+    
+    if table3_elem:
+        found_table2 = False
+        for elem in list(body):
+            if elem is table2_elem:
+                found_table2 = True
+                continue
+            if elem is table3_elem:
+                break
+            if found_table2 and elem.tag.endswith('}p'):
+                text = ''.join(t.text or '' for t in elem.iter(f'{W}t'))
+                if not text.strip():
+                    elements_to_remove.append(elem)
+    
+    for elem in elements_to_remove:
+        body.remove(elem)
+
+
 @app.route("/api/generate-f01655", methods=["POST"])
 def api_generate_f01655():
     """Generate F01655 Material Request document."""
@@ -393,6 +433,9 @@ def api_generate_f01655():
         if len(doc.tables) > 2:
             rows_to_del = _process_material_table(doc.tables[2], requested)
             _delete_table_rows(doc.tables[2], rows_to_del)
+
+        # Step 4: Compact — remove page breaks between tables
+        _compact_between_tables(doc)
 
         doc.save(output_docx)
 

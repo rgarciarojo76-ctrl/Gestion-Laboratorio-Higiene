@@ -483,6 +483,60 @@ def _delete_table_rows(table, row_indices):
         tbl.remove(row_element)
 
 
+def _compact_between_tables(doc):
+    """Remove page breaks and empty paragraphs between material tables
+    to compact the document after row purging.
+    
+    Document body order:
+      [0] P(IMPORTANTE) [1] Table0 [2-3] empty [4] P(CONSULTAR) [5] empty
+      [6] Table1 [7] P(PAGE BREAK) [8] empty [9] Table2
+      [10-13] empties [14] Table3 ...
+    
+    We remove elements [7] and [8] (page break + empty between Tables 1-2)
+    and the empty paragraphs [10-13] between Tables 2-3.
+    """
+    body = doc.element.body
+    
+    # Find the positions of Table 1 and Table 2 in the body
+    table1_elem = doc.tables[1]._tbl if len(doc.tables) > 1 else None
+    table2_elem = doc.tables[2]._tbl if len(doc.tables) > 2 else None
+    table3_elem = doc.tables[3]._tbl if len(doc.tables) > 3 else None
+    
+    if table1_elem is None or table2_elem is None:
+        return
+    
+    # Collect paragraphs between Table 1 and Table 2 to remove
+    elements_to_remove = []
+    found_table1 = False
+    
+    for elem in list(body):
+        if elem is table1_elem:
+            found_table1 = True
+            continue
+        if elem is table2_elem:
+            break
+        if found_table1 and elem.tag.endswith('}p'):
+            elements_to_remove.append(elem)
+    
+    # Also collect empty paragraphs between Table 2 and Table 3
+    if table3_elem is not None:
+        found_table2 = False
+        for elem in list(body):
+            if elem is table2_elem:
+                found_table2 = True
+                continue
+            if elem is table3_elem:
+                break
+            if found_table2 and elem.tag.endswith('}p'):
+                # Only remove empty paragraphs, not content paragraphs
+                text = ''.join(t.text or '' for t in elem.iter(f'{W}t'))
+                if not text.strip():
+                    elements_to_remove.append(elem)
+    
+    for elem in elements_to_remove:
+        body.remove(elem)
+
+
 def generate_docx(template_path, data, is_f01655=True):
     """Fill out the F01655 DOCX template with session data and return as BytesIO buffer.
 
@@ -515,6 +569,10 @@ def generate_docx(template_path, data, is_f01655=True):
         if len(doc.tables) > 2:
             rows_to_del = _process_material_table(doc.tables[2], requested)
             _delete_table_rows(doc.tables[2], rows_to_del)
+
+        # Step 4: Remove page breaks and empty paragraphs between tables
+        # to compact the document after row purging
+        _compact_between_tables(doc)
 
     # Save to memory buffer
     buffer = io.BytesIO()
