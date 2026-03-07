@@ -230,59 +230,253 @@ def update_excel_in_github(cas, codigo_soporte, codigo_soporte_alt, commit_messa
     return True
 
 # --- Document Generation ---
-    
+
+
+def _set_cell_text(cell, text, preserve_format=True):
+    """Set text in a cell while preserving the original font formatting."""
+    if not cell.paragraphs:
+        return
+    paragraph = cell.paragraphs[0]
+    if preserve_format and paragraph.runs:
+        # Preserve the formatting of the first run
+        run = paragraph.runs[0]
+        run.text = str(text)
+        # Clear any additional runs
+        for extra_run in paragraph.runs[1:]:
+            extra_run.text = ""
+    else:
+        paragraph.text = str(text)
+
+
+def _is_category_row(row):
+    """Check if a table row is a category header (all cells have the same non-empty text)."""
+    cells_text = [cell.text.strip() for cell in row.cells]
+    first = cells_text[0]
+    return bool(first) and all(c == first for c in cells_text)
+
+
+def _fill_header(doc, data):
+    """Fill Table 0 (header) with client data, date, and shipping type."""
+    t = doc.tables[0]
+
+    # Row 1: CÓDIGO and NOMBRE
+    # Cells 1-2 are merged as CÓDIGO, Cells 3-6 are merged as NOMBRE
+    codigo = data.get("codigo", "")
+    nombre = data.get("nombre", "")
+    if codigo:
+        _set_cell_text(t.rows[1].cells[1], f"CÓDIGO (1)   {codigo}")
+    if nombre:
+        _set_cell_text(t.rows[1].cells[3], f"NOMBRE   {nombre}")
+
+    # Row 2: OFIC. VENTA (cells 0-4) + Persona solicita (cell 6)
+    ofic = data.get("oficina_venta", "")
+    persona = data.get("persona_solicita", "")
+    if ofic:
+        # Append value after the label in cell 0
+        original = t.rows[2].cells[0].text.strip()
+        _set_cell_text(t.rows[2].cells[0], f"{original}\n{ofic}")
+    if persona:
+        _set_cell_text(t.rows[2].cells[6], f"Persona solicita:\n{persona}")
+
+    # Row 3: CLIENTE (Cargo) (cells 0-4) + Correo electrónico (cell 6)
+    cliente = data.get("cliente_cargo", "")
+    email = data.get("email", "")
+    if cliente:
+        original = t.rows[3].cells[0].text.strip()
+        _set_cell_text(t.rows[3].cells[0], f"{original}\n{cliente}")
+    if email:
+        _set_cell_text(t.rows[3].cells[6], f"Correo electrónico:\n{email}")
+
+    # Row 4: REMITENTE (cells 0-4) + Teléfono (cell 6)
+    remitente = data.get("remitente", "")
+    telefono = data.get("telefono", "")
+    if remitente:
+        original = t.rows[4].cells[0].text.strip()
+        _set_cell_text(t.rows[4].cells[0], f"{original}\n{remitente}")
+    if telefono:
+        _set_cell_text(t.rows[4].cells[6], f"Teléfono:\n{telefono}")
+
+    # Row 5: COMPAÑÍA (cells 0-4) + Ref. Presupuesto (cell 6)
+    compania = data.get("compania", "")
+    ref_pres = data.get("ref_presupuesto", "")
+    if compania:
+        _set_cell_text(t.rows[5].cells[0], f"COMPAÑÍA:\n{compania}")
+    if ref_pres:
+        _set_cell_text(t.rows[5].cells[6], f"Ref. Presupuesto/ Nº pedido**:\n{ref_pres}")
+
+    # Row 6: Fecha de solicitud — format DD / MM / AAAA
+    fecha_raw = data.get("fecha_solicitud", "")
+    if fecha_raw:
+        try:
+            # Input is YYYY-MM-DD from HTML date input
+            parts = fecha_raw.split("-")
+            fecha_formatted = f"{parts[2]} / {parts[1]} / {parts[0]}"
+        except (IndexError, AttributeError):
+            fecha_formatted = fecha_raw
+        _set_cell_text(t.rows[6].cells[2], fecha_formatted)
+
+    # Row 7: Tipo de envío — mark with "x"
+    tipo = data.get("tipo_envio", "oficina")
+    cell_text = t.rows[7].cells[2].text
+    if tipo == "oficina":
+        # Replace the checkbox area for "Envío a la Oficina" with an x
+        new_text = cell_text.replace(
+            "Envío a la Oficina de Ventas Echevarne más próxima",
+            "x  Envío a la Oficina de Ventas Echevarne más próxima"
+        )
+        _set_cell_text(t.rows[7].cells[2], new_text, preserve_format=False)
+    elif tipo == "mrw":
+        new_text = cell_text.replace(
+            "Envío a través de MRW",
+            "x  Envío a través de MRW"
+        )
+        _set_cell_text(t.rows[7].cells[2], new_text, preserve_format=False)
+        # Also fill MRW account number if provided
+        cuenta_mrw = data.get("cuenta_mrw", "")
+        if cuenta_mrw:
+            new_text2 = t.rows[7].cells[2].text.replace(
+                "Nº de cuenta MRW:",
+                f"Nº de cuenta MRW: {cuenta_mrw}"
+            )
+            _set_cell_text(t.rows[7].cells[2], new_text2, preserve_format=False)
+
+    # Row 8: Dirección de envío (only for MRW)
+    if tipo == "mrw":
+        direccion = data.get("direccion_envio", "")
+        if direccion and len(t.rows) > 8:
+            original = t.rows[8].cells[0].text.strip()
+            _set_cell_text(t.rows[8].cells[0], f"{original}\n{direccion}")
+
+
+def _process_material_table(table, requested_materials):
+    """
+    Process a material grid table (Tables 1 or 2):
+    1. Insert quantities for requested CEF codes
+    2. Mark rows for purging (no requested materials)
+    3. Remove empty category headers
+
+    Args:
+        table: A python-docx Table object with 8 columns (2x4 grid)
+        requested_materials: dict mapping CEF code -> quantity
+
+    Returns:
+        List of row indices to delete (in reverse order for safe deletion)
+    """
+    rows_to_delete = []
+    category_row_indices = []
+    material_row_indices = []
+
+    # First pass: identify categories and insert quantities
+    for i, row in enumerate(table.rows):
+        if i == 0:
+            # Header row (Nº unidades | CEF | Descripción | Obs | ...)
+            continue
+
+        if _is_category_row(row):
+            category_row_indices.append(i)
+            continue
+
+        # Material row — check left side (col 1) and right side (col 5)
+        cells = row.cells
+        left_cef = cells[1].text.strip() if len(cells) > 1 else ""
+        right_cef = cells[5].text.strip() if len(cells) > 5 else ""
+
+        left_matched = False
+        right_matched = False
+
+        if left_cef and left_cef in requested_materials:
+            qty = requested_materials[left_cef]
+            _set_cell_text(cells[0], str(qty))
+            left_matched = True
+
+        if right_cef and right_cef in requested_materials:
+            qty = requested_materials[right_cef]
+            _set_cell_text(cells[4], str(qty))
+            right_matched = True
+
+        if not left_matched and not right_matched:
+            # Neither side has a requested material — mark for deletion
+            rows_to_delete.append(i)
+        else:
+            # At least one side matched — clear the non-matched side
+            if not left_matched and left_cef:
+                _set_cell_text(cells[0], "")
+                _set_cell_text(cells[1], "")
+                _set_cell_text(cells[2], "")
+                _set_cell_text(cells[3], "")
+            if not right_matched and right_cef:
+                _set_cell_text(cells[4], "")
+                _set_cell_text(cells[5], "")
+                _set_cell_text(cells[6], "")
+                _set_cell_text(cells[7], "")
+
+        material_row_indices.append(i)
+
+    # Second pass: check if categories have any surviving materials below them
+    for cat_idx in category_row_indices:
+        # Find the next category or end of table
+        next_cat = None
+        for other_cat in category_row_indices:
+            if other_cat > cat_idx:
+                next_cat = other_cat
+                break
+
+        # Check if any material rows between this category and the next survive
+        has_materials = False
+        for mat_idx in material_row_indices:
+            if mat_idx > cat_idx and (next_cat is None or mat_idx < next_cat):
+                if mat_idx not in rows_to_delete:
+                    has_materials = True
+                    break
+
+        if not has_materials:
+            rows_to_delete.append(cat_idx)
+
+    return sorted(rows_to_delete, reverse=True)
+
+
+def _delete_table_rows(table, row_indices):
+    """Delete rows from a table by their indices (must be in reverse order)."""
+    tbl = table._tbl
+    for idx in row_indices:
+        row_element = table.rows[idx]._tr
+        tbl.remove(row_element)
+
+
 def generate_docx(template_path, data, is_f01655=True):
-    """Fill out a DOCX template and return it as a BytesIO buffer."""
+    """Fill out the F01655 DOCX template with session data and return as BytesIO buffer.
+
+    Strategy:
+    1. Fill header fields (Table 0) with client data, date, shipping type
+    2. Insert requested quantities into material grid (Tables 1-2)
+    3. Purge unused material rows and empty category headers
+    4. Preserve Table 3 (observations) and Table 4 (reference catalog)
+    """
     doc = Document(template_path)
-    
-    doc.add_paragraph("")
-    doc.add_paragraph("═" * 60)
-    p = doc.add_paragraph()
-    p.add_run("DATOS CUMPLIMENTADOS AUTOMÁTICAMENTE (Via Web)").bold = True
 
     if is_f01655:
-        fields = [
-            ("Código", data.get("codigo", "")),
-            ("Nombre", data.get("nombre", "")),
-            ("Persona solicita", data.get("persona_solicita", "")),
-            ("Cliente (Cargo)", data.get("cliente_cargo", "")),
-            ("Remitente", data.get("remitente", "")),
-            ("Compañía", data.get("compania", "")),
-            ("Email", data.get("email", "")),
-            ("Teléfono", data.get("telefono", "")),
-            ("Ref. Presupuesto", data.get("ref_presupuesto", "")),
-            ("Fecha Solicitud", data.get("fecha_solicitud", "")),
-            ("Tipo de Envío", data.get("tipo_envio", "")),
-        ]
-        if data.get("tipo_envio") == "mrw":
-            fields.append(("Cuenta MRW", data.get("cuenta_mrw", "")))
-            fields.append(("Dirección Envío", data.get("direccion_envio", "")))
-            
-        for label, value in fields:
-            p = doc.add_paragraph()
-            run = p.add_run(f"{label}: ")
-            run.bold = True
-            run.font.size = Pt(10)
-            p.add_run(str(value))
+        # Step 1: Fill header
+        _fill_header(doc, data)
 
+        # Step 2-3: Process materials
         materials = data.get("materials", [])
-        if materials:
-            doc.add_paragraph("")
-            p = doc.add_paragraph()
-            p.add_run("MATERIAL SOLICITADO").bold = True
-            table = doc.add_table(rows=1, cols=3)
-            table.style = "Table Grid"
-            hdr_cells = table.rows[0].cells
-            hdr_cells[0].text = "Uds."
-            hdr_cells[1].text = "CEF"
-            hdr_cells[2].text = "Descripción"
-            for mat in materials:
-                row_cells = table.add_row().cells
-                row_cells[0].text = str(mat.get("qty", ""))
-                row_cells[1].text = str(mat.get("cef", ""))
-                row_cells[2].text = str(mat.get("desc", ""))
-    
-    # Save to memory buffer instead of disk
+        requested = {}
+        for mat in materials:
+            cef = mat.get("cef", "")
+            if cef:
+                requested[cef] = mat.get("qty", 1)
+
+        # Process Table 1 (main materials: AMIANTO → PREPESADOS)
+        if len(doc.tables) > 1:
+            rows_to_del = _process_material_table(doc.tables[1], requested)
+            _delete_table_rows(doc.tables[1], rows_to_del)
+
+        # Process Table 2 (secondary materials: TUBOS → MATERIAL)
+        if len(doc.tables) > 2:
+            rows_to_del = _process_material_table(doc.tables[2], requested)
+            _delete_table_rows(doc.tables[2], rows_to_del)
+
+    # Save to memory buffer
     buffer = io.BytesIO()
     doc.save(buffer)
     buffer.seek(0)
