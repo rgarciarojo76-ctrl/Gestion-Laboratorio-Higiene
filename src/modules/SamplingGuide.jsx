@@ -40,6 +40,15 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
   const [editableCaudal, setEditableCaudal] = useState("");
   const searchInputRef = useRef(null);
 
+  // MTA INSST pre-indexed CAS → PDF URL mapping
+  const [mtaIndex, setMtaIndex] = useState({});
+  useEffect(() => {
+    fetch('/mta_insst_index.json')
+      .then(r => r.json())
+      .then(data => setMtaIndex(data))
+      .catch(err => console.warn('MTA index not loaded:', err));
+  }, []);
+
   // Cart popover state
   const [popoverItem, setPopoverItem] = useState(null);
 
@@ -507,6 +516,52 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         Método Exacto
                       </a>
                     )}
+                    {/* MTA INSST — conditional on CAS pre-index */}
+                    {(() => {
+                      const cas = selected.cas || "";
+                      const mtaEntries = mtaIndex[cas];
+                      if (!mtaEntries || mtaEntries.length === 0) return null;
+                      const entry = mtaEntries[0];
+                      return (
+                        <a
+                          href={entry.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-pro btn-pro-secondary"
+                          style={{
+                            fontSize: 13,
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 6,
+                            textDecoration: "none",
+                            background: "linear-gradient(135deg, #1e3a5f 0%, #2d5a8e 100%)",
+                            color: "#fff",
+                            border: "1px solid #1e3a5f",
+                            borderRadius: 10,
+                            padding: "8px 14px",
+                            fontWeight: 600,
+                            letterSpacing: "0.3px",
+                            boxShadow: "0 2px 8px rgba(30,58,95,0.15)",
+                            transition: "all 0.2s ease",
+                          }}
+                          title={`${entry.mta_code} — ${entry.description} (INSST)`}
+                          onMouseEnter={e => {
+                            e.currentTarget.style.boxShadow = '0 4px 16px rgba(30,58,95,0.3)';
+                            e.currentTarget.style.transform = 'translateY(-1px)';
+                          }}
+                          onMouseLeave={e => {
+                            e.currentTarget.style.boxShadow = '0 2px 8px rgba(30,58,95,0.15)';
+                            e.currentTarget.style.transform = 'translateY(0)';
+                          }}
+                          onClick={() => {
+                            // Best-effort link availability check
+                          }}
+                        >
+                          <span style={{ fontSize: 16, display: 'flex', alignItems: 'center' }}>🛡️</span>
+                          MTA INSST
+                        </a>
+                      );
+                    })()}
                     <a
                       href={videoUrl}
                       target="_blank"
