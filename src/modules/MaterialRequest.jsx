@@ -334,24 +334,23 @@ export default function MaterialRequest({ contaminants = [], memory, updateMemor
             <div className="card" style={{ marginBottom: 16 }}>
               <h3 style={{ marginBottom: 16, fontSize: 18, fontWeight: 700 }}>📦 Selección de Material</h3>
 
-              {/* Alta Prioridad: Cart-injected items */}
-              {materials.some(m => m.fromCart) && (
-                <div className="cart-priority-section">
-                  <div className="cart-priority-header">
-                    <span className="cart-priority-badge">🛒 ALTA PRIORIDAD</span>
-                    <span className="cart-priority-subtitle">Artículos añadidos desde la Guía Técnica</span>
-                  </div>
-                  <div className="cart-priority-items">
-                    {materials.filter(m => m.fromCart).map(m => (
-                      <div key={m.cef} className="cart-priority-item">
-                        <code className="cart-priority-code">{m.cef}</code>
-                        <span className="cart-priority-name">{m.desc}</span>
-                        <div className="cart-priority-controls">
+              {/* Summary of selected materials */}
+              {materials.length > 0 && (
+                <div className="card" style={{ border: '2px solid var(--accent-primary)', background: 'linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(59,130,246,0.02) 100%)', marginBottom: 24 }}>
+                  <h4 style={{ marginBottom: 16, fontSize: 16, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    🛒 Material Seleccionado ({materials.length})
+                  </h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {materials.map(m => (
+                      <div key={m.cef} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', background: 'white', borderRadius: 8, border: '1px solid var(--border-light)' }}>
+                        <code style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-accent)', minWidth: 60 }}>{m.cef}</code>
+                        <span style={{ flex: 1, fontSize: 13, fontWeight: 500 }}>{m.desc}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                           <button className="btn btn-sm btn-secondary" onClick={() => updateQty(m.cef, m.qty - 1)}>−</button>
                           <input
                             style={{ width: 40, textAlign: 'center', background: 'var(--bg-input)', border: '1px solid var(--border-color)', borderRadius: 6, padding: '4px 0', color: 'var(--text-primary)', fontSize: 13 }}
                             value={m.qty}
-                            onChange={e => updateQty(m.cef, e.target.value)}
+                            readOnly
                           />
                           <button className="btn btn-sm btn-secondary" onClick={() => updateQty(m.cef, m.qty + 1)}>+</button>
                           <button className="btn btn-sm btn-danger" onClick={() => removeMaterial(m.cef)} style={{ marginLeft: 4 }}>✕</button>
@@ -446,19 +445,7 @@ export default function MaterialRequest({ contaminants = [], memory, updateMemor
               ))}
             </div>
 
-            {/* Cart summary */}
-            {materials.length > 0 && (
-              <div className="card">
-                <h4 style={{ marginBottom: 12, fontSize: 15, fontWeight: 700 }}>🛒 Material Seleccionado ({materials.length})</h4>
-                {materials.map(m => (
-                  <div key={m.cef} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', fontSize: 13 }}>
-                    <code style={{ color: 'var(--text-accent)' }}>{m.cef}</code>
-                    <span style={{ flex: 1 }}>{m.desc}</span>
-                    <strong>×{m.qty}</strong>
-                  </div>
-                ))}
-              </div>
-            )}
+
           </div>
         )
 
