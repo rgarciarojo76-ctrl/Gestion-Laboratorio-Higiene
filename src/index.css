@@ -44,11 +44,16 @@
 body {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   background-color: var(--color-background);
   color: var(--color-text-main);
   font-family: var(--font-family);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
 }
 
 /* ─── Píldora Advertencia Integración ─── */
@@ -3049,17 +3054,18 @@ h1, h2, h3, h4 {
 
 .unified-results-row {
   display: flex;
-  gap: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .unified-result-card {
   flex: 1;
-  min-width: 0;
-  word-wrap: break-word;
+  min-width: 240px;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 20px 24px;
+  padding: 16px 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3081,35 +3087,37 @@ h1, h2, h3, h4 {
 }
 
 .unified-result-label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: #64748b;
   text-transform: uppercase;
-  margin-bottom: 16px;
-  letter-spacing: 0.8px;
-  line-height: 1.6;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  line-height: 1.4;
   white-space: normal;
-  word-break: break-word;
+  overflow-wrap: anywhere;
+  word-break: normal;
   max-width: 100%;
 }
 
 .unified-result-value {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 800;
   color: #0f172a;
   font-variant-numeric: tabular-nums;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   letter-spacing: -0.02em;
 }
 
 .unified-result-status {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  padding: 6px 16px;
+  padding: 4px 12px;
   border-radius: 20px;
   white-space: normal;
   text-align: center;
-  word-break: break-word;
+  overflow-wrap: anywhere;
+  word-break: normal;
   max-width: 100%;
 }
 
