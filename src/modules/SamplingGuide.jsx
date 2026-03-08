@@ -200,15 +200,36 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
     return parseFloat(editableCaudal.replace(',', '.')) || parseNum(selected?.caudal) || parseNum(selected?.caudal_l_min) || 0;
   }, [editableCaudal, selected]);
 
-  const isCaudalOutOfRangeGlobal = useMemo(() => {
-    if (!selected) return false;
-    if (!isNaN(methodCaudalGlobal) && selected.caudal_metodo_min !== undefined && selected.caudal_metodo_max !== undefined) {
-      if (methodCaudalGlobal < selected.caudal_metodo_min || methodCaudalGlobal > selected.caudal_metodo_max) {
-         return true;
+  const methodCaudalLimits = useMemo(() => {
+    if (!selected) return { isOutOfRange: false, min: null, max: null };
+    
+    let min = selected.caudal_metodo_min;
+    let max = selected.caudal_metodo_max;
+    
+    if (min == null || max == null) {
+        if (selected.caudal_metodo) {
+            const raw = selected.caudal_metodo.toString().replace(',', '.').replace(/[^\d.-]/g, '');
+            if (raw.includes('-')) {
+                const parts = raw.split('-');
+                min = parseFloat(parts[0]);
+                max = parseFloat(parts[1]);
+            } else {
+                min = parseFloat(raw);
+                max = parseFloat(raw);
+            }
+        }
+    }
+    
+    let isOutOfRange = false;
+    if (!isNaN(methodCaudalGlobal) && min != null && max != null && !isNaN(min) && !isNaN(max)) {
+      if (methodCaudalGlobal < min || methodCaudalGlobal > max) {
+         isOutOfRange = true;
       }
     }
-    return false;
+    return { isOutOfRange, min, max };
   }, [methodCaudalGlobal, selected]);
+  
+  const isCaudalOutOfRangeGlobal = methodCaudalLimits.isOutOfRange;
 
   // Derive compounds for a screening profile
   const screeningCompounds = useMemo(() => {
@@ -1201,9 +1222,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                             <div className="range-warning-banner">
                               <div className="suggestion-icon">⚠️</div>
                               <div className="suggestion-text">
-                                <strong>Advertencia:</strong> El caudal asignado ({methodCaudalGlobal} L/min) está fuera del {selected.caudal_metodo_min === selected.caudal_metodo_max 
-                                  ? `caudal oficial del método para este compuesto (${selected.caudal_metodo_min} L/min).` 
-                                  : `rango oficial del método para este compuesto (${selected.caudal_metodo_min} - ${selected.caudal_metodo_max} L/min).`}
+                                <strong>Advertencia:</strong> El caudal asignado ({methodCaudalGlobal} L/min) está fuera del {methodCaudalLimits.min === methodCaudalLimits.max 
+                                  ? `caudal oficial del método para este compuesto (${methodCaudalLimits.min} L/min).` 
+                                  : `rango oficial del método para este compuesto (${methodCaudalLimits.min} - ${methodCaudalLimits.max} L/min).`}
                               </div>
                             </div>
                           )}
