@@ -3054,14 +3054,14 @@ h1, h2, h3, h4 {
 
 .unified-results-row {
   display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
+  gap: 12px;
+  flex-wrap: nowrap;
   width: 100%;
 }
 
 .unified-result-card {
   flex: 1;
-  min-width: 240px;
+  min-width: 0;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
