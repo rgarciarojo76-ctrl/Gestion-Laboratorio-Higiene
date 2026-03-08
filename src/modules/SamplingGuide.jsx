@@ -712,22 +712,25 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                   {/* PVP Badge for Screening Profile */}
                   <div className="pvp-badge pvp-badge--gold">
                     💰 PVP: {formatPrice(PRICING_MAP[selected.screening_perfil] || 147.21)}
-                    <button
-                      className="cart-icon-btn"
-                      title="Añadir perfil al pedido"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openCartPopover({
-                          id: `screening-${selected.screening_perfil}`,
-                          code: String(selected.screening_perfil).padStart(4, '0'),
-                          name: selected.screening_desc || 'Perfil Analítico',
-                          price: PRICING_MAP[selected.screening_perfil] || 147.21,
-                          method: selected.metodo_analisis || ''
-                        });
-                      }}
-                    >
-                      🛒
-                    </button>
+                    {/* Carrito oculto provisionalmente en Perfil Analítico */}
+                    {false && (
+                      <button
+                        className="cart-icon-btn"
+                        title="Añadir perfil al pedido"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openCartPopover({
+                            id: `screening-${selected.screening_perfil}`,
+                            code: String(selected.screening_perfil).padStart(4, '0'),
+                            name: selected.screening_desc || 'Perfil Analítico',
+                            price: PRICING_MAP[selected.screening_perfil] || 147.21,
+                            method: selected.metodo_analisis || ''
+                          });
+                        }}
+                      >
+                        🛒
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -895,22 +898,25 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       <span title="Plazo 8 días">🚀 Urgente:</span>
                       <span style={{ fontFamily: "monospace", letterSpacing: "0.5px" }}>{selected.codigo_8d}</span>
                       <span className="price-amount">{formatPrice(PRICING_MAP[selected.codigo_8d] || 82.80)}</span>
-                      <button
-                        className="cart-icon-btn cart-icon-btn--inline"
-                        title="Añadir análisis urgente al pedido"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openCartPopover({
-                            id: `analisis-8d-${selected.codigo_8d}`,
-                            code: selected.codigo_8d,
-                            name: `${selected.descripcion_tecnica || selected.contaminante} (Urgente 8d)`,
-                            price: PRICING_MAP[selected.codigo_8d] || 82.80,
-                            method: selected.metodo_analisis || ''
-                          });
-                        }}
-                      >
-                        🛒
-                      </button>
+                      {/* Carrito oculto provisionalmente en Análisis Urgente */}
+                      {false && (
+                        <button
+                          className="cart-icon-btn cart-icon-btn--inline"
+                          title="Añadir análisis urgente al pedido"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openCartPopover({
+                              id: `analisis-8d-${selected.codigo_8d}`,
+                              code: selected.codigo_8d,
+                              name: `${selected.descripcion_tecnica || selected.contaminante} (Urgente 8d)`,
+                              price: PRICING_MAP[selected.codigo_8d] || 82.80,
+                              method: selected.metodo_analisis || ''
+                            });
+                          }}
+                        >
+                          🛒
+                        </button>
+                      )}
                     </div>
                   )}
                   {selected.codigo_15d && (
@@ -918,22 +924,25 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                       <span title="Plazo 15 días">📅 Estándar:</span>
                       <span style={{ fontFamily: "monospace", letterSpacing: "0.5px" }}>{selected.codigo_15d}</span>
                       <span className="price-amount">{formatPrice(PRICING_MAP[selected.codigo_15d] || 55.20)}</span>
-                      <button
-                        className="cart-icon-btn cart-icon-btn--inline"
-                        title="Añadir análisis estándar al pedido"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openCartPopover({
-                            id: `analisis-15d-${selected.codigo_15d}`,
-                            code: selected.codigo_15d,
-                            name: `${selected.descripcion_tecnica || selected.contaminante} (Estándar 15d)`,
-                            price: PRICING_MAP[selected.codigo_15d] || 55.20,
-                            method: selected.metodo_analisis || ''
-                          });
-                        }}
-                      >
-                        🛒
-                      </button>
+                      {/* Carrito oculto provisionalmente en Análisis Estándar */}
+                      {false && (
+                        <button
+                          className="cart-icon-btn cart-icon-btn--inline"
+                          title="Añadir análisis estándar al pedido"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openCartPopover({
+                              id: `analisis-15d-${selected.codigo_15d}`,
+                              code: selected.codigo_15d,
+                              name: `${selected.descripcion_tecnica || selected.contaminante} (Estándar 15d)`,
+                              price: PRICING_MAP[selected.codigo_15d] || 55.20,
+                              method: selected.metodo_analisis || ''
+                            });
+                          }}
+                        >
+                          🛒
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
