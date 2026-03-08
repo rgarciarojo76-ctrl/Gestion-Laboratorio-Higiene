@@ -16,6 +16,7 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.units import cm
+from .pdf_engine import create_premium_ficha
 
 app = Flask(__name__)
 CORS(app)
@@ -603,99 +604,12 @@ def api_generate_ficha():
         return jsonify({"error": "No data provided"}), 400
     try:
         contaminante = data.get("contaminante_display", data.get("contaminante", "Desconocido"))
-        safe_name = contaminante.replace("/", "_").replace(" ", "_")
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        buffer, filename_suggestion = create_premium_ficha(data)
         
-        buffer = io.BytesIO()
-        doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
-        Story = []
-        styles = getSampleStyleSheet()
-        
-        title_style = ParagraphStyle(
-            'TitleStyle', parent=styles['Heading1'], fontSize=16,
-            textColor=colors.HexColor("#0369a1"), spaceAfter=20, alignment=1
-        )
-        heading_style = ParagraphStyle(
-            'HeadingStyle', parent=styles['Heading2'], fontSize=12,
-            textColor=colors.HexColor("#0f172a"), spaceBefore=15, spaceAfter=10,
-            borderPadding=5, backColor=colors.HexColor("#f1f5f9")
-        )
-        normal_style = styles['Normal']
-        
-        Story.append(Paragraph("FICHA TÉCNICA DE PROCEDIMIENTO DE MUESTREO - 2026", title_style))
-        Story.append(Spacer(1, 10))
-        
-        def create_table(data_matrix):
-            t = Table(data_matrix, colWidths=[5*cm, 11*cm])
-            t.setStyle(TableStyle([
-                ('BACKGROUND', (0,0), (0,-1), colors.HexColor("#f8fafc")),
-                ('TEXTCOLOR', (0,0), (-1,-1), colors.HexColor("#334155")),
-                ('ALIGN', (0,0), (-1,-1), 'LEFT'),
-                ('FONTNAME', (0,0), (0,-1), 'Helvetica-Bold'),
-                ('FONTSIZE', (0,0), (-1,-1), 10),
-                ('BOTTOMPADDING', (0,0), (-1,-1), 8),
-                ('TOPPADDING', (0,0), (-1,-1), 8),
-                ('INNERGRID', (0,0), (-1,-1), 0.25, colors.HexColor("#cbd5e1")),
-                ('BOX', (0,0), (-1,-1), 0.25, colors.HexColor("#cbd5e1")),
-            ]))
-            return t
-
-        Story.append(Paragraph("1. Identificación del Agente Químico", heading_style))
-        b1_data = [
-            ["Contaminante", Paragraph(contaminante, normal_style)],
-            ["Nº CAS", str(data.get("cas", "—"))],
-            ["Sinónimos", Paragraph(str(data.get("sinonimo", "—")), normal_style)],
-        ]
-        Story.append(create_table(b1_data))
-        Story.append(Spacer(1, 15))
-
-        Story.append(Paragraph("2. Parámetros de Captación", heading_style))
-        # Use dynamic final values if available, else static fallbacks
-        final_caudal = data.get("caudal_asignado_final")
-        if final_caudal is not None:
-            caudal_str = f"{final_caudal} L/min (Estrategia Asignada)"
-        else:
-            caudal_str = str(data.get("caudal", data.get("caudal_l_min", "—")))
-
-        b2_data = [
-            ["Soporte de Captación", Paragraph(str(data.get("soporte_captacion_display", data.get("soporte_captacion", "—"))), normal_style)],
-            ["Ref. Soporte", str(data.get("ref_soporte", "—"))],
-            ["Técnica Analítica", Paragraph(str(data.get("tecnica_analitica", "—")), normal_style)],
-            ["Ref. Técnica", str(data.get("ref_tecnica", "—"))],
-            ["Método de Análisis", Paragraph(str(data.get("metodo_analisis", "—")), normal_style)],
-            ["Caudal (L/min)", caudal_str],
-            ["Volumen Recomendado (L)", str(data.get("volumen_minimo", data.get("volumen_recomendado_l", "—")))],
-            ["Desorción", Paragraph(str(data.get("desorcion", "—")), normal_style)]
-        ]
-        Story.append(create_table(b2_data))
-        Story.append(Spacer(1, 15))
-
-        Story.append(Paragraph("3. Criterios Analíticos y Límites", heading_style))
-        # Append calculated times if provided by the frontend payload
-        time_ed = data.get("tiempo_minimo_ed_final")
-        time_ec = data.get("tiempo_minimo_ec_final")
-        
-        b3_data = [
-            ["LOQ / LOD", f"{data.get('lq', data.get('loq', '—'))} µg / {data.get('ld', data.get('lod', '—'))} µg"],
-            ["VLA-ED / VLA-EC", f"{str(data.get('vla_ed', data.get('vla_ed_mg_m3', '—')))} / {str(data.get('vla_ec', data.get('vla_ec_mg_m3', '—')))}"],
-            ["Tiempo Mínimo UNE 482", f"ED: {time_ed if time_ed else '—'} | EC: {time_ec if time_ec else '—'}"],
-            ["Frases H", Paragraph(str(data.get("frases_h", "—")), normal_style)],
-        ]
-        Story.append(create_table(b3_data))
-        Story.append(Spacer(1, 25))
-
-        Story.append(Paragraph("Observaciones Técnicas y de Seguridad", heading_style))
-        warnings_list = ["• Seguir las condiciones generales de transporte establecidas por el laboratorio."]
-        for w in warnings_list:
-            Story.append(Paragraph(w, normal_style))
-            Story.append(Spacer(1, 5))
-
-        doc.build(Story)
-        buffer.seek(0)
         return send_file(
             buffer,
             as_attachment=True,
-            download_name=f"Ficha_{safe_name}_{timestamp}.pdf",
+            download_name=filename_suggestion,
             mimetype="application/pdf"
         )
     except Exception as e:
