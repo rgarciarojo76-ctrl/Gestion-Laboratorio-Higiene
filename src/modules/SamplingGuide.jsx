@@ -1201,7 +1201,9 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                             <div className="range-warning-banner">
                               <div className="suggestion-icon">⚠️</div>
                               <div className="suggestion-text">
-                                <strong>Advertencia:</strong> El caudal asignado ({methodCaudalGlobal} L/min) está fuera del rango oficial del método para este compuesto ({selected.caudal_metodo_min} - {selected.caudal_metodo_max} L/min).
+                                <strong>Advertencia:</strong> El caudal asignado ({methodCaudalGlobal} L/min) está fuera del {selected.caudal_metodo_min === selected.caudal_metodo_max 
+                                  ? `caudal oficial del método para este compuesto (${selected.caudal_metodo_min} L/min).` 
+                                  : `rango oficial del método para este compuesto (${selected.caudal_metodo_min} - ${selected.caudal_metodo_max} L/min).`}
                               </div>
                             </div>
                           )}
