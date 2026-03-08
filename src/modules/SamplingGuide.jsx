@@ -537,12 +537,52 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                         Método Exacto
                       </a>
                     )}
-                    {/* MTA INSST — conditional on CAS pre-index */}
+                    {/* MTA INSST — conditional on CAS pre-index + technique matching */}
                     {(() => {
                       const cas = selected.cas || "";
                       const mtaEntries = mtaIndex[cas];
                       if (!mtaEntries || mtaEntries.length === 0) return null;
-                      const entry = mtaEntries[0];
+                      
+                      // Smart technique matching: cross-reference descripcion_tecnica with MTA technique tags
+                      const desc = (selected.descripcion_tecnica || "").toLowerCase();
+                      const techniqueMap = {
+                        "hplc": "HPLC",
+                        "cromatografía líquida": "HPLC",
+                        "gc-ms": "GC", "gc-fid": "GC", "gc-ecd": "GC",
+                        "cg-fid": "GC", "cg-ecd": "GC",
+                        "cromatografía de gases": "GC",
+                        "difracción de rayos x": "DRX",
+                        "rayos x": "DRX",
+                        "infrarrojos": "IR",
+                        "espectroscopía de infrarrojos": "IR",
+                        "gravimetría": "GRAV",
+                        "gravimetr": "GRAV",
+                        "icp": "ICP",
+                        "absorción atómica": "AAS",
+                        "cromatografía iónica": "IC",
+                        "microscopía": "MICRO",
+                        "termoóptico": "TERMO",
+                        "ultravioleta": "UV",
+                        "espectrofotometría": "UV",
+                      };
+                      
+                      let appTechnique = null;
+                      for (const [keyword, tag] of Object.entries(techniqueMap)) {
+                        if (desc.includes(keyword)) {
+                          appTechnique = tag;
+                          break;
+                        }
+                      }
+                      
+                      // If we identified a technique, try to find a matching MTA entry
+                      let entry = mtaEntries[0]; // fallback: first entry
+                      if (appTechnique && mtaEntries.length > 1) {
+                        const match = mtaEntries.find(e => 
+                          e.techniques && e.techniques.includes(appTechnique)
+                        );
+                        if (match) entry = match;
+                      }
+                      
                       return (
                         <a
                           href={entry.url}
