@@ -1261,7 +1261,10 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                           
                           <div className="unified-results-row">
                             <div className={`unified-result-card validation-${statusVLA}`}>
-                              <div className="unified-result-label">Índice Exposición Mínimo Teórico (VLA)</div>
+                                <div className="unified-result-label">
+                                  Índice Exposición Mínimo Teórico (VLA)<br/>
+                                  <span style={{ fontSize: '9px', fontWeight: 500, textTransform: 'none', opacity: 0.8 }}>Para las condiciones de muestreo establecidas y el límite de cuantificación</span>
+                                </div>
                               <div className="unified-result-value" style={{ margin: "0 0 4px 0", lineHeight: 1 }}>
                                 {indiceVLA !== null ? indiceVLA.toFixed(3) : "N/A"}
                               </div>
@@ -1274,7 +1277,10 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                             </div>
 
                             <div className={`unified-result-card validation-${statusTWA}`}>
-                              <div className="unified-result-label">Índice Exposición Mínimo Teórico (TWA | GESTIS)</div>
+                                <div className="unified-result-label">
+                                  Índice Exposición Mínimo Teórico (TWA | GESTIS)<br/>
+                                  <span style={{ fontSize: '9px', fontWeight: 500, textTransform: 'none', opacity: 0.8 }}>Para las condiciones de muestreo establecidas y el límite de cuantificación</span>
+                                </div>
                               <div className="unified-result-value" style={{ margin: "0 0 4px 0", lineHeight: 1 }}>
                                 {indiceTWA !== null ? indiceTWA.toFixed(3) : "N/A"}
                               </div>
