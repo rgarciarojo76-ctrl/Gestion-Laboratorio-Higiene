@@ -1,10 +1,13 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
-import SamplingGuide from './modules/SamplingGuide'
-import MaterialRequest from './modules/MaterialRequest'
-import ChainOfCustody from './modules/ChainOfCustody'
-import AdminPanel from './modules/AdminPanel'
+import { useState, useEffect, useMemo, useCallback, Suspense, lazy } from 'react'
+import ErrorBoundary from './components/ErrorBoundary'
 import OrderDrawer from './components/OrderDrawer'
 import { useCart } from './context/CartContext'
+
+// Lazy-loaded modules for code splitting
+const SamplingGuide = lazy(() => import('./modules/SamplingGuide'))
+const MaterialRequest = lazy(() => import('./modules/MaterialRequest'))
+const ChainOfCustody = lazy(() => import('./modules/ChainOfCustody'))
+const AdminPanel = lazy(() => import('./modules/AdminPanel'))
 
 function App() {
   const [activeModule, setActiveModule] = useState('guide')
@@ -152,20 +155,28 @@ function App() {
             Cargando base de datos...
           </div>
         ) : (
-          <>
+          <Suspense fallback={<div style={{ textAlign: 'center', padding: 40, color: 'var(--text-muted)' }}>Cargando módulo...</div>}>
             {activeModule === 'guide' && (
-              <SamplingGuide contaminants={visibleContaminants} allContaminants={contaminants} loading={loading} />
+              <ErrorBoundary>
+                <SamplingGuide contaminants={visibleContaminants} allContaminants={contaminants} loading={loading} />
+              </ErrorBoundary>
             )}
             {activeModule === 'material' && (
-              <MaterialRequest contaminants={visibleContaminants} memory={memory} updateMemory={updateMemory} />
+              <ErrorBoundary>
+                <MaterialRequest contaminants={visibleContaminants} memory={memory} updateMemory={updateMemory} />
+              </ErrorBoundary>
             )}
             {activeModule === 'chain' && (
-              <ChainOfCustody contaminants={visibleContaminants} memory={memory} updateMemory={updateMemory} />
+              <ErrorBoundary>
+                <ChainOfCustody contaminants={visibleContaminants} memory={memory} updateMemory={updateMemory} />
+              </ErrorBoundary>
             )}
             {activeModule === 'admin' && (
-              <AdminPanel contaminants={contaminants} onDataChanged={loadContaminants} />
+              <ErrorBoundary>
+                <AdminPanel contaminants={contaminants} onDataChanged={loadContaminants} />
+              </ErrorBoundary>
             )}
-          </>
+          </Suspense>
         )}
       </main>
 

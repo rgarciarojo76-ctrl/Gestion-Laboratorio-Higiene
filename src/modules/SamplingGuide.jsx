@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import AddToCartPopover from '../components/AddToCartPopover';
+import { normalizeText, parseNum, formatPrice } from '../utils/helpers';
 
 /**
  * Módulo I: Guía técnica muestreo
@@ -25,14 +26,7 @@ const PRICING_MAP = {
   'MA173': 82.80,
 };
 
-const formatPrice = (amount) => {
-  if (!amount || isNaN(amount)) return null;
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: 2,
-  }).format(amount);
-};
+// NOTE: formatPrice imported from '../utils/helpers'
 
 export default function SamplingGuide({ contaminants, allContaminants, loading }) {
   const [query, setQuery] = useState("");
@@ -92,24 +86,7 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [query]);
 
-  // Helper: Normalize text to remove accents (e.g., "Ácido" -> "acido")
-  const normalizeText = (text) => {
-    if (!text) return "";
-    return text
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase();
-  };
-
-  // Helper: Parse number from string (supports commas and text like "< 0.1")
-  const parseNum = (val) => {
-    if (!val) return null;
-    if (typeof val === "number") return val;
-    // Replace comma with dot and extract numeric part
-    const clean = val.toString().replace(/,/g, ".").replace(/[^\d.-]/g, "");
-    const parsed = parseFloat(clean);
-    return isNaN(parsed) ? null : parsed;
-  };
+  // NOTE: normalizeText & parseNum imported from '../utils/helpers'
 
   // Helper: Calculate Volume Mínimo UNE 482
   // Formula: V = LOQ (µg) / (factor * VLA (mg/m³))

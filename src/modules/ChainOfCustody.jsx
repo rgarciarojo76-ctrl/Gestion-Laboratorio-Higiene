@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { normalizeText, parseNum } from '../utils/helpers'
 
 /**
  * Módulo III: Solicitud de Análisis — Envío muestras al laboratorio (F00662)
@@ -15,11 +16,7 @@ const STEPS = [
   { id: 'review', label: 'Revisión' },
 ]
 
-// Normalize utility for accent-insensitive search
-const normalizeText = (text) => {
-  if (!text) return ''
-  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-}
+// NOTE: normalizeText & parseNum imported from '../utils/helpers'
 
 function emptySample() {
   return {
@@ -35,11 +32,6 @@ function emptySample() {
     analisis_solicitado: '',
     observaciones: '',
   }
-}
-
-function parseNum(s) {
-  if (!s) return NaN
-  return parseFloat(s.replace(',', '.'))
 }
 
 export default function ChainOfCustody({ contaminants, memory, updateMemory }) {

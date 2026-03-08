@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo, useEffect } from 'react'
 import { useCart } from '../context/CartContext'
 import { useToast } from '../components/ToastNotification'
+import { normalizeText } from '../utils/helpers'
 
 /**
  * Módulo II: Solicitud de soportes de captación (F01655)
@@ -45,10 +46,7 @@ export default function MaterialRequest({ contaminants = [], memory, updateMemor
   const [isFocused, setIsFocused] = useState(false)
   const searchInputRef = useRef(null)
 
-  // Normalize utility for accent-insensitive search
-  const normalizeText = (text) => {
-    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  }
+  // NOTE: normalizeText imported from '../utils/helpers'
 
   // Filter contaminants based on query
   const searchResults = useMemo(() => {

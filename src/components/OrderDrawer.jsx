@@ -1,4 +1,5 @@
 import { useCart } from '../context/CartContext'
+import { formatPrice } from '../utils/helpers'
 
 /**
  * OrderDrawer — Right-side sliding drawer showing the current cart contents.
@@ -11,14 +12,7 @@ import { useCart } from '../context/CartContext'
 export default function OrderDrawer({ isOpen, onClose, onNavigateToMaterial }) {
   const { items, totalItems, totalUnits, removeItem, updateQuantity, clearCart } = useCart()
 
-  const formatPrice = (amount) => {
-    if (!amount || isNaN(amount)) return '—'
-    return new Intl.NumberFormat('es-ES', {
-      style: 'currency',
-      currency: 'EUR',
-      minimumFractionDigits: 2,
-    }).format(amount)
-  }
+  // NOTE: formatPrice imported from '../utils/helpers'
 
   return (
     <>

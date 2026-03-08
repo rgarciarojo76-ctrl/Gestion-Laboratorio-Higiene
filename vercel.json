@@ -38,7 +38,7 @@
                 },
                 {
                     "key": "Content-Security-Policy",
-                    "value": "default-src 'self' https://gestion-laboratorio-higiene.vercel.app https://direccion-tecnica-ia-lab.vercel.app; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://direccion-tecnica-ia-lab.vercel.app https://api.github.com;"
+                    "value": "default-src 'self' https://gestion-laboratorio-higiene.vercel.app https://direccion-tecnica-ia-lab.vercel.app; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://direccion-tecnica-ia-lab.vercel.app https://api.github.com;"
                 },
                 {
                     "key": "Permissions-Policy",
