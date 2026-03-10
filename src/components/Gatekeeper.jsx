@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 
 /**
@@ -29,67 +30,11 @@ async function calculateHMAC(message, secret) {
 }
 
 export default function Gatekeeper({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isVerifying, setIsVerifying] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isVerifying, setIsVerifying] = useState(false);
 
   useEffect(() => {
-    // Si ya estamos autenticados en esta sesión, permitimos el paso directamente
-    if (sessionStorage.getItem("ia_lab_auth") === "true") {
-      setIsAuthenticated(true);
-      setIsVerifying(false);
-      return;
-    }
-
-    const verifyAccess = async () => {
-      try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const t = urlParams.get("t");
-        const h = urlParams.get("h");
-        
-        // Si no hay parámetros, verificar si es dev local
-        if (!t || !h) {
-          if (import.meta.env.DEV) {
-            setIsAuthenticated(true);
-            setIsVerifying(false);
-            return;
-          }
-          window.location.href = "https://direccion-tecnica-ia-lab.vercel.app/";
-          return;
-        }
-
-        const secret = import.meta.env.VITE_SHARED_SECRET;
-        if (!secret) {
-          console.error("Falta VITE_SHARED_SECRET en las variables de entorno");
-          // Fallback allow en dev local si no hay secreto, pero en prod bloqueamos
-          if (import.meta.env.DEV) {
-            setIsAuthenticated(true);
-            setIsVerifying(false);
-            return;
-          }
-        }
-
-        const expectedHash = await calculateHMAC(t, secret);
-
-        if (expectedHash === h) {
-          // Autenticación exitosa
-          sessionStorage.setItem("ia_lab_auth", "true");
-          setIsAuthenticated(true);
-          
-          // Opcional: limpiar la URL para que no quede el timestamp e hash
-          window.history.replaceState({}, document.title, window.location.pathname);
-        } else {
-          // Fallo de autenticación
-          window.location.href = "https://direccion-tecnica-ia-lab.vercel.app/";
-        }
-      } catch (error) {
-        console.error("Error en validación HMAC:", error);
-        window.location.href = "https://direccion-tecnica-ia-lab.vercel.app/";
-      } finally {
-        setIsVerifying(false);
-      }
-    };
-
-    verifyAccess();
+    // Bypass provisional para poder usar la app fuera del portal
   }, []);
 
   if (isVerifying) {
