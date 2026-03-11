@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import AddToCartPopover from '../components/AddToCartPopover';
 import { normalizeText, parseNum, formatPrice } from '../utils/helpers';
+import { calcularEstrategiaVR, parseVolumenMaximo } from '../utils/breakthroughVolume';
 
 /**
  * Módulo I: Guía técnica muestreo
@@ -1316,8 +1317,176 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                                 {statusTWA === "error" && "🔴 NO CONFORMIDAD CON EL VLA (> 1)"}
                                 {statusTWA === "unknown" && "Faltan datos (TWA o LQ)"}
                               </div>
+                              </div>
                             </div>
-                          </div>
+
+                        {/* ═══════════════════════════════════════════════════════
+                            MÓDULO VR: Control de Ruptura y Fraccionamiento
+                            ═══════════════════════════════════════════════════════ */}
+                        {(() => {
+                          const vMaxRango = parseVolumenMaximo(selected.volumen_minimo);
+                          const volMinED_VR = calcVolMinUNE482(selected.lq || selected.loq, selected.vla_ed || selected.vla_ed_mg_m3, 0.1);
+                          
+                          const vrResult = calcularEstrategiaVR({
+                            tObjetivo: t_unified,
+                            caudal: methodCaudal,
+                            vRuptura: selected.v_ruptura || null,
+                            vMaxMTA: vMaxRango,
+                            volMinUNE482: volMinED_VR,
+                          });
+
+                          if (vrResult.estrategia === 'SIN_DATOS') {
+                            return (
+                              <div className="vr-module vr-module--gris">
+                                <div className="vr-header">
+                                  <span className="vr-semaforo vr-semaforo--gris">⚪</span>
+                                  <span className="vr-titulo">Control de Saturación del Soporte</span>
+                                </div>
+                                <div className="vr-instruccion vr-instruccion--gris">
+                                  <span className="vr-instruccion-icon">ℹ️</span>
+                                  <span>{vrResult.instruccion}</span>
+                                </div>
+                              </div>
+                            );
+                          }
+
+                          return (
+                            <div className={`vr-module vr-module--${vrResult.estado}`}>
+                              {/* ── Vista Junior: Semáforo + Instrucción ── */}
+                              <div className="vr-header">
+                                <div className="vr-header-left">
+                                  <span className={`vr-semaforo vr-semaforo--${vrResult.estado}`}>
+                                    {vrResult.estado === 'verde' ? '🟢' : '🟡'}
+                                  </span>
+                                  <div className="vr-header-text">
+                                    <span className="vr-titulo">Control de Saturación del Soporte</span>
+                                    <span className={`vr-status-badge vr-status-badge--${vrResult.estado}`}>
+                                      {vrResult.estrategia === 'UNICA'
+                                        ? 'Muestreo Seguro (1 soporte)'
+                                        : `Fraccionamiento Necesario (${vrResult.nSoportes} soportes)`}
+                                    </span>
+                                  </div>
+                                </div>
+                                <span className="vr-badge-criterio">
+                                  {vrResult.origenDato}
+                                </span>
+                              </div>
+
+                              <div className={`vr-instruccion vr-instruccion--${vrResult.estado}`}>
+                                <span className="vr-instruccion-icon">
+                                  {vrResult.estado === 'verde' ? '✅' : '⚠️'}
+                                </span>
+                                <span>{vrResult.instruccion}</span>
+                              </div>
+
+                              {/* UNE 482 cross-validation warning */}
+                              {!vrResult.cumpleUNE482 && (
+                                <div className="vr-instruccion vr-instruccion--error">
+                                  <span className="vr-instruccion-icon">🔴</span>
+                                  <span>
+                                    <strong>Alerta UNE 482:</strong> El volumen por fracción ({vrResult.vPorFraccion} L) es inferior al mínimo requerido ({volMinED_VR?.toFixed(2)} L) para detectar 0,1 × VLA-ED. Considere aumentar el caudal.
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* ── Vista Senior: Dashboard Técnico ── */}
+                              <details className="vr-senior-details">
+                                <summary className="vr-senior-toggle">
+                                  <span>📊 Ver detalle técnico</span>
+                                  <span className="vr-toggle-arrow">▸</span>
+                                </summary>
+                                <div className="vr-senior-content">
+                                  {/* Tabla de Validación */}
+                                  <table className="vr-tabla-validacion">
+                                    <thead>
+                                      <tr>
+                                        <th>Parámetro</th>
+                                        <th>Valor</th>
+                                        <th>Estado</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td>T<sub>objetivo</sub> (UNE 689)</td>
+                                        <td>{Math.round(t_unified)} min</td>
+                                        <td>—</td>
+                                      </tr>
+                                      <tr>
+                                        <td>T<sub>máx soporte</sub> (antes de saturación)</td>
+                                        <td>{vrResult.tMaxSoporte} min</td>
+                                        <td>
+                                          {vrResult.tMaxSoporte >= t_unified
+                                            ? <span className="vr-check verde">✓ Suficiente</span>
+                                            : <span className="vr-check amarillo">⚠ Insuficiente</span>}
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>V<sub>seguro</sub> (límite adsorbente)</td>
+                                        <td>{vrResult.vSeguro} L</td>
+                                        <td>—</td>
+                                      </tr>
+                                      <tr>
+                                        <td>V<sub>total</sub> (muestreo completo)</td>
+                                        <td>{vrResult.vTotal} L</td>
+                                        <td>
+                                          {vrResult.vTotal <= vrResult.vSeguro
+                                            ? <span className="vr-check verde">✓ Dentro de límite</span>
+                                            : <span className="vr-check amarillo">⚠ Supera límite</span>}
+                                        </td>
+                                      </tr>
+                                      {vrResult.estrategia === 'FRACCIONAMIENTO' && (
+                                        <>
+                                          <tr>
+                                            <td>Nº Soportes</td>
+                                            <td>{vrResult.nSoportes}</td>
+                                            <td>—</td>
+                                          </tr>
+                                          <tr>
+                                            <td>T por fracción</td>
+                                            <td>{vrResult.tPorSoporte} min</td>
+                                            <td>—</td>
+                                          </tr>
+                                          <tr>
+                                            <td>V por fracción</td>
+                                            <td>{vrResult.vPorFraccion} L</td>
+                                            <td>
+                                              {vrResult.cumpleUNE482
+                                                ? <span className="vr-check verde">✓ UNE 482</span>
+                                                : <span className="vr-check rojo">✗ UNE 482</span>}
+                                            </td>
+                                          </tr>
+                                        </>
+                                      )}
+                                    </tbody>
+                                  </table>
+
+                                  {/* Barra de Saturación */}
+                                  <div className="vr-saturacion-section">
+                                    <div className="vr-saturacion-label">
+                                      <span>Nivel de saturación del soporte</span>
+                                      <span className="vr-saturacion-pct">{vrResult.pctSaturacion}%</span>
+                                    </div>
+                                    <div className="vr-barra-saturacion">
+                                      <div
+                                        className={`vr-barra-fill ${
+                                          vrResult.pctSaturacion <= 70 ? 'fill-verde' :
+                                          vrResult.pctSaturacion <= 100 ? 'fill-amarillo' :
+                                          'fill-rojo'
+                                        }`}
+                                        style={{ width: `${Math.min(vrResult.pctSaturacion, 100)}%` }}
+                                      />
+                                    </div>
+                                    <div className="vr-saturacion-legend">
+                                      <span>0 L</span>
+                                      <span className="vr-saturacion-limit">V<sub>seguro</sub>: {vrResult.vSeguro} L</span>
+                                      <span>{Math.max(vrResult.vTotal, vrResult.vSeguro)} L</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </details>
+                            </div>
+                          );
+                        })()}
                         </div>
 
                       </div>

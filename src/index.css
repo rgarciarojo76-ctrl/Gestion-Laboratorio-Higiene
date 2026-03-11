@@ -3911,3 +3911,331 @@ h1, h2, h3, h4 {
   flex-shrink: 0;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MÓDULO VR — Control de Ruptura y Fraccionamiento
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.vr-module {
+  margin-top: 20px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #fafbfc;
+  animation: panelReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vr-module--verde {
+  border-color: #bbf7d0;
+  background: linear-gradient(135deg, #f0fdf4 0%, #fafbfc 100%);
+}
+
+.vr-module--amarillo {
+  border-color: #fde68a;
+  background: linear-gradient(135deg, #fefce8 0%, #fafbfc 100%);
+}
+
+.vr-module--gris {
+  border-color: #e2e8f0;
+  background: #f8fafc;
+}
+
+/* ── VR Header ── */
+.vr-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.vr-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.vr-semaforo {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.vr-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vr-titulo {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #334155;
+}
+
+.vr-status-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.vr-status-badge--verde {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.vr-status-badge--amarillo {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.vr-badge-criterio {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── Instrucción Banner ── */
+.vr-instruccion {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.vr-instruccion--verde {
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.vr-instruccion--amarillo {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.vr-instruccion--gris {
+  background: rgba(100, 116, 139, 0.06);
+  border: 1px solid rgba(100, 116, 139, 0.15);
+  color: #64748b;
+}
+
+.vr-instruccion--error {
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #991b1b;
+}
+
+.vr-instruccion-icon {
+  flex-shrink: 0;
+  font-size: 14px;
+  margin-top: 1px;
+}
+
+/* ── Vista Senior: Details toggle ── */
+.vr-senior-details {
+  margin-top: 4px;
+}
+
+.vr-senior-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+  list-style: none;
+  user-select: none;
+}
+
+.vr-senior-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.vr-senior-toggle:hover {
+  background: white;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.vr-toggle-arrow {
+  transition: transform 0.2s ease;
+  font-size: 10px;
+}
+
+.vr-senior-details[open] .vr-toggle-arrow {
+  transform: rotate(90deg);
+}
+
+.vr-senior-content {
+  padding: 14px 0 4px;
+  animation: panelReveal 0.25s ease;
+}
+
+/* ── Tabla de Validación ── */
+.vr-tabla-validacion {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.vr-tabla-validacion thead th {
+  background: #f8fafc;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 10px;
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.vr-tabla-validacion tbody td {
+  padding: 7px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  font-variant-numeric: tabular-nums;
+}
+
+.vr-tabla-validacion tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.vr-tabla-validacion tbody tr:hover {
+  background: #f8fafc;
+}
+
+.vr-check {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.vr-check.verde {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.vr-check.amarillo {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.vr-check.rojo {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ── Barra de Saturación ── */
+.vr-saturacion-section {
+  margin-top: 14px;
+}
+
+.vr-saturacion-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.vr-saturacion-pct {
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #1e293b;
+}
+
+.vr-barra-saturacion {
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.vr-barra-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vr-barra-fill.fill-verde {
+  background: linear-gradient(90deg, #86efac 0%, #22c55e 100%);
+}
+
+.vr-barra-fill.fill-amarillo {
+  background: linear-gradient(90deg, #fde68a 0%, #f59e0b 100%);
+}
+
+.vr-barra-fill.fill-rojo {
+  background: linear-gradient(90deg, #fca5a5 0%, #ef4444 100%);
+}
+
+.vr-saturacion-legend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  color: #94a3b8;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.vr-saturacion-limit {
+  font-weight: 600;
+  color: #64748b;
+}
+
+/* ── Responsive VR ── */
+@media (max-width: 640px) {
+  .vr-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .vr-badge-criterio {
+    align-self: flex-start;
+  }
+  .vr-tabla-validacion {
+    font-size: 11px;
+  }
+  .vr-tabla-validacion thead th,
+  .vr-tabla-validacion tbody td {
+    padding: 6px 8px;
+  }
+}
+
