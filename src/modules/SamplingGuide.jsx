@@ -1389,6 +1389,29 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                                 </div>
                               )}
 
+                              {/* Barra de Saturación */}
+                              <div className="vr-saturacion-section" style={{ marginTop: '16px', marginBottom: '16px' }}>
+                                <div className="vr-saturacion-label">
+                                  <span>Nivel de saturación del soporte</span>
+                                  <span className="vr-saturacion-pct">{vrResult.pctSaturacion}%</span>
+                                </div>
+                                <div className="vr-barra-saturacion">
+                                  <div
+                                    className={`vr-barra-fill ${
+                                      vrResult.pctSaturacion <= 70 ? 'fill-verde' :
+                                      vrResult.pctSaturacion <= 100 ? 'fill-amarillo' :
+                                      'fill-rojo'
+                                    }`}
+                                    style={{ width: `${Math.min(vrResult.pctSaturacion, 100)}%` }}
+                                  />
+                                </div>
+                                <div className="vr-saturacion-legend">
+                                  <span>0 L</span>
+                                  <span className="vr-saturacion-limit">V<sub>seguro</sub>: {vrResult.vSeguro} L</span>
+                                  <span>{Math.max(vrResult.vTotal, vrResult.vSeguro)} L</span>
+                                </div>
+                              </div>
+
                               {/* ── Vista Senior: Dashboard Técnico ── */}
                               <details className="vr-senior-details">
                                 <summary className="vr-senior-toggle">
@@ -1459,29 +1482,6 @@ export default function SamplingGuide({ contaminants, allContaminants, loading }
                                       )}
                                     </tbody>
                                   </table>
-
-                                  {/* Barra de Saturación */}
-                                  <div className="vr-saturacion-section">
-                                    <div className="vr-saturacion-label">
-                                      <span>Nivel de saturación del soporte</span>
-                                      <span className="vr-saturacion-pct">{vrResult.pctSaturacion}%</span>
-                                    </div>
-                                    <div className="vr-barra-saturacion">
-                                      <div
-                                        className={`vr-barra-fill ${
-                                          vrResult.pctSaturacion <= 70 ? 'fill-verde' :
-                                          vrResult.pctSaturacion <= 100 ? 'fill-amarillo' :
-                                          'fill-rojo'
-                                        }`}
-                                        style={{ width: `${Math.min(vrResult.pctSaturacion, 100)}%` }}
-                                      />
-                                    </div>
-                                    <div className="vr-saturacion-legend">
-                                      <span>0 L</span>
-                                      <span className="vr-saturacion-limit">V<sub>seguro</sub>: {vrResult.vSeguro} L</span>
-                                      <span>{Math.max(vrResult.vTotal, vrResult.vSeguro)} L</span>
-                                    </div>
-                                  </div>
                                 </div>
                               </details>
                             </div>
